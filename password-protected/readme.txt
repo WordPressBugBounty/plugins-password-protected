@@ -2,9 +2,9 @@
 Contributors: wpexpertsio
 Tags: password, maintenance mode, password protect page, password protect, restrict content
 Requires at least: 4.6
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 5.6
-Stable tag: 2.7.3
+Stable tag: 2.7.4
 License: GPLv2 or later
 
 Protect your WordPress site, pages, posts, WooCommerce products, and categories with single or multiple passwords.
@@ -293,6 +293,10 @@ If you want to translate this plugin you can easily contribute to the [Translati
 
 
 == Changelog ==
+= 2.7.4 =
+- New - Added functionality to login with transient if the cookies are blocked.
+- Fixed: compatibility with WordPress 6.7
+
 = 2.7.3 =
 - New - Option to view password text in the field while entering.
 - Improvement - Preserve custom URL parameters on password protected screen.
