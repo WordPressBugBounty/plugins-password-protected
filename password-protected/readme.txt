@@ -4,7 +4,7 @@ Tags: password, maintenance mode, password protect page, password protect, restr
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 5.6
-Stable tag: 2.7.4
+Stable tag: 2.7.5
 License: GPLv2 or later
 
 Protect your WordPress site, pages, posts, WooCommerce products, and categories with single or multiple passwords.
@@ -293,6 +293,9 @@ If you want to translate this plugin you can easily contribute to the [Translati
 
 
 == Changelog ==
+= 2.7.5 - Nov 26, 2024 =
+- Fixed: login with transient issue resolved.
+
 = 2.7.4 =
 - New - Added functionality to login with transient if the cookies are blocked.
 - Fixed: compatibility with WordPress 6.7
