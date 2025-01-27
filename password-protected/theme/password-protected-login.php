@@ -166,12 +166,12 @@ do_action( 'password_protected_login_head' );
         <div style="display: table;clear: both;"></div>
 
         <p>
-		    <?php do_action( 'password_protected_below_password_field' ); ?>
+		    <?php do_action( 'password_protected_below_password_field', 'global' ); ?>
         </p>
 
 	</form>
 
-	<?php do_action( 'password_protected_after_login_form' ); ?>
+	<?php do_action( 'password_protected_after_login_form', 'global' ); ?>
 
 </div>
 

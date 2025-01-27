@@ -29,12 +29,89 @@ jQuery( document ).ready(function( $ ) {
     } );
 
     $( 'body' ).on( 'click', '.pp-close-button', function( e ) {
-        $( '#pro-popup' ).remove();
+        $( '#pro-popup, #pro-upgrade-popup' ).remove();
     } );
 
     $( 'body' ).on( 'click', '.pp-link', function( e ) {
         e.preventDefault();
         window.location.href = $( '.pro-badge a' ).attr( 'href' );
+    } );
+
+    $( '.click-to-display-upgrade-popup' ).on( 'click', function( e ) {
+        let element_id = '#pro-upgrade-popup';
+
+        if ( $( element_id ).length ) {
+            $( element_id ).remove();
+        }
+
+        let popup_html = `<div id="pro-upgrade-popup">
+            <div class="pp-container" style="">
+                <a class="pp-close-button" style="">&times;</a>
+                
+                <div class="pp-body" style="">
+                    <img style="" src="${passwordProtectedAdminObject.imageURL}cropped-logo.png" alt="Password Protected logo">
+                
+                    <h2 style="font-weight: bolder;" class="pp-heading__title">
+                        Get this and more advanced features with
+                        <br>
+                        Business Plan
+                    </h2>
+                    
+                    <div style="margin-bottom: 20px;display: block;padding: 0 30px;" class="pp-description clearfix">
+                        <div style="text-align: left; width: 50%;" class="pp-fl-left">
+                            <ul>
+                                <li style="" class="pp-list-content">
+                                    <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
+                                    </svg>
+                                    Category / Taxonomy Protection
+                                </li>
+                                <li style="" class="pp-list-content">
+                                    <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
+                                    </svg>
+                                    Multiple Password Management
+                                </li>
+                                <li style="" class="pp-list-content">
+                                    <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
+                                    </svg>
+                                    WP Admin Protection
+                                </li>
+                            </ul>
+                        </div>
+                        <div style="text-align: left; width: 50%;" class="pp-fl-right">
+                            <ul>
+                                <li style="" class="pp-list-content">
+                                    <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
+                                    </svg>
+                                    Protection Screen Styling
+                                </li>
+                                <li style="" class="pp-list-content">
+                                    <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
+                                    </svg>
+                                    Multisite Network Support
+                                </li>
+                                <li style="" class="pp-list-content">
+                                    <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
+                                    </svg>
+                                    Request Password (Comming Soon)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <a class="pp-pro-link" style="" href="https://passwordprotectedwp.com/pricing/?utm_source=plugin&utm_medium=business_pop_up&utm_campaign=plugin">Get Business Plan Now ></a>
+                </div>
+                
+                
+            </div>
+        </div>`;
+
+        $( 'body' ).append( popup_html );
     } );
 
 } );

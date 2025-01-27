@@ -681,7 +681,7 @@ input#password_protected_password_new, input#password_protected_password_confirm
     left: 0;
 }
 
-#pro-popup {
+#pro-popup, #pro-upgrade-popup {
     width: 100vw;
     height: 100vh;
     position:fixed;
@@ -694,7 +694,7 @@ input#password_protected_password_new, input#password_protected_password_confirm
     align-items: center;
 }
 
-#pro-popup .pp-container {
+#pro-popup .pp-container, #pro-upgrade-popup .pp-container {
     width: 514px;
     background: #fff;
     position:relative;
@@ -704,7 +704,11 @@ input#password_protected_password_new, input#password_protected_password_confirm
     border-radius: 8px;
 }
 
-#pro-popup .pp-close-button {
+#pro-upgrade-popup .pp-container {
+    width: 596px;
+}
+
+#pro-popup .pp-close-button, #pro-upgrade-popup .pp-close-button {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -713,17 +717,21 @@ input#password_protected_password_new, input#password_protected_password_confirm
     cursor: pointer;
 }
 
-#pro-popup .pp-body {
+#pro-popup .pp-body, #pro-upgrade-popup .pp-body {
     text-align: center;
     padding: 15px 0;
     margin: 15px 0;
 }
 
-#pro-popup .pp-body img {
+#pro-upgrade-popup .pp-body {
+    margin: 0 0;
+}
+
+#pro-popup .pp-body img, #pro-upgrade-popup .pp-body img {
     margin-bottom: 10px;
 }
 
-#pro-popup .pp-body .pp-description {
+#pro-popup .pp-body .pp-description, #pro-upgrade-popup .pp-body .pp-description {
     text-align: center;
     color: #2D3748;
     font-size: 18px;
@@ -731,7 +739,7 @@ input#password_protected_password_new, input#password_protected_password_confirm
     line-height: 24px;
 }
 
-#pro-popup .pp-body .pp-link {
+#pro-popup .pp-body .pp-link, #pro-upgrade-popup .pp-body .pp-pro-link {
     margin-top: 10px;
     display: inline-block;
     padding: 16px 32px;
@@ -742,4 +750,44 @@ input#password_protected_password_new, input#password_protected_password_confirm
     font-size: 16px;
     line-height: 16px;
     text-decoration: none;
+}
+
+#pro-popup .pp-heading__title {
+    color: #171219;
+
+    text-align: center;
+    font-family: Poppins;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.pp-fl-left {
+    float: left;
+}
+
+.pp-fl-right {
+    float: right;
+}
+
+.pp-list-content {
+    color: #282455;
+    font-size: 13.091px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 150%; /* 19.636px */
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.pp-list-content svg {
+    margin-right: 5px;
+    margin-bottom: -7px;
 }

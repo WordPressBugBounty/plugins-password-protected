@@ -3,7 +3,7 @@
 Plugin Name: Password Protected
 Plugin URI: https://wordpress.org/plugins/password-protected/
 Description: A very simple way to quickly password protect your WordPress site with a single password. Please note: This plugin does not restrict access to uploaded files and images and does not work with some caching setups.
-Version: 2.7.5
+Version: 2.7.6
 Author: Password Protected
 Text Domain: password-protected
 Author URI: https://passwordprotectedwp.com/
@@ -41,7 +41,7 @@ $Password_Protected = new Password_Protected();
 
 class Password_Protected {
 
-	var $version 	   = '2.7.5';
+	var $version 	   = '2.7.6';
 	var $admin   	   = null;
 	var $errors  	   = null;
 	var $admin_caching = null;
@@ -58,6 +58,7 @@ class Password_Protected {
 		add_action( 'plugins_loaded', array( $this, 'load_plugin_textdomain' ) );
 
 		add_filter( 'password_protected_is_active', array( $this, 'allow_ip_addresses' ) );
+		add_filter( 'password_protected_is_active', array( $this, 'elementor_compatibility' ) );
 
 		add_action( 'init', array( $this, 'disable_caching' ), 1 );
 		add_action( 'init', array( $this, 'maybe_process_logout' ), 1 );
@@ -84,9 +85,8 @@ class Password_Protected {
 		add_shortcode( 'password_protected_logout_link', array( $this, 'logout_link_shortcode' ) );
 
 		include_once dirname( __FILE__ ) . '/admin/admin-bar.php';
-
+		include_once dirname( __FILE__ ) . '/includes/compatibility.php';
 		if ( is_admin() ) {
-
 
 			include_once dirname( __FILE__ ) . '/admin/admin-caching.php';
 			include_once dirname( __FILE__ ) . '/admin/admin.php';
@@ -249,6 +249,22 @@ class Password_Protected {
 
 		return $bool;
 
+	}
+
+	/**
+	 * Is protection active.
+	 *
+	 * @param bool $is_active is active {true|false}.
+	 *
+	 * @return bool
+	 */
+	public function elementor_compatibility( $is_active ) {
+		if ( class_exists( '\\Elementor\\plugin' ) ) {
+			if ( \Elementor\Plugin::$instance->preview->is_preview_mode() ) {
+				$is_active = false;
+			}
+		}
+		return $is_active;
 	}
 
 	/**
@@ -700,24 +716,8 @@ class Password_Protected {
 
 			$cookie_name = $this->cookie_name();
 			$use_transient = get_option( 'password_protected_use_transient', 'default' );
-			
 
-			$cookie = '';
-
-			switch ( $use_transient ) {
-				case 'transient':
-					$cookie = pp_get_transient( $cookie_name );
-					break;
-				case 'something-else':
-					$cookie = apply_filters( 'password_protected_setting_get_cookie', null, $cookie );
-					break;
-				case 'default':
-				default:
-					if ( isset( $_COOKIE[ $cookie_name ] ) && ! empty( $_COOKIE[ $cookie_name ] ) ) {
-						$cookie = $_COOKIE[ $cookie_name ];
-					}
-					break;
-			}
+			$cookie = password_protected_cookie( 'get', array( 'name' => $cookie_name ) );
 
 			if ( empty( $cookie ) ) {
 				return false;
@@ -763,31 +763,17 @@ class Password_Protected {
 		$password_protected_cookie        = $this->generate_auth_cookie( $expiration, 'password_protected' );
 
 		$use_transient = get_option( 'password_protected_use_transient', 'default' );
-
-
-		switch ( $use_transient ) {
-			case 'something-else':
-				do_action(
-					'password_protected_setting_set_cookie',
-					$this->cookie_name(),
-					$password_protected_cookie,
-					$secure_password_protected_cookie,
-					$expire
-				);
-				break;
-
-			case 'transient':
-				pp_set_transient( $this->cookie_name(), $password_protected_cookie, $expiration_time );
-				break;
-
-			case 'default':
-			default:
-				setcookie( $this->cookie_name(), $password_protected_cookie, $expire, COOKIEPATH, COOKIE_DOMAIN, $secure_password_protected_cookie, true );
-				if ( COOKIEPATH != SITECOOKIEPATH ) {
-					setcookie( $this->cookie_name(), $password_protected_cookie, $expire, SITECOOKIEPATH, COOKIE_DOMAIN, $secure_password_protected_cookie, true );
-				}
-				break;
-		}
+		
+		
+		password_protected_cookie(
+			'set',
+			array(
+				'name' => $this->cookie_name(),
+				'data' => $password_protected_cookie,
+				'secure' => $secure_password_protected_cookie,
+				'expire' => $expire,
+			)
+		);
 
 	}
 
@@ -796,22 +782,7 @@ class Password_Protected {
 	 */
 	public function clear_auth_cookie() {
 		$use_transient = get_option( 'password_protected_use_transient', 'default' );
-
-		switch ( $use_transient ) {
-			case 'something-else':
-				do_action( 'password_protected_setting_delete_cookie', $this->cookie_name() );
-				break;
-
-			case 'transient':
-				pp_delete_transient( $this->cookie_name() );
-				break;
-
-			case 'default':
-			default:
-				setcookie( $this->cookie_name(), ' ', current_time( 'timestamp' ) - 31536000, COOKIEPATH, COOKIE_DOMAIN );
-				setcookie( $this->cookie_name(), ' ', current_time( 'timestamp' ) - 31536000, SITECOOKIEPATH, COOKIE_DOMAIN );
-				break;
-		}
+		password_protected_cookie( 'delete', array( 'name' => $this->cookie_name() ) );
 	}
 
 	/**

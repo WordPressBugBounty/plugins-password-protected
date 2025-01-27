@@ -68,7 +68,7 @@ class Password_Protected_reCAPTCHA {
             <h1><?php _e( 'Google reCAPTCHA Settings', 'password-protected' ); ?></h1>
             <form method="post" action="options.php">
                 <?php
-                settings_fields( 'password-protected-advanced' );
+                settings_fields( 'password-protected-google-recaptcha-advanced' );
                 do_settings_sections( 'password-protected&tab=advanced' );
                 submit_button();
                 ?>
@@ -158,7 +158,7 @@ class Password_Protected_reCAPTCHA {
 		);
 
 		// register settings in an array group.
-		register_setting( 'password-protected-advanced', $this->options_name, array( 'type' => 'array' ) );
+		register_setting( 'password-protected-google-recaptcha-advanced', $this->options_name, array( 'type' => 'array' ) );
 	}
 
 	/**
@@ -190,12 +190,13 @@ class Password_Protected_reCAPTCHA {
 	 * @return  void  password protected reCAPTCHA status field
 	 */
 	public function reCAPTCHA_enable() {
+        $checked = isset( $this->settings['enable'] ) ? 'checked' : '';
         echo '<div class="pp-toggle-wrapper">
             <input 
                 name="' . esc_attr( $this->options_name ) . '[enable]" 
                 id="pp_enable_recaptcha" 
                 type="checkbox" 
-                value="1" ' . checked( 1, @$this->settings['enable'], false ) . ' 
+                value="1" ' . $checked . '
             />
             <label class="pp-toggle" for="pp_enable_recaptcha">
                 <span class="pp-toggle-slider"></span>
