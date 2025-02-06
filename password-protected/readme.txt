@@ -1,10 +1,10 @@
-=== Password Protected – Password Protect your WordPress Site, Pages, & WooCommerce Products - Restrict Content, Protect WooCommerce Category, and more ===
+=== Password Protected – Password Protect your WordPress Site, Pages, & WooCommerce Products - Restrict Content, Protect WooCommerce Category and more ===
 Contributors: wpexpertsio
 Tags: password, maintenance mode, password protect page, password protect, restrict content
 Requires at least: 4.6
 Tested up to: 6.7
 Requires PHP: 5.6
-Stable tag: 2.7.6
+Stable tag: 2.7.7
 License: GPLv2 or later
 
 Protect your WordPress site, pages, posts, WooCommerce products, and categories with single or multiple passwords.
@@ -64,17 +64,17 @@ You can specify which IP addresses can access password protected content with IP
 
 This feature adds an extra layer of security by preventing unauthorized access from IP addresses not included on the whitelist so that only approved users can access protected content.
 
-**✅ Specific Post/Page Protection**
+**✅ Specific Post/Page Protection [Pro]**
 
 Do you have premium content or sensitive information that you want to restrict access to? With the Password Protected plugin, you can easily password protect pages or posts so that only authorized users can view them. This feature allows you to offer exclusive content to subscribers or conduct private testing before publication.
 
 Check out our guide on how to [password protect WordPress page](https://passwordprotectedwp.com/wordpress-password-protect-page/) the right way.
 
-**✅ User Role Whitelisting**
+**✅ User Role Whitelisting [Pro]**
 
 If you are looking for simplified access control based on user roles. The User Role Whitelisting is the solution you need. By whitelisting certain user roles for your WordPress site, such as administrators, editors, or subscribers, you can ensure that authorized users can view protected content without entering a password.
 
-**✅ WP-Admin Protection**
+**✅ WP-Admin Protection [Pro]**
 
 Password protect wp-login (WordPress admin login page) against unauthorized access. This feature adds an extra layer of security by requiring a password to access the WP-admin dashboard, giving you greater protection against unauthorized login attempts and a [WordPress brute force attack](https://passwordprotectedwp.com/wordpress-brute-force-attack/).
 
@@ -84,29 +84,29 @@ When you password protect WordPress login page (WP-admin area), it prevents unau
 
 Gain valuable insights into user interactions with your protected content (e.g., password protect pages, posts, etc.) through our exclusive Password Attempt Activity Report. This report will provide a comprehensive overview of login attempts, including successful and failed tries, browsers utilized, and recent activity logs. Whether using the Free or Pro version, this report enables you to track login attempts and user activity efficiently.
 
-**✅ Custom Post Type Protection**
+**✅ Custom Post Type Protection [Pro]**
 
 Extend your site's security beyond standard posts and pages. The Password Protected plugin allows you to protect any custom post type, such as portfolios or testimonials, or you can even password protect WooCommerce products. The feature is extremely useful for businesses or creatives looking to share proprietary content or restrict content access to certain areas of their site.
 
-**✅ Category/Taxonomy Protection**
+**✅ Category/Taxonomy Protection [Pro]**
 
 Password protect categories to take control of your site's organization and access. Using single or multiple passwords, you can lock specific WordPress categories or taxonomies, along with related post tags.
 
 This functionality is ideal for websites with diverse content categories or membership tiers. By restricting access to certain categories, you can create exclusive areas for different user groups or offer premium/restricted content to subscribers.
 
-**✅ Certain Page/Posts Exclusions**
+**✅ Certain Page/Posts Exclusions [Pro]**
 
 Maintain flexibility in your WordPress site's accessibility by excluding specific pages, posts, and post types from password protection. Whether it's your homepage, contact page, or landing page, you can ensure that certain content remains accessible to all visitors while securing entire website content with a password.
 
-**✅ Limit Login Attempts**
+**✅ Limit Login Attempts [Pro]**
 
 Set up a limit for login attempts to protect your WordPress password protected screen against the most common WordPress attacks, such as brute force attacks. The Password Protected [limit login attempts](https://passwordprotectedwp.com/limit-login-attempts/) feature is a proactive measure that mitigates the risk of unauthorized access and strengthens overall site security.
 
-**✅ Password Expiration and Usage Limit**
+**✅ Password Expiration and Usage Limit [Pro]**
 
 If you want to password protect WordPress pages/posts for a certain period, set expiration dates and impose usage limits to restrict the number of times a user can use the password. This will make your site more secure and make it easier to manage user access.
 
-**✅ Bypass URL**
+**✅ Bypass URL [Pro]**
 
 Want to share password protected content with someone without sharing the password? The Bypass URL feature enables you to do just that. You can create unique URLs that remain accessible to the users without requiring a password.
 
@@ -114,13 +114,13 @@ Want to share password protected content with someone without sharing the passwo
 
 Stay informed and vigilant with detailed activity logs for every password attempt. This feature provides comprehensive insights into site activity, including IP addresses, dates, times, and login statuses, so you can easily monitor and review user interactions.
 
-**✅ Lock Screen Customization**
+**✅ Lock Screen Customization [Pro]**
 
 Make a lasting impression on visitors with a personalized and professional lock screen. With our Login Designer plugin, you can customize the appearance of your password-protected screen to align with your brand identity and aesthetics.
 
 With options to customize the background, logo, and other elements of the lock screen, you can create a cohesive and visually appealing experience for users seeking access to your protected/restricted content.
 
-**✅ Multiple Password Management**
+**✅ Multiple Password Management [Pro]**
 
 Experience unmatched flexibility and control over access permissions with Multiple Password Management. You can create unlimited passwords for any lock screen. It is also easy to activate or deactivate multiple passwords for various purposes, from testing to membership management.
 
@@ -293,6 +293,9 @@ If you want to translate this plugin you can easily contribute to the [Translati
 
 
 == Changelog ==
+= 2.7.7 =
+- Fixed - compatibility with elementor.
+
 = 2.7.6 =
 - Fixed: login with transient issue resolved.
 

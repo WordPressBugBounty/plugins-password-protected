@@ -98,7 +98,7 @@ jQuery( document ).ready(function( $ ) {
                                     <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
                                     </svg>
-                                    Request Password (Comming Soon)
+                                    Request Password (Coming Soon)
                                 </li>
                             </ul>
                         </div>
