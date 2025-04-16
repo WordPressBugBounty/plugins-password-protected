@@ -59,11 +59,6 @@ class Password_Protected_Admin {
 				'slug'     => 'advanced',
 				'icon'     => 'dashicons-admin-settings',
 				'sub-tabs' => array(
-					'cache-issue' => array(
-						'title' => __( 'Cache Issue', 'password-protected' ),
-						'slug'  => 'cache-issue',
-					),
-
 					'exclude-from-protection' => array(
 						'title' => __( 'Exclude From Protection', 'password-protected' ),
 						'slug'  => 'exclude-from-protection',
@@ -77,6 +72,11 @@ class Password_Protected_Admin {
 					'bypass-url' => array(
 						'title' => __( 'Bypass URL', 'password-protected' ),
 						'slug'  => 'bypass-url',
+					),
+
+					'cache-issue' => array(
+						'title' => __( 'Cache Issue', 'password-protected' ),
+						'slug'  => 'cache-issue',
 					),
 				),
 			),
@@ -191,6 +191,26 @@ class Password_Protected_Admin {
 					),
 				),
 			),
+
+            'request-password' => array(
+                'title'    => __( 'Password Request', 'password-protected' ),
+                'slug'     => 'request-password',
+                'icon'     => 'dashicons-email-alt',
+                'sub-tabs' => array(
+                    'password-request' => array(
+                        'title' => __( 'Request Password', 'password-protected' ),
+                        'slug'  => 'password-request',
+                    ),
+                    'requests'         => array(
+                        'title' => __( 'Requests', 'password-protected' ),
+                        'slug'  => 'requests',
+                    ),
+                    'email-templates'  => array(
+                        'title' => __( 'Email Templates', 'password-protected' ),
+                        'slug'  => 'email-templates',
+                    ),
+                ),
+            ),
 		);
 
 		$this->setting_tabs = apply_filters( 'password_protected_setting_tabs', $this->setting_tabs );
@@ -263,6 +283,9 @@ class Password_Protected_Admin {
 			add_action( 'password_protected_subtab_body-background_content', array( $this, 'dummy_content' ) );
 			add_action( 'password_protected_subtab_below-form_content', array( $this, 'dummy_content' ) );
 			add_action( 'password_protected_subtab_custom-css_content', array( $this, 'dummy_content' ) );
+            add_action( 'password_protected_subtab_password-request_content', array( $this, 'dummy_content' ) );
+            add_action( 'password_protected_subtab_requests_content', array( $this, 'dummy_content' ) );
+            add_action( 'password_protected_subtab_email-templates_content', array( $this, 'dummy_content' ) );
 		}
 
 		if ( isset( $_GET['page'] ) && 'password-protected-get-pro' === $_GET['page'] ) {
@@ -379,7 +402,8 @@ class Password_Protected_Admin {
 		?>
         <div class="wrap">
             <div class="wrap-row">
-                <div class="wrap-col-70">
+                <?php $attributes = class_exists( 'Password_Protected_Pro' ) ? '' : 'class="wrap-col-70"'; ?>
+                <div <?php echo $attributes; ?>>
 					<?php settings_errors(); ?>
 
                     <div class="pp-wrapper">
@@ -424,7 +448,9 @@ class Password_Protected_Admin {
                         </div>
                     </div>
                 </div>
-                <div id="pp-sidebar" class="wrap-col-25">
+
+	            <?php $attributes = class_exists( 'Password_Protected_Pro' ) ? 'style="display:none;"' : 'id="pp-sidebar" class="wrap-col-25"'; ?>
+                <div <?php echo $attributes; ?>>
 					<?php
 					$_tab = '';
 					if ( isset( $_GET['tab'] ) ) {
@@ -875,17 +901,22 @@ class Password_Protected_Admin {
 			),
 			array(
 				'name' => 'transient',
-				'title' => __( 'Use Transient', 'password-protected' ),
+				'title' => __( 'You can enable this option if you are having trouble with cookies due to cache or server restrictions.', 'password-protected' ),
+                'description' => __( 'Note: It uses transients,  which are saved based on the user\'s IP address, unlike cookies that are tied to the specific browser. This means that once a user logs in using any browser, they can access the page from any other browser as long as they are on the same IP address.', 'password-protected' ),
 			),
 		);
 
-		foreach ( $cache_issue as $issue ) {
+		foreach ( $cache_issue as $issue ) :
 			echo '<p>
                 <label>
                     <input type="radio" name="password_protected_use_transient" value="' . esc_attr( $issue['name'] ) . '" ' . checked( $use_transient, $issue['name'], false ) . ' />' . esc_html( $issue['title'] ) . '
                 </label>
             </p>';
-		}
+
+            if ( isset( $issue['description'] ) ) :
+                echo '<p class="desc"><strong>' . esc_attr( $issue['description'] ) . '</strong></p>';
+            endif;
+		endforeach;
 	}
 
 	/**
@@ -1880,6 +1911,93 @@ class Password_Protected_Admin {
                     
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="custom-css">Custom CSS</label></th><td><textarea id="custom-css" name="password_protected_custom_css_styles[custom-css]" class="large-text"></textarea></td></tr></tbody></table>
                     
+                </div>';
+				break;
+
+            case 'password-request':
+	            $url = add_query_arg(
+		            array(
+			            'utm_source'   => 'plugin',
+			            'utm_medium'   => 'pop_up',
+			            'utm_campaign' => 'plugin',
+			            'utm_content'  => 'password-request'
+		            ),
+		            'https://passwordprotectedwp.com/pricing/'
+	            );
+
+                echo '<div>
+                    <h2>Request Password <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    
+                    <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="enable-password-requests">Enable Password Requests</label></th><td><div class="pp-toggle-wrapper">
+					<input type="checkbox" value="yes" id="enable-password-requests" name="pp_password_request_setting[enable-password-requests]" checked="checked">
+					<label class="pp-toggle" for="enable-password-requests">
+						<span class="pp-toggle-slider"></span>
+					</label>
+				</div><p class="desc"><strong>Enable password requests for your site.</strong></p></td></tr><tr><th scope="row"><label for="password-request-label">Password Request Label</label></th><td><input type="text" value="Request for password" id="password-request-label" name="pp_password_request_setting[password-request-label]" class="regular-text"><p class="desc"><strong>Change the label of the password request button.</strong></p></td></tr><tr><th scope="row"><label for="add-your-email-label">Add Your Email Label</label></th><td><input type="text" value="Email Address" id="add-your-email-label" name="pp_password_request_setting[add-your-email-label]" class="regular-text"><p class="desc"><strong>Change the label of the email input field.</strong></p></td></tr><tr><th scope="row"><label for="email-place-holder-label">Email Placeholder Label</label></th><td><input type="text" value="Enter your email address" id="email-place-holder-label" name="pp_password_request_setting[email-place-holder-label]" class="regular-text"><p class="desc"><strong>Change the placeholder of the email input field.</strong></p></td></tr><tr><th scope="row"><label for="validation-button-label">Validation Button Label</label></th><td><input type="text" value="Validate your email" id="validation-button-label" name="pp_password_request_setting[validation-button-label]" class="regular-text"><p class="desc"><strong>Change the label of the validation button.</strong></p></td></tr></tbody></table>
+                </div>';
+                break;
+			case 'requests':
+				$url = add_query_arg(
+					array(
+						'utm_source'   => 'plugin',
+						'utm_medium'   => 'pop_up',
+						'utm_campaign' => 'plugin',
+						'utm_content'  => 'password-request'
+					),
+					'https://passwordprotectedwp.com/pricing/'
+				);
+
+				echo '<div>
+                    <h2>Requests <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    
+                    <div class="pp-settings-wrapper">
+								<div style="margin: 10px 0;">
+						<a style="margin: 0 10px;text-decoration: none;" href="http://password-protected.test/wp-admin/admin.php?page=password-protected&amp;tab=request-password&amp;sub-tab=requests">All (1)</a>
+						<a style="margin: 0 10px;text-decoration: none;" href="http://password-protected.test/wp-admin/admin.php?page=password-protected&amp;tab=request-password&amp;sub-tab=requests&amp;status=pending">Pending (0)</a>
+						<a style="margin: 0 10px;text-decoration: none;;" href="http://password-protected.test/wp-admin/admin.php?page=password-protected&amp;tab=request-password&amp;sub-tab=requests&amp;status=approved">Approved (1)</a>
+						<a style="margin: 0 10px;text-decoration: none;;" href="http://password-protected.test/wp-admin/admin.php?page=password-protected&amp;tab=request-password&amp;sub-tab=requests&amp;status=rejected">Rejected (0)</a>
+					</div><table class="wp-list-table widefat fixed striped table-view-list ">
+			<thead>
+	<tr>
+		<th scope="col" id="id" class="manage-column column-id column-primary">ID</th><th scope="col" id="email" class="manage-column column-email">Email</th><th scope="col" id="requested_content" class="manage-column column-requested_content">Requested Content</th><th scope="col" id="status" class="manage-column column-status">Status</th><th scope="col" id="datetime" class="manage-column column-datetime">Date &amp; Time</th><th scope="col" id="action" class="manage-column column-action">Action</th>	</tr>
+	</thead>
+
+	<tbody id="the-list">
+		<tr><td class="id column-id has-row-actions column-primary" data-colname="ID">1<button type="button" class="toggle-row"><span class="screen-reader-text">Show more details</span></button></td><td class="email column-email" data-colname="Email">email@localwp.com</td><td class="requested_content column-requested_content" data-colname="Requested Content">wp-admin/admin.sds</td><td class="status column-status" data-colname="Status"><span class="pp-status pp-status-approved">Approved</span></td><td class="datetime column-datetime" data-colname="Date &amp; Time">March 27, 2025, 6:06 am</td><td class="action column-action" data-colname="Action"><a href="http://password-protected.test/wp-admin/admin.php?page=password-protected&amp;tab=request-password&amp;sub-tab=requests&amp;action=resend&amp;id=1&amp;_wpnonce=b5c8a49b1b&amp;email=email@localwp.com" class="pp-rensend-password-email">Send Password Email</a>
+				|
+				<a href="http://password-protected.test/wp-admin/admin.php?page=password-protected&amp;tab=request-password&amp;sub-tab=requests&amp;action=delete&amp;id=1&amp;_wpnonce=5468d5c8c5" class="pp-delete-request">Delete</a></td></tr>	</tbody>
+
+	<tfoot>
+	<tr>
+		<th scope="col" class="manage-column column-id column-primary">ID</th><th scope="col" class="manage-column column-email">Email</th><th scope="col" class="manage-column column-requested_content">Requested Content</th><th scope="col" class="manage-column column-status">Status</th><th scope="col" class="manage-column column-datetime">Date &amp; Time</th><th scope="col" class="manage-column column-action">Action</th>	</tr>
+	</tfoot>
+
+</table>
+		                            </div>
+                </div>';
+				break;
+			case 'email-templates':
+				$url = add_query_arg(
+					array(
+						'utm_source'   => 'plugin',
+						'utm_medium'   => 'pop_up',
+						'utm_campaign' => 'plugin',
+						'utm_content'  => 'password-request'
+					),
+					'https://passwordprotectedwp.com/pricing/'
+				);
+
+				echo '<div>
+                    <h2>Email Templates <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    
+                    <div class="ppp-email-templates" id="validations"><h2>Validation\'s</h2>
+<table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="rp-validation-subject">Email Subject</label></th><td><input type="text" value="Verify Your Email Address for Password Request" id="rp-validation-subject" name="pp_email_templates_setting[rp-validation-subject]" class="regular-text"><p class="desc"><strong>Email template for validation email subject. Use <code>{site_name}</code> to replace with site name.</strong></p></td></tr><tr><th scope="row"><label for="rp-validation-body">Email Body</label></th><td><textarea id="rp-validation-body" name="pp_email_templates_setting[rp-validation-body]" class="regular-text">Hello,
+Thank you for requesting access to our protected content. To proceed, we need to verify your email address.
+                                                                                                   Please click the link below to validate your email:
+{validation_link}
+If you did not make this request, you can ignore this email.
+                                                      Best regards,
+{site_name}</textarea><p class="desc"><strong>Email template for validation email body. Use <code>{site_name}</code> to replace with site name. use <code>{validation_link}</code> to replace with validation link.</strong></p></td></tr></tbody></table></div>
                 </div>';
 				break;
 		}
