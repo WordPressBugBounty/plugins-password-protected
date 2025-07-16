@@ -269,15 +269,11 @@ input#password_protected_password_new, input#password_protected_password_confirm
 }
 
 .pp-sub-tabs-wrapper {
-    width: calc( 100% - 15px );
-    height: 45px;
     background: #fff;
     border-bottom: 1px solid #f7f8fa;
 }
 
 .pp-sub-tabs-wrapper .pp-subtabs-links {
-    height: 45px;
-    display: inline-block;
     border-bottom: 3px solid #f7f8fa;
     position: relative;
 }

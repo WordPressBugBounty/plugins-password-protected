@@ -4,7 +4,7 @@ Tags: password, maintenance mode, password protect page, password protect, restr
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 2.7.8
+Stable tag: 2.7.9
 License: GPLv2 or later
 
 Protect your WordPress site, pages, posts, WooCommerce products, and categories with single or multiple passwords.
@@ -106,9 +106,9 @@ Set up a limit for login attempts to protect your WordPress password protected s
 
 If you want to password protect WordPress pages/posts for a certain period, set expiration dates and impose usage limits to restrict the number of times a user can use the password. This will make your site more secure and make it easier to manage user access.
 
-**✅ Bypass URL [Pro]**
+**✅Bypass Links for Quick Access [Pro]**
 
-Want to share password protected content with someone without sharing the password? The Bypass URL feature enables you to do just that. You can create unique URLs that remain accessible to the users without requiring a password.
+For passwordless access, easily create unique bypass links for each password protected post, page, WooCommerce product, or category, along with a master bypass URL for the entire site.
 
 **✅ Detailed Activity Logs**
 
@@ -123,6 +123,10 @@ With options to customize the background, logo, and other elements of the lock s
 **✅ Multiple Password Management [Pro]**
 
 Experience unmatched flexibility and control over access permissions with Multiple Password Management. You can create unlimited passwords for any lock screen. It is also easy to activate or deactivate multiple passwords for various purposes, from testing to membership management.
+
+**✅ Import & Export Passwords [Pro]**
+
+For quick easy password management, import or export passwords in bulk using a CSV file, complete with usage limits, expiry, status, and more.
 
 **✅ Request Password [Pro]**
 
@@ -301,6 +305,9 @@ If you want to translate this plugin you can easily contribute to the [Translati
 
 
 == Changelog ==
+= 2.7.9 =
+- Improved code optimization.
+
 = 2.7.8 =
 - Fixed: compatibility with WordPress 6.8
 - Added - Notice on transient/cookies settings recommended by WordFence team.
