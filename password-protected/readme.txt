@@ -1,17 +1,17 @@
 === Password Protected – Password Protect your WordPress Site, Pages, & WooCommerce Products - Restrict Content, Protect WooCommerce Category and more ===
 Contributors: wpexpertsio
-Tags: password, maintenance mode, password protect page, password protect, restrict content
+Tags: password protection, maintenance mode, password protect page, password protect, restrict content
 Requires at least: 4.6
 Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 2.7.9
+Stable tag: 2.7.10
 License: GPLv2 or later
 
 Protect your WordPress site, pages, posts, WooCommerce products, and categories with single or multiple passwords.
 
 == Description ==
 
-[Live Demo](https://tastewp.com/new/?pre-installed-plugin-slug=password-protected)
+[👑 Get Pro](https://passwordprotectedwp.com/pricing/?utm_source=wp_org&utm_medium=readme) | [Live Demo](https://tastewp.com/new/?pre-installed-plugin-slug=password-protected) | [Documentation](https://passwordprotectedwp.com/documentation/?utm_source=wp_org&utm_medium=readme) | [Support](https://objectsws.atlassian.net/servicedesk/customer/portal/18)
 
 Do you want to secure your WordPress site, to password protect pages, posts, WooCommerce categories, etc.❓ If so, then you need to install ✨**the Password Protected plugin**✨.
 
@@ -52,11 +52,17 @@ As an admin, you probably don't want the hassle of entering additional passwords
 
 Don't worry. With the Password Protected plugin, you can simplify the login process for administrators with Passwordless Admin Access. This time-saving functionality enhances efficiency and security by eliminating the need for administrators to manage passwords or risk exposure to unauthorized access attempts.
 
-**✅ Add Google Recaptcha**
+**✅ Google reCAPTCHA**
 
-Make your password protected screen more secure by integrating Google reCaptcha. The plugin supports both Google reCAPTCHA v2 and v3.
+Add an extra layer of protection to your password screen with Google reCAPTCHA (v2 & v3). It blocks automated bots and spam by requiring human verification through simple challenges like image selection or puzzle solving.
 
-Google reCAPTCHA prevents automated bots and spam by presenting users with challenges that only humans can solve, such as identifying objects in images or solving puzzles.
+**✅ hCaptcha [Pro]**
+
+Secure your password form with hCaptcha, a privacy-focused alternative to Google reCAPTCHA. It verifies human users while keeping data collection minimal, helping you block bots effectively without sacrificing user privacy.
+
+**✅ Cloudflare Turnstile [Pro]**
+
+Protect your password entry with Cloudflare Turnstile, a lightweight, user-friendly CAPTCHA solution. Unlike traditional captchas, Turnstile verifies visitors in the background, offering strong bot protection without interrupting the user experience.
 
 **✅ IP Address Whitelisting**
 
@@ -305,6 +311,11 @@ If you want to translate this plugin you can easily contribute to the [Translati
 
 
 == Changelog ==
+
+= 2.7.10 =
+- Optimized code for better performance.
+- Feedback SDK update.
+
 = 2.7.9 =
 - Improved code optimization.
 

@@ -3,7 +3,7 @@
 Plugin Name: Password Protected
 Plugin URI: https://wordpress.org/plugins/password-protected/
 Description: A very simple way to quickly password protect your WordPress site with a single password. Please note: This plugin does not restrict access to uploaded files and images and does not work with some caching setups.
-Version: 2.7.9
+Version: 2.7.10
 Author: Password Protected
 Text Domain: password-protected
 Author URI: https://passwordprotectedwp.com/
@@ -41,7 +41,7 @@ $Password_Protected = new Password_Protected();
 
 class Password_Protected {
 
-	var $version 	   = '2.7.9';
+	var $version 	   = '2.7.10';
 	var $admin   	   = null;
 	var $errors  	   = null;
 	var $admin_caching = null;
@@ -61,6 +61,7 @@ class Password_Protected {
 		add_filter( 'password_protected_is_active', array( $this, 'elementor_compatibility' ) );
 
 		add_action( 'init', array( $this, 'disable_caching' ), 1 );
+		add_action( 'init', array( $this, 'pro_version_testing' ), 1 );
 		add_action( 'init', array( $this, 'maybe_process_logout' ), 1 );
 		add_action( 'init', array( $this, 'maybe_process_login' ), 1 );
 		add_action( 'wp', array( $this, 'disable_feeds' ) );
@@ -76,6 +77,8 @@ class Password_Protected {
 		add_action('password_protected_above_password_field', array( $this, 'password_protected_above_password_field' ));
 		add_action('password_protected_below_password_field', array( $this, 'password_protected_below_password_field' ));
 
+
+		
 
 		// Available from WordPress 4.3+
 		if ( function_exists( 'wp_site_icon' ) ) {
@@ -101,6 +104,25 @@ class Password_Protected {
 
 		include_once dirname( __FILE__ ) . '/includes/transient-functions.php';
 		include_once dirname( __FILE__ ) . '/includes/activity-report-email/class-password-protected-activity-report-settings.php';
+
+
+	}
+
+	/**
+	 * admin init check condition for pro version
+	 */
+	public function pro_version_testing() {
+
+		$showProCaptchas = is_plugin_active( 'password-protected-pro/password-protected-pro.php');
+        global $Password_Protected_Pro;
+		$showProCaptchas = $showProCaptchas ? version_compare( $Password_Protected_Pro->version, '1.9', '>=' ) : $showProCaptchas;
+			include_once dirname( __FILE__ ) . '/admin/class-pp-all-captcha-tabs.php';
+		if( $showProCaptchas ){
+			add_action( 'showAllCaptchsaEnable', array( 'Password_Protected_Free_allCaptchas', 'getInstance' ) );
+		} else {
+            new Password_Protected_Free_allCaptchas();
+        }
+
 	}
 
 	/**

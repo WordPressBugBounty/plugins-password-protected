@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Password_Protected_reCAPTCHA {
 
-	public $options_group = 'password-protected-recaptcha';
+	public $options_group = 'password-protected-all-captchas';
 	public $options_name  = 'password_protected_recaptcha';
 	public $tab           = 'password-protected&tab=advanced';
 	public $settings      = array();
@@ -35,7 +35,8 @@ class Password_Protected_reCAPTCHA {
 		}
 
 		add_action( 'admin_init', array( $this, 'register_reCAPTCHA_settings' ), 6 );
-        add_action( 'password_protected_subtab_google-recaptcha_content', array( $this, 'google_recaptcha_settings' ) );
+        // add_action( 'password_protected_subtab_google-recaptcha_content', array( $this, 'google_recaptcha_settings' ) );
+        add_action( 'password_protected_googlerecaptcha', array( $this, 'google_recaptcha_settings' ) );
 
 		add_action( 'password_protected_after_password_field', array( $this, 'add_recaptcha' ) );
 
@@ -64,15 +65,15 @@ class Password_Protected_reCAPTCHA {
 
     public function google_recaptcha_settings() {
         ?>
-        <div class="wrap">
+        <div class="reCaptchaTab">
             <h1><?php _e( 'Google reCAPTCHA Settings', 'password-protected' ); ?></h1>
-            <form method="post" action="options.php">
+            <!-- <form method="post" action="options.php"> -->
                 <?php
-                settings_fields( 'password-protected-google-recaptcha-advanced' );
+                // settings_fields( 'password-protected-google-recaptcha-advanced' );
                 do_settings_sections( 'password-protected&tab=advanced' );
-                submit_button();
+                // submit_button();
                 ?>
-            </form>
+            <!-- </form> -->
         </div>
         <?php
     }
@@ -89,7 +90,7 @@ class Password_Protected_reCAPTCHA {
 		// reCAPTCHA Section
 		add_settings_section(
 			$this->options_group,
-			__( 'Google reCAPTCHA', 'password-protected' ),
+			__( ' ', 'password-protected' ),
 			array( $this, 'reCAPTCHA_section' ),
 			$this->tab
 		);
@@ -158,7 +159,7 @@ class Password_Protected_reCAPTCHA {
 		);
 
 		// register settings in an array group.
-		register_setting( 'password-protected-google-recaptcha-advanced', $this->options_name, array( 'type' => 'array' ) );
+		register_setting( $this->options_group, $this->options_name, array( 'type' => 'array' ) );
 	}
 
 	/**
@@ -170,7 +171,7 @@ class Password_Protected_reCAPTCHA {
 	 */
 	public static function recpatcha_screen() {
 		do_settings_sections( 'password-protected&tab=advanced' );
-		submit_button();
+		// submit_button();
 	}
 
 	/**

@@ -787,3 +787,114 @@ input#password_protected_password_new, input#password_protected_password_confirm
     margin-right: 5px;
     margin-bottom: -7px;
 }
+
+
+/*captcha css*/
+.captcha-setting-field {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: -10px;
+}
+.captcha-setting-field .captcha-settings-field-radio-wrapper {
+    flex: 0 0 166px;
+    margin-right: 0;
+}
+.captcha-setting-field input[type=radio] {
+    display: none;
+}
+.captcha-setting-field label {
+    width: 140px;
+    height: 110px;
+    padding: 20px;
+    text-align: center;
+    color: #2c3338;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 0 0 1px #c3c4c7;
+    transition: box-shadow 0.05s;
+}
+.captcha-setting-field label.option-hcaptcha:before {
+    background-image: url("../images/h-captcha.svg");
+}
+.captcha-setting-field label.option-recaptcha:before {
+    background-image: url("../images/re-captcha.svg");
+}
+.captcha-setting-field label.option-turnstile:before {
+    background-image: url("../images/cloudflare.svg");
+}
+.captcha-setting-field label.option-none:before {
+    background-image: url("../images/none.png");
+}
+.captcha-setting-field label:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 80px;
+    margin: 0 0 20px 0;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: auto 60px;
+}
+.captcha-setting-field label.option-turnstile-free:before, .captcha-setting-field label.option-turnstile:before{
+    content: "";
+    display: block;
+    width: 100%;
+    height: 80px;
+    margin: 0 0 20px 0;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: auto 100px;
+}
+.captcha-setting-field input[type=radio]:checked+label:not(.option-hcaptcha-free):not(.option-turnstile-free) {
+    box-shadow: 0 0 0 2px #8076ff, 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+}
+.captcha-settings-field-radio-wrapper{
+    align-items: flex-start;
+    display: inline-flex;
+}
+
+.allCaptchaTabsTable .form-table th {
+    padding: 0px;
+    width: auto;
+}
+
+.turnStileTab .form-table th ,
+.hCaptchaTab .form-table th ,
+.reCaptchaTab .form-table th {
+    padding: 15px 0px;
+    width: 150px;
+}
+
+.enableCaptchaHeading{
+    margin: 0px 10px !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+}
+
+.allCaptchaTabsTable p.submit {
+    margin: -10px 10px !important;
+}
+
+label.option-hcaptcha-free, label.option-turnstile-free {
+    background: #f3f3f3;
+}
+.captcha-setting-field label.option-hcaptcha-free:before {
+    background-image: url("../images/h-captcha.svg");
+}
+.captcha-setting-field label.option-recaptcha-free:before {
+    background-image: url("../images/re-captcha.svg");
+}
+.captcha-setting-field label.option-turnstile-free:before {
+    background-image: url("../images/cloudflare.svg");
+}
+.captcha-setting-field label.option-none-free:before {
+    background-image: url("../images/none.png");
+}
+
+.captchaProBadge{
+    margin-left: -40px;
+    margin-top: 5px;
+}

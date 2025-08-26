@@ -114,6 +114,53 @@ jQuery( document ).ready(function( $ ) {
         $( 'body' ).append( popup_html );
     } );
 
+
+    // captcha tab jquery for hide and show on radio
+    $('div.hCaptchaTab').hide();
+    $('div.reCaptchaTab').hide();
+    $('div.turnStileTab').hide();
+    $('div.noneTab').hide();
+
+    function updateCaptchaTabs() {
+    let selected = $('span.captcha-setting-field input[type="radio"]:checked').val();
+
+    if (selected === 'hcaptcha') {
+        $('input#pppro_enable_hcaptcha').prop('checked', true);
+        $('input#pp_enable_recaptcha, input#pppro_enable_cloudflare').removeAttr('checked');
+        $('div.hCaptchaTab').show();
+        $('div.reCaptchaTab, div.turnStileTab, div.noneTab').hide();
+    }
+
+    if (selected === 'recaptcha') {
+        $('input#pp_enable_recaptcha').prop('checked', true);
+        $('input#pppro_enable_cloudflare, input#pppro_enable_hcaptcha').removeAttr('checked');
+        $('div.reCaptchaTab').show();
+        $('div.hCaptchaTab, div.turnStileTab, div.noneTab').hide();
+    }
+
+    if (selected === 'turnstile') {
+        $('input#pppro_enable_cloudflare').prop('checked', true);
+        $('input#pp_enable_recaptcha, input#pppro_enable_hcaptcha').removeAttr('checked');
+        $('div.turnStileTab').show();
+        $('div.hCaptchaTab, div.reCaptchaTab, div.noneTab').hide();
+    }
+
+    if (selected === 'none') {
+        $('input#pp_enable_recaptcha, input#pppro_enable_cloudflare, input#pppro_enable_hcaptcha').removeAttr('checked');
+        $('div.noneTab').show();
+        $('div.hCaptchaTab, div.reCaptchaTab, div.turnStileTab').hide();
+    }
+}
+
+updateCaptchaTabs();
+$('span.captcha-setting-field input[type="radio"]').on('change', updateCaptchaTabs);
+
+// Hide enable toggles in captchas, We are doing enable when tab click.
+jQuery('.turnStileTab #pppro_enable_cloudflare').closest('tr').hide();
+jQuery('.hCaptchaTab #pppro_enable_hcaptcha').closest('tr').hide();
+jQuery('.reCaptchaTab #pp_enable_recaptcha').closest('tr').hide();
+
+
 } );
 
 function set_recaptcha_version_fields( $ ) {
@@ -161,3 +208,4 @@ function hide_recaptcha_v3_fields( $ ) {
     $("#pp_google_recpatcha_v3_score").parent('td').parent('tr').hide();
     $("#pp_google_recpatcha_v3_badge").parent('td').parent('tr').hide();
 }
+

@@ -26,6 +26,8 @@ class Password_Protected_Admin {
 
 		add_action( 'password_protected_subtab_cache-issue_content', array( $this, 'cache_related_issue' ) );
 		add_action( 'admin_footer', array( $this, 'add_script_in_footer' ), 9999 );
+
+
 	}
 
 	public function add_script_in_footer() {
@@ -114,9 +116,9 @@ class Password_Protected_Admin {
 						'slug'  => 'whitelist-user-role',
 					),
 
-					'google-recaptcha' => array(
-						'title' => __( 'Google ReCaptcha', 'password-protected' ),
-						'slug'  => 'google-recaptcha',
+					'all-captchas' => array(
+						'title' => __( 'Captcha', 'password-protected' ),
+						'slug'  => 'all-captchas',
 					),
 
 					'wp-admin-protection' => array(
@@ -1743,7 +1745,7 @@ class Password_Protected_Admin {
 					</div>';
 					break;
 
-				case 'logo-styles':
+                case 'logo-styles':
 					$url = add_query_arg(
 						array(
 							'utm_source'   => 'plugin',
@@ -1774,7 +1776,7 @@ class Password_Protected_Admin {
 					</div></td></tr></tbody></table>
 					</div>';
 					break;
-				case 'label-styles':
+                case 'label-styles':
 					$url = add_query_arg(
 						array(
 							'utm_source'   => 'plugin',
@@ -1794,7 +1796,7 @@ class Password_Protected_Admin {
 					
 					</div>';
 					break;
-				case 'field-styles':
+                case 'field-styles':
 					$url = add_query_arg(
 						array(
 							'utm_source'   => 'plugin',
@@ -1822,7 +1824,7 @@ class Password_Protected_Admin {
 					</select></td></tr><tr><th scope="row"><label for="font-size">Font Size</label></th><td><div class="range-slider-wrapper"><label for="font-size" pp-customizer-placeholder="px"><strong>24px</strong></label><input pp-default-value="24" id="font-size" class="regular-text range-slider-input" name="password_protected_fields_styles[font-size]" min="13" max="40" step="1" value="24" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="24">Reset</button></div></td></tr><tr><th scope="row"><label for="text-color">Text Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(130, 36, 227);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#8224e3" id="text-color" name="password_protected_fields_styles[text-color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 136.594px; top: 20.0337px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 41, 41), rgb(255, 148, 41), rgb(255, 255, 41), rgb(148, 255, 41), rgb(41, 255, 41), rgb(41, 255, 148), rgb(41, 255, 255), rgb(41, 148, 255), rgb(41, 41, 255), rgb(148, 41, 255), rgb(255, 41, 255), rgb(255, 41, 148), rgb(255, 41, 41));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(112, 0, 224), rgb(227, 227, 227));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 84%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr></tbody></table>
 					</div>';
 					break;
-				case 'button-styles':
+                case 'button-styles':
 					$url = add_query_arg(
 						array(
 							'utm_source'   => 'plugin',
@@ -1844,7 +1846,7 @@ class Password_Protected_Admin {
 
 					</div>';
 					break;
-				case 'remember-me-styles':
+                case 'remember-me-styles':
 					$url = add_query_arg(
 						array(
 							'utm_source'   => 'plugin',
@@ -1866,7 +1868,7 @@ class Password_Protected_Admin {
 
 					</div>';
 					break;
-				case 'form-background':
+                case 'form-background':
 					$url = add_query_arg(
 						array(
 							'utm_source'   => 'plugin',
@@ -1889,7 +1891,7 @@ class Password_Protected_Admin {
 
 					</div>';
 					break;
-				case 'body-background':
+                case 'body-background':
 					$url = add_query_arg(
 						array(
 							'utm_source'   => 'plugin',
@@ -1915,7 +1917,7 @@ class Password_Protected_Admin {
 						
 					</div>';
 					break;
-				case 'below-form':
+                case 'below-form':
 					$url = add_query_arg(
 						array(
 							'utm_source'   => 'plugin',
@@ -1951,14 +1953,37 @@ class Password_Protected_Admin {
                     echo '<div>
                     <h2>Page Content <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
                     
-                    <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="font">Font</label></th><td><select id="font" name="password_protected_below_page_styles[font]" class="regular-text">
-					<option value="default" selected="selected">Default</option><option value="Abril Fatface">Abril Fatface</option><option value="Georgia">Georgia</option><option value="Helvetica">Helvetica</option><option value="Lato">Lato</option><option value="Lora">Lora</option><option value="Karla">Karla</option><option value="Josefin Sans">Josefin Sans</option><option value="Montserrat">Montserrat</option><option value="Open Sans">Open Sans</option><option value="Oswald">Oswald</option><option value="Overpass">Overpass</option><option value="Poppins">Poppins</option><option value="PT Sans">PT Sans</option><option value="Roboto">Roboto</option><option value="Fira Sans">Fira Sans</option><option value="Times New Roman">Times New Roman</option><option value="Nunito">Nunito</option><option value="Merriweather">Merriweather</option><option value="Rubik">Rubik</option><option value="Playfair Display">Playfair Display</option><option value="Spectral">Spectral</option>
-				</select></td></tr><tr><th scope="row"><label for="font-size">Font Size</label></th><td><div class="range-slider-wrapper"><label for="font-size" pp-customizer-placeholder="px"><strong>14px</strong></label><input pp-default-value="14" id="font-size" class="regular-text range-slider-input" name="password_protected_below_page_styles[font-size]" min="0" max="100" step="1" value="14" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="14">Reset</button></div></td></tr><tr><th scope="row"><label for="position">Position</label></th><td><div class="range-slider-wrapper"><label for="position" pp-customizer-placeholder="px"><strong>0px</strong></label><input pp-default-value="0" id="position" class="regular-text range-slider-input" name="password_protected_below_page_styles[position]" min="0" max="100" step="1" value="0" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="0">Reset</button></div></td></tr><tr><th scope="row"><label for="color">Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(114, 119, 124);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#72777c" id="color" name="password_protected_below_page_styles[color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 106.24px; top: 92.8838px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 235, 235), rgb(255, 245, 235), rgb(255, 255, 235), rgb(245, 255, 235), rgb(235, 255, 235), rgb(235, 255, 245), rgb(235, 255, 255), rgb(235, 245, 255), rgb(235, 235, 255), rgb(245, 235, 255), rgb(255, 235, 255), rgb(255, 235, 245), rgb(255, 235, 235));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(0, 61, 122), rgb(125, 125, 125));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 8%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr><tr><th scope="row"><label for="text-alignment">Text Alignment</label></th><td><select id="text-alignment" name="password_protected_below_page_styles[text-alignment]" class="regular-text">
-					<option value="left">Left</option><option value="center" selected="selected">Center</option><option value="right">Right</option>
-				</select></td></tr></tbody></table>
-                    
+                    <table class="wp-list-table widefat fixed striped table-view-list toplevel_page_password-protected">
+                        <thead>
+                            <tr>
+                                <th>Password</th>
+                                <th>Uses Remaining</th>
+                                <th>Expiry</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                                <th>Bypass URL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6">
+                                    Manage passwords are only available in Password Protected Pro version.
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Password</th>
+                                <th>Uses Remaining</th>
+                                <th>Expiry</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                                <th>Bypass URL</th>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>';
-                    break;
+				break;
 				case 'custom-css':
 					$url = add_query_arg(
 						array(
@@ -1977,7 +2002,6 @@ class Password_Protected_Admin {
                     
                 </div>';
 					break;
-
 				case 'password-request':
 					$url = add_query_arg(
 						array(
