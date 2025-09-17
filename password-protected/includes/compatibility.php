@@ -82,3 +82,13 @@ if ( ! function_exists( 'password_protected_cookie' ) ) {
 		return $k;
 	}
 }
+
+if ( ! function_exists('pp__add_dynamic_arg') ) {
+	function pp__add_dynamic_arg( $url ) {
+		if ( ! function_exists( 'pp_pro__add_dynamic_arg' ) ) {
+			return $url;
+		}
+
+		return pp_pro__add_dynamic_arg( $url );
+	}
+}

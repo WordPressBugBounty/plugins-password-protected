@@ -121,7 +121,7 @@ class Password_Protected_Admin_Caching {
 	}
 
 	public function documentation() {
-		echo '<a href="https://passwordprotectedwp.com/documentation?utm_source=documentation&utm_medium=help-tab">Documentation</a>';
+		echo '<a href="https://passwordprotectedwp.com/documentation?utm_source=documentation&utm_medium=help-tab">' . __( 'Documentation', 'password-protected' ) . '</a>';
 	}
 
 	/**

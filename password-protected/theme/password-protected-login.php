@@ -125,7 +125,7 @@ do_action( 'password_protected_login_head' );
 
 	<?php do_action( 'password_protected_before_login_form' ); ?>
 
-	<form name="loginform" id="loginform" action="<?php echo esc_url( $Password_Protected->login_url() ); ?>" method="post">
+	<form tabindex="0" name="loginform" id="loginform" action="<?php echo esc_url( $Password_Protected->login_url() ); ?>" method="post">
 
         <p>
             <?php do_action( 'password_protected_above_password_field' ); ?>
@@ -142,8 +142,26 @@ do_action( 'password_protected_login_head' );
         <div class="user-pass-wrap">
             <label for="password_protected_pass"><?php echo esc_attr( apply_filters( 'password_protected_login_password_title', __( 'Password', 'password-protected' ) ) ); ?></label>
             <div class="wp-pwd">
-                <input id="password_protected_pass" class="input password-input" type="password" name="password_protected_pwd" value="" size="20" autocomplete="false" spellcheck="false" required>
-                <button id="pp-hide-show-password" class="button button-secondary hide-if-no-js wp-hide-pw" type="button" data-toggle="0" aria-label="Show password">
+                <input
+                    id="password_protected_pass"
+                    class="input password-input"
+                    type="password"
+                    name="password_protected_pwd"
+                    value=""
+                    size="20"
+                    autocomplete="false"
+                    spellcheck="false"
+                    required
+                    tabindex="100"
+                >
+                <button
+                    id="pp-hide-show-password"
+                    class="button button-secondary hide-if-no-js wp-hide-pw"
+                    type="button"
+                    data-toggle="0"
+                    aria-label="Show password"
+                    tabindex="101"
+                >
                     <span class="dashicons dashicons-visibility" aria-hidden="true"></span>
                 </button>
             </div>
@@ -152,12 +170,29 @@ do_action( 'password_protected_login_head' );
 		<?php do_action('password_protected_after_password_field'); ?>
 		<?php if ( $Password_Protected->allow_remember_me() ) : ?>
 			<p class="forgetmenot">
-				<label for="password_protected_rememberme"><input name="password_protected_rememberme" type="checkbox" id="password_protected_rememberme" value="1" tabindex="90" /> <?php esc_attr_e( 'Remember Me' ); ?></label>
+				<label for="password_protected_rememberme">
+                    <input
+                        name="password_protected_rememberme"
+                        type="checkbox"
+                        id="password_protected_rememberme"
+                        value="1"
+                        tabindex="102"
+                    />
+                    &nbsp;
+                    <?php esc_attr_e( 'Remember Me' ); ?>
+                </label>
 			</p>
 		<?php endif; ?>
 		
 		<p class="submit">
-			<input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="<?php esc_attr_e( 'Log In' ); ?>" tabindex="100" />
+			<input
+                type="submit"
+                name="wp-submit"
+                id="wp-submit"
+                class="button button-primary button-large"
+                value="<?php esc_attr_e( 'Log In' ); ?>"
+                tabindex="103"
+            />
 			<input type="hidden" name="password_protected_cookie_test" value="1" />
 			<input type="hidden" name="password-protected" value="login" />
 			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( ! empty( $_REQUEST['redirect_to'] ) ? esc_url( $_REQUEST['redirect_to'] ) : '' ); ?>" />
