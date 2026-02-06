@@ -36,7 +36,7 @@ class Password_Protected_reCAPTCHA {
 
 		add_action( 'admin_init', array( $this, 'register_reCAPTCHA_settings' ), 6 );
         // add_action( 'password_protected_subtab_google-recaptcha_content', array( $this, 'google_recaptcha_settings' ) );
-        add_action( 'password_protected_googlerecaptcha', array( $this, 'google_recaptcha_settings' ) );
+        add_action( 'password_protected_all_captchas', array( $this, 'google_recaptcha_settings' ) );
 
 		add_action( 'password_protected_after_password_field', array( $this, 'add_recaptcha' ) );
 

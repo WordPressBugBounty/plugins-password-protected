@@ -898,3 +898,8 @@ label.option-hcaptcha-free, label.option-turnstile-free {
     margin-left: -40px;
     margin-top: 5px;
 }
+
+.actionDisable{
+  pointer-events: none;
+  cursor: default;
+}
