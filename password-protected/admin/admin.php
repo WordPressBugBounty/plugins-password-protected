@@ -80,6 +80,11 @@ class Password_Protected_Admin {
 						'title' => __( 'Cache Issue', 'password-protected' ),
 						'slug'  => 'cache-issue',
 					),
+
+					'custom-error-message' => array(
+						'title' => __( 'Custom Error Message', 'password-protected' ),
+						'slug'  => 'custom-error-message',
+					),
 				),
 			),
 
@@ -277,6 +282,7 @@ class Password_Protected_Admin {
 		if ( ! class_exists( 'Password_Protected_Pro' ) ) {
 			
 			add_action( 'password_protected_subtab_exclude-from-protection_content', array( $this, 'dummy_content' ) );
+			add_action( 'password_protected_subtab_custom-error-message_content', array( $this, 'dummy_content' ) );
 			add_action( 'text_before_after_login_form', array( $this, 'dummy_content' ) );
 			add_action( 'password_protected_subtab_attempt-limitation_content', array( $this, 'dummy_content' ) );
 			add_action( 'password_protected_subtab_bypass-url_content', array( $this, 'dummy_content' ) );

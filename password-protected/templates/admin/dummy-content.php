@@ -49,6 +49,29 @@ if ( isset( $k['slug'] ) ) {
                     </table>
                 </div>';
 			break;
+		case 'custom-error-message':
+			$url = add_query_arg(
+				array(
+					'utm_source'   => 'plugin',
+					'utm_medium'   => 'pop_up',
+					'utm_campaign' => 'plugin',
+					'utm_content'  => 'custom_error_message'
+				),
+				'https://passwordprotectedwp.com/pricing/'
+			);
+			echo '<div>
+                    <h2>Custom Error Message <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <table class="form-table">
+                        <tr>
+                            <th><label for="">Password Expiry & Limit Error Message</label></th>
+                            <td>
+                                <input disabled placeholder="Either password is expired or passwords limit exceeded kindly contact site administrator." type="text" class="regular-text" />
+                            	<p>A message will be display when the password has either expired or exceeded its usage limit</p>
+							</td>
+                        </tr>
+                    </table>
+                </div>';
+			break;
 		case 'attempt-limitation':
 			$url = add_query_arg(
 				array(
