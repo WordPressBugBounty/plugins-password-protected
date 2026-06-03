@@ -12,11 +12,13 @@
     width: 80%;
 }
 .wrap-col-25 {
-    flex: 0 1 15%;
+    flex: 0 1 20%;
+    width: 20%;
 }
 .wrap-row {
     display: flex;
     justify-content: space-between;
+    gap: 20px;
 }
 h2.nav-tab-wrapper {
     display: inline-block;
@@ -228,11 +230,12 @@ input#password_protected_password_new, input#password_protected_password_confirm
 }
 
 .pp-nav-tab {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
     display: inline-block;
     border-right: 1px solid #d9dce3;
     background: #f6f6f6;
+    margin-bottom: 5px;
 }
 
 .pp-nav-tab a {
@@ -262,6 +265,10 @@ input#password_protected_password_new, input#password_protected_password_confirm
 
 .pp-nav-tab:hover {
     background: #fff;
+}
+
+.pp-pro-tab:hover{
+    background: #8076ff !important;
 }
 
 .pp-nav-tab a:hover {
@@ -401,19 +408,26 @@ input#password_protected_password_new, input#password_protected_password_confirm
 
 .pp-pro-tab span {
     color: #fcc045;
-    margin-right: 10px;
+    margin: -7px -8px 0px 0px;
     font-size: 30px;
 }
-
+.pp-get-pro-tab-icon img.pro-tab-icon{
+    width: 80%;
+   margin-bottom: -12px;
+}
 
 
 /**
  * Adding css for pro banner
  */
 .pp-pro-banner {
-    width: 800px;
-    height: 484px;
-    background-image:  url( "../images/banner-background.png" );
+    width: 80%;
+    height: auto;
+    background-image: url(../images/banner-background.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 15px;
 }
 
 .pp-pro-banner * {
@@ -424,34 +438,49 @@ input#password_protected_password_new, input#password_protected_password_confirm
     padding: 20px;
 }
 
-.pp-wrapper:has( .pp-pro-banner ) {
+@media (max-width: 1024px) {
+    .pp-pro-banner {
+        width: 100%;
+    }   
 }
+
+@media (max-width: 767px) {
+    .pp-pro-banner {
+        width: 100%;
+    } 
+    .pp-banner-body{
+        display: grid !important;
+    }
+    .pp-cols{
+        width: 100% !important;
+    }
+    .pp-banner-header .pp-head-wt-pro-tag .pp-pro-tag{
+        margin: 26px 0px 0px 5px !important;
+    }
+    .pp-banner-header .heading-1{
+        font-size: 30px !important;
+        line-height: 29px !important;
+        margin-top: 5px !important;
+        text-align: left !important;
+    }
+}
+
+/* .pp-wrapper:has( .pp-pro-banner ) {
+} */
 
 .pp-content-wrapper:has( .pp-pro-banner ) {
-    padding: 20px 20px 20px 20px;
-}
-
-.pp-pro-banner .pp-container .heading-1 {
-    font-size: 16px;
-    font-weight: 400;
-    padding: 0;
-    margin: 0;
-}
-
-.pp-pro-banner .pp-container .heading-2 {
-    font-size: 24px;
-    font-weight: 700;
-    padding: 0;
-    margin: 0;
-}
-
-.pp-pro-banner .pp-container .heading-2 span {
-    color: #8076FF;
+    padding: 10px;
+    background: #f0f0f1;
+    box-shadow: none;
 }
 
 .pp-banner-body {
-    margin: 20px 0;
-    width: 100%;
+    width: 78%;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .pp-cols {
@@ -462,7 +491,6 @@ input#password_protected_password_new, input#password_protected_password_confirm
 .pp-cols div {
     font-size: 14px;
     font-weight: 400;
-    margin-bottom: 25px;
     color: #2D3748;
 }
 
@@ -492,25 +520,110 @@ input#password_protected_password_new, input#password_protected_password_confirm
 .pp-sidebar-footer a,
 .pp-banner-footer a {
     display: inline-block;
-    background: #8076FF;
-    padding: 10px 20px;
+    background: linear-gradient(0deg, #FFA402 0%, #FCC21B 100%);
+    padding: 12px 20px;
     border-radius: 50px;
     font-size: 14px;
     font-weight: 600;
-    color: #fff;
+    color: #000;
     text-decoration: none;
+    width: 100%;
+    font-family: "Poppins", sans-serif;
 }
 
-.pp-sidebar-footer a {
-    font-size: 12px;
+.pp-banner-footer{
+   display: grid;
+    justify-content: center;
+        margin: 30px 0px;
+}
+
+.pp-banner-footer a{
+    width: auto !important;
+}
+
+.pp-banner-header {
+    text-align: center;
+        margin-top: 15px;
+}
+
+.pp-banner-header .heading-1 {
+    font-weight: 700;
+    padding: 0;
+    margin: 0;
+    font-size: 38px;
+    font-family: "Poppins", sans-serif;
+    margin-top: -9px;
+    background: linear-gradient(180deg, #8076FF 40%, #6F68C6 60%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.pp-banner-header .pp-row{
+    display:inline-flex
+}
+
+.pp-banner-header .pp-crown-icon img{
+    width:85px;
+    padding-right:15px;
+    margin-top: 8px;
+}
+
+.pp-banner-header .pp-head-wt-pro-tag{
+    display: flex;
+}
+
+.pp-banner-header .pp-head-wt-pro-tag .pp-pro-tag{
+    letter-spacing: 0.6px;
+    background: linear-gradient(269deg, #eb9702 0%, #FCC21B 100%);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 22px;
+    padding: 0px 6px;
+    border-radius: 5px;
+    color: black;
+    margin: 6px 0px 0px 5px;
+    display: inline-block;
+    font-family: "Poppins", sans-serif;
+}
+
+.pp-banner-header .pp-sm-txt-heading{
+    font-size: 14px;
+    margin: 6px 0px 0px 0px;
+    color: #27292C;
+    font-weight: 500;
+    font-family: "Poppins", sans-serif;
+}
+
+.pp-features-list-banner {
+    display: flex;
+    align-items: center;
+}
+
+.pp-features-list-banner img{
+    width: 17px;
+    padding-right: 7px;
+}
+
+.pp-features-list-banner p{
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 7px;
+    color: #2D3748;
+    font-family: "Poppins", sans-serif;
+}
+.pp-features-list-banner a:hover{
+    text-decoration: underline !important;
+    font-weight: 500;
+    color: #8076FF;
+    text-decoration-color: #8076FF !important;
 }
 
 .pp-sidebar-widget {
     float: right;
     margin-top: 15px;
     position: relative;
-    width: 250px;
-    background: linear-gradient(180deg, #dad7ff 0%, #fff 100%);
+    width: 100%;
+    background: radial-gradient(ellipse at center, #FFFFFF 0%, #DDDAFF 100%);
     background-position-x: right;
     background-position-y: bottom;
 
@@ -519,21 +632,29 @@ input#password_protected_password_new, input#password_protected_password_confirm
 }
 
 .pp-sidebar-widget .pp-container {
-    padding: 20px;
+    padding: 20px 15px;
 }
 
 .pp-sidebar-header .heading-1 {
-    font-size: 16px;
     font-weight: 400;
     padding: 0;
     margin: 0;
+    font-size: 25px;
+    font-family: "Poppins", sans-serif;
+    margin-top: -9px;
+    background: linear-gradient(180deg, #8076FF 0%, #6a63c2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .pp-sidebar-header .heading-2 {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 700;
     padding: 0;
     margin: 0;
+    color: #6a63c2;
+    line-height: 22px;
+    font-family: "Poppins", sans-serif;
 }
 
 .pp-sidebar-header .heading-2 img {
@@ -544,6 +665,70 @@ input#password_protected_password_new, input#password_protected_password_confirm
 .pp-sidebar-header .heading-2 span {
     color: #8076FF;
 }
+
+.pp-sidebar-header .pp-row{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+}
+
+.pp-sidebar-header .pp-crown-icon img{
+    width:57px;
+    padding-right:10px;
+    margin-top: 5px;
+}
+
+.pp-sidebar-header .pp-head-wt-pro-tag{
+    display: flex;
+}
+
+.pp-sidebar-header .pp-head-wt-pro-tag .pp-pro-tag{
+    letter-spacing: 0.6px;
+    background: linear-gradient(269deg, #eb9702 0%, #FCC21B 100%);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 22px;
+    padding: 0px 6px;
+    border-radius: 5px;
+    color: black;
+    margin: 0px 0px 0px 5px;
+    display: inline-block;
+    font-family: "Poppins", sans-serif;
+}
+
+.pp-sidebar-header .pp-sm-txt-under-head{
+    font-size: 9px;
+    margin-top: 3px;
+    color: #27292C;
+    font-weight: 500;
+}
+
+
+.pp-sidebar-body ul {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0px;
+    padding: 0;
+    margin: 0;
+}
+
+.pp-sidebar-body ul li {
+    list-style: none;
+}
+
+@media (max-width: 1024px) {
+    .pp-sidebar-body ul {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 767px) {
+    .pp-sidebar-body ul {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 .pp-sidebar-body {
     margin: 20px 0;
@@ -566,13 +751,15 @@ input#password_protected_password_new, input#password_protected_password_confirm
 
 .pp-sidebar-body ul li {
     font-weight: 400;
-    font-size: 14px;
-    margin-bottom: 15px;
+    font-size: 13px;
+    margin-bottom: 13px;
+    font-family: "Poppins", sans-serif;
 }
 
 .pp-sidebar-footer {
     text-align: center;
     width: 100%;
+    display: flex;
 }
 
 .pp-docs-link {
@@ -614,7 +801,9 @@ input#password_protected_password_new, input#password_protected_password_confirm
 
 @media screen and ( max-width: 1589px ) {
     .pp-nav-tab a {
-        padding: 8px 10px;
+        padding: 5px 10px;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
     }
 }
 
@@ -696,8 +885,13 @@ input#password_protected_password_new, input#password_protected_password_confirm
     position:relative;
     padding: 15px;
     border: 1px solid #DAD7FF;
-    background: linear-gradient(175deg, #DAD7FF 0%, #FFFFFF 100%);
+    /* background: linear-gradient(175deg, #DAD7FF 0%, #FFFFFF 100%); */
+    background: radial-gradient(ellipse at center, #FFFFFF 0%, #DDDAFF 100%);
     border-radius: 8px;
+}
+
+.pp-pro-popup-logo{
+    width: 35%;
 }
 
 #pro-upgrade-popup .pp-container {
@@ -730,9 +924,11 @@ input#password_protected_password_new, input#password_protected_password_confirm
 #pro-popup .pp-body .pp-description, #pro-upgrade-popup .pp-body .pp-description {
     text-align: center;
     color: #2D3748;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 400;
-    line-height: 24px;
+    line-height: 10px;
+    margin-top: -6px;
+    font-family: Poppins;
 }
 
 #pro-popup .pp-body .pp-link, #pro-upgrade-popup .pp-body .pp-pro-link {
@@ -740,7 +936,7 @@ input#password_protected_password_new, input#password_protected_password_confirm
     display: inline-block;
     padding: 16px 32px;
     border-radius: 24px;
-    background: #8076FF;
+    background: linear-gradient(180deg, #8076FF 0%, #6F68C6 100%);
     color: #fff;
     font-weight: 600;
     font-size: 16px;
@@ -748,15 +944,24 @@ input#password_protected_password_new, input#password_protected_password_confirm
     text-decoration: none;
 }
 
-#pro-popup .pp-heading__title {
+.pp-heading__title {
     color: #171219;
-
     text-align: center;
     font-family: Poppins;
-    font-size: 17px;
+    font-size: 24px;
     font-style: normal;
-    font-weight: 400;
-    line-height: 24px;
+    font-weight: 600;
+    line-height: 28px;
+}
+
+#pro-popup .pp-body .pp-pro-popup-heading{
+    color: #171219;
+    text-align: center;
+    font-family: Poppins;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 30px;
 }
 
 .clearfix::after {

@@ -14,8 +14,12 @@ jQuery( document ).ready(function( $ ) {
                 <a class="pp-close-button" style="">&times;</a>
                 
                 <div class="pp-body" style="">
-                    <img style="" src="${passwordProtectedAdminObject.imageURL}cropped-logo.png" alt="Password Protected logo">
-                
+                    <img style="" src="${passwordProtectedAdminObject.imageURL}cropped-popup-logo.png" alt="Password Protected logo" class="pp-pro-popup-logo">
+
+                    <h2 class="pp-pro-popup-heading">
+                        ${passwordProtectedAdminObject.heading}
+                    </h2>
+
                     <p class="pp-description" style="">
                         ${passwordProtectedAdminObject.description}
                     </p>
@@ -38,8 +42,12 @@ jQuery( document ).ready(function( $ ) {
                 <a class="pp-close-button" style="">&times;</a>
                 
                 <div class="pp-body" style="">
-                    <img style="" src="${passwordProtectedAdminObject.imageURL}cropped-logo.png" alt="Password Protected logo">
-                
+                    <img style="" src="${passwordProtectedAdminObject.imageURL}cropped-popup-logo.png" alt="Password Protected logo" class="pp-pro-popup-logo">
+
+                    <h2 class="pp-heading__title">
+                        ${passwordProtectedAdminObject.heading}
+                    </h2>
+
                     <p class="pp-description" style="">
                         ${passwordProtectedAdminObject.description}
                     </p>
@@ -73,12 +81,10 @@ jQuery( document ).ready(function( $ ) {
                 <a class="pp-close-button" style="">&times;</a>
                 
                 <div class="pp-body" style="">
-                    <img style="" src="${passwordProtectedAdminObject.imageURL}cropped-logo.png" alt="Password Protected logo">
+                    <img style="" src="${passwordProtectedAdminObject.imageURL}cropped-popup-logo.png" alt="Password Protected logo" class="pp-pro-popup-logo">
                 
-                    <h2 style="font-weight: bolder;" class="pp-heading__title">
-                        Get this and more advanced features with
-                        <br>
-                        Business Plan
+                    <h2 class="pp-heading__title">
+                        Unlock unmatched website protection with advanced security features
                     </h2>
                     
                     <div style="margin-bottom: 20px;display: block;padding: 0 30px;" class="pp-description clearfix">
@@ -88,19 +94,19 @@ jQuery( document ).ready(function( $ ) {
                                     <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
                                     </svg>
-                                    Category / Taxonomy Protection
+                                    Protect Categories/Taxonomies
                                 </li>
                                 <li style="" class="pp-list-content">
                                     <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
                                     </svg>
-                                    Multiple Password Management
+                                    Manage Unlimited Passwords
                                 </li>
                                 <li style="" class="pp-list-content">
                                     <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
                                     </svg>
-                                    WP Admin Protection
+                                    Password Access Request
                                 </li>
                             </ul>
                         </div>
@@ -110,19 +116,19 @@ jQuery( document ).ready(function( $ ) {
                                     <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
                                     </svg>
-                                    Protection Screen Styling
+                                    Lock Screen Customization
+                                </li>
+                                <li style="" class="pp-list-content">
+                                    <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
+                                    </svg>
+                                    Partial Content Protection
                                 </li>
                                 <li style="" class="pp-list-content">
                                     <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
                                     </svg>
                                     Multisite Network Support
-                                </li>
-                                <li style="" class="pp-list-content">
-                                    <svg style="margin-bottom: -4px;background: #8086ff;border-radius: 90.909px;display: inline-flex;padding: 2.727px;align-items:flex-start;gap: 9.091px;" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12.7005 3.5771L5.48535 11.8229L1.84375 8.18135L2.72763 7.29746L5.42446 9.99429L11.7597 2.75397L12.7005 3.5771Z" fill="white" stroke="white" stroke-width="0.454545" stroke-miterlimit="10" stroke-linecap="square"/>
-                                    </svg>
-                                    Request Password
                                 </li>
                             </ul>
                         </div>

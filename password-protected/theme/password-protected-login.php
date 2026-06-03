@@ -80,8 +80,10 @@ add_action( 'password_protected_login_head', 'wp_login_viewport_meta' );
 <?php
 
 if ( version_compare( $wp_version, '3.9-dev', '>=' ) ) {
+    wp_enqueue_style( 'wp-base-styles', true );
 	wp_admin_css( 'login', true );
 } else {
+    wp_enqueue_style( 'wp-base-styles' );
 	wp_admin_css( 'wp-admin', true );
 	wp_admin_css( 'colors-fresh', true );
 }
@@ -117,7 +119,7 @@ do_action( 'password_protected_login_head' );
 ?>
 
 </head>
-<body class="login login-password-protected login-action-password-protected-login wp-core-ui">
+<body class="login login-password-protected login-action-password-protected-login wp-core-ui admin-color-modern">
 
 <div id="login">
 	<h1 class="wp-login-logo" id="password-protected-logo"><a href="<?php echo esc_url( apply_filters( 'password_protected_login_headerurl', home_url( '/' ) ) ); ?>" title="<?php echo esc_attr( apply_filters( 'password_protected_login_headertitle', get_bloginfo( 'name' ) ) ); ?>"><?php bloginfo( 'name' ); ?></a></h1>

@@ -24,6 +24,9 @@ class Password_Protected_Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 		add_action( 'init', array( $this, 'init' ) );
 
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_upsell_assets' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_classic_editor_upsell_assets' ) );
+
 		add_action( 'password_protected_subtab_cache-issue_content', array( $this, 'cache_related_issue' ) );
 		add_action( 'admin_footer', array( $this, 'add_script_in_footer' ), 9999 );
 
@@ -256,15 +259,22 @@ class Password_Protected_Admin {
 
 		if ( 'settings_page_password-protected' === $hooks || 'toplevel_page_password-protected' === $hooks ) {
 			global $Password_Protected;
-			wp_enqueue_style( 'password-protected-page-script', PASSWORD_PROTECTED_URL . 'assets/css/admin.css', array(), $Password_Protected->version );
+			wp_enqueue_style(
+				'password-protected-poppins',
+				'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap',
+				array(),
+				null
+			);
+			wp_enqueue_style( 'password-protected-page-script', PASSWORD_PROTECTED_URL . 'assets/css/admin.css', array( 'password-protected-poppins' ), $Password_Protected->version );
 			wp_enqueue_script( 'password-protected-admin-script', PASSWORD_PROTECTED_URL . 'assets/js/admin.js', array('jquery'), $Password_Protected->version );
 			wp_localize_script(
 				'password-protected-admin-script',
 				'passwordProtectedAdminObject',
 				array(
 					'imageURL'       => PASSWORD_PROTECTED_URL . 'assets/images/',
-					'description'    => __( 'Unlock unmatched website protection with<br>advanced security features', 'password-protected' ),
-					'buttonText'     => __( 'Get Password Protected Pro', 'password-protected' ),
+					'heading'        => __( "Don't Settle for Limited Password Protection", 'password-protected' ),
+					'description'    => __( 'Upgrade to Business plan and unlock all premium features!', 'password-protected' ),
+					'buttonText'     => __( 'Upgrade to Premium', 'password-protected' ),
 					'buttonRedirect' => add_query_arg(
 						array(
 							'page' => 'password-protected',
@@ -275,6 +285,64 @@ class Password_Protected_Admin {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Enqueue assets for block editor native visibility upsell.
+	 */
+	public function enqueue_block_editor_upsell_assets() {
+		if ( class_exists( 'Password_Protected_Pro' ) ) {
+			return;
+		}
+		global $Password_Protected;
+		
+		wp_enqueue_script(
+			'password-protected-native-visibility-upsell',
+			PASSWORD_PROTECTED_URL . 'assets/js/native-visibility-upsell.js',
+			array( 'jquery' ),
+			$Password_Protected->version,
+			true
+		);
+
+		wp_localize_script(
+			'password-protected-native-visibility-upsell',
+			'passwordProtectedUpsell',
+			array(
+				'settingsUrl' => admin_url( 'admin.php?page=password-protected' ),
+			)
+		);
+	}
+
+	/**
+	 * Enqueue assets for classic editor native visibility upsell.
+	 *
+	 * @param string $hook The current admin page hook.
+	 */
+	public function enqueue_classic_editor_upsell_assets( $hook ) {
+		if ( class_exists( 'Password_Protected_Pro' ) ) {
+			return;
+		}
+		if ( 'post.php' !== $hook && 'post-new.php' !== $hook ) {
+			return;
+		}
+
+		global $Password_Protected;
+
+		wp_enqueue_script(
+			'password-protected-classic-visibility-upsell',
+			PASSWORD_PROTECTED_URL . 'assets/js/classic-visibility-upsell.js',
+			array( 'jquery' ),
+			$Password_Protected->version,
+			true
+		);
+
+		wp_localize_script(
+			'password-protected-classic-visibility-upsell',
+			'passwordProtectedUpsell',
+			array(
+				'settingsUrl' => admin_url( 'admin.php?page=password-protected' ),
+			)
+		);
 	}
 
 	public function init() {
@@ -433,15 +501,25 @@ class Password_Protected_Admin {
                         <div class="pp-nav-wrapper">
 							<?php foreach( $this->setting_tabs as $index => $setting_tab ) : ?>
                                 <div class="pp-nav-tab <?php echo ( $tab === $setting_tab['slug'] ) ? 'pp-nav-tab-active' : ''; ?> <?php echo ( 'getpro' === $setting_tab['slug'] ) ? 'pp-pro-tab' : ''; ?>">
-                                    <a href="<?php echo admin_url( 'admin.php?page=password-protected&tab=' . $setting_tab['slug'] ); ?>" class=" ">
-										<?php if ( filter_var( $setting_tab['icon'], FILTER_VALIDATE_URL ) ) : ?>
-                                            <span>
-                                                <img src="<?php echo esc_url( $setting_tab['icon'] ); ?>" alt="">
-                                            </span>
+                                    <a href="<?php echo admin_url( 'admin.php?page=password-protected&tab=' . $setting_tab['slug'] ); ?>" class="get-pro-txt">
+										<?php if ( 'getpro' === $setting_tab['slug'] ) : ?>
+											<span class="pp-get-pro-tab-icon">
+												<img src="<?php echo esc_url( PASSWORD_PROTECTED_URL . 'assets/images/pro-tab-icon.png' ); ?>" alt="" class="pro-tab-icon">
+											</span>
+
+										<?php elseif ( filter_var( $setting_tab['icon'], FILTER_VALIDATE_URL ) ) : ?>
+
+											<span>
+												<img src="<?php echo esc_url( $setting_tab['icon'] ); ?>" alt="">
+											</span>
+
 										<?php else : ?>
-                                            <span class="dashicons <?php echo $setting_tab['icon']; ?>"></span>
+
+											<span class="dashicons <?php echo esc_attr( $setting_tab['icon'] ); ?>"></span>
+
 										<?php endif; ?>
-										<?php echo $setting_tab['title']; ?>
+
+										<?php echo esc_html( $setting_tab['title'] ); ?>
                                     </a>
                                 </div>
 							<?php endforeach; ?>
@@ -963,51 +1041,76 @@ class Password_Protected_Admin {
 		$image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
 		echo '<div class="pp-sidebar-widget">
             <div class="pp-container">
-            
-                <div class="pp-sidebar-header">
-                    <p class="heading-1">Level up your WordPress protection with</p>
-                    <p class="heading-2">Password <img src="' . $image_url . 'crown.png" /> Protected <span>Pro</span></p>
+
+				<div class="pp-sidebar-header">	
+					<div class="pp-row">
+						<div class="pp-crown-icon">
+							<img src="' . $image_url . 'pro-crown.png" />
+						</div>
+						<div>
+							<p class="heading-2">Password</p>
+							<div class="pp-head-wt-pro-tag">
+								<p class="heading-2">Protected</p> 
+								<p class="pp-pro-tag">
+									PRO
+								</p>
+							</div>
+							<p class="pp-sm-txt-under-head">Level up your WordPress protection</p>
+						</div>
+					</div>
                 </div>
 
                 <div class="pp-sidebar-body">
                     <ul>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Protect Specific Post Types</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Protect Custom Post Types</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Whitelist Specific User Role</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Exclude Specific Page, Post & Product</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Password Protect WP-Admin</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Partial Content Protection</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Password Attempt Activity Report</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Protect Categories</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Specific Post/Page Protection</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Protect WordPress Login Page</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Certain Page/Posts Exclusions</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Lock Specific Posts & Pages</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Password Attempts Restriction</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Manage Unlimited Passwords</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Password Expiration and Usage Limit</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Set Expiration & Usage Limits</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Bypass URL (Post, Page, Category, etc.)</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Limit Login Attempts</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Activity Log For Each Password Attempt</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Create Secure Bypass Links</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Multiple Password Management</span>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Lock Screen Customization</span>
+                        </li>
+						<li>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Password Access Request</span>
+                        </li>
+                        <li>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Whitelist User Roles</span>
+                        </li>
+                        <li>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Track Password Activity</span>
+                        </li>
+                        <li>
+                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">hCaptcha & Cloudflare Turnstile</span>
                         </li>
                     </ul>
                 </div>
                 <div class="pp-sidebar-footer">
-                    <a target="_blank" href="https://passwordprotectedwp.com/pricing/?utm_source=plugin&utm_medium=side_banner&utm_campaign=plugin">' . esc_html__( 'Get Password Protected Pro', 'password-protected' ) . '</a>
+                    <a target="_blank" href="https://passwordprotectedwp.com/pricing/?utm_source=plugin&utm_medium=side_banner&utm_campaign=plugin">' . esc_html__( 'Upgrade to Premium', 'password-protected' ) . '</a>
                 </div>
             </div>
         </div>';
@@ -1232,113 +1335,161 @@ class Password_Protected_Admin {
 		$image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
 		echo '<div class="pp-pro-banner">
             <div class="pp-container">
-                <div class="pp-banner-header">
-                    <p class="heading-1">Level up your WordPress protection with</p>
-                    <p class="heading-2">Password Protected
-                        <img src="' . $image_url . 'crown.png" alt="">
-                        <span>Pro</span>
-                    </p>
-                </div>
+
+				<div class="pp-banner-header">
+					<div class="pp-row">
+						<div class="pp-crown-icon">
+							<img src="' . $image_url . 'pro-crown.png" />
+						</div>
+						<div>
+							<div class="pp-head-wt-pro-tag">
+								<p class="pp-sm-txt-heading">Unlock Premium Content Protection Features with</p> 
+								<p class="pp-pro-tag">
+									PRO
+								</p>
+							</div>
+							<p class="heading-1">Password Protected</p>
+						</div>
+					</div>
+				</div>
                 
                 <div class="pp-banner-body">
                     <div class="pp-cols">
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Protect Specific Post Types
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/post-and-page-protection/how-to-secure-all-posts-and-pages/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/post-and-page-protection/how-to-secure-all-posts-and-pages/?utm_source=plugin&utm_medium=pro_tab">
+									Protect Custom Post Types
+								</a>
+							</p>
                         </div>
 
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Whitelist Specific User Role
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/pro/whitelist-specific-user-role/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
-                        </div>
-                        
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Password Protect WP-Admin
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/pro/password-protect-wp-admin/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
-                        </div>
-                        
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Password Attempt Activity Report
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/logs/password-attempt-activity-report?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/bypass-url/?utm_source=plugin&utm_medium=pro_tab">
+									Create Secure Bypass Links
+								</a>
+							</p>
                         </div>
 
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Specific Post/Page Protection
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/post-and-page-protection/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/post-and-page-protection/?utm_source=plugin&utm_medium=pro_tab">
+									Lock Specific Posts & Pages
+								</a>
+							</p>
                         </div>
-                        
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Certain Page/Posts Exclusions
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/pro/exclude-pages-posts-and-post-types/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
-                        </div> 
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/manage-multiple-websites/?utm_source=plugin&utm_medium=pro_tab">
+									Manage Unlimited Passwords
+								</a>
+							</p>
+                        </div>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/limit-password-attempts-and-lockdown-time/?utm_source=plugin&utm_medium=pro_tab">
+									Limit Login Attempts
+								</a>
+							</p>
+                        </div>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/integration/?utm_source=plugin&utm_medium=pro_tab">
+									hCaptcha & Cloudflare Turnstile
+								</a>
+							</p>
+                        </div>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/customize-your-password-protected-screen/?utm_source=plugin&utm_medium=pro_tab">
+									Lock Screen Customization
+								</a>
+							</p>
+                        </div>
                         
                     </div>
                     <div class="pp-cols pp-cols-section-2">
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Password Attempts Restriction
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/pro/limit-password-attempts-and-lockdown-time/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/partial-content-protection/?utm_source=plugin&utm_medium=pro_tab">
+									Partial Content Protection
+								</a>
+							</p>
                         </div>
-                        
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Password Expiration and Usage Limit
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/pro/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/password-protect-wp-admin/?utm_source=plugin&utm_medium=pro_tab">
+									Protect WordPress Login Page
+								</a>
+							</p>
                         </div>
-                        
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Bypass URL (Post, Page, Category, etc.)
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/pro/bypass-password-protection-for-specific-urls/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/exclude-pages-posts-and-post-types/?utm_source=plugin&utm_medium=pro_tab">
+									Exclude Specific Page, Post, & Product
+								</a>
+							</p>
                         </div>
-                        
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Activity Log For Each Password Attempt
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/logs/password-activity-logs/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/documentation/?utm_source=plugin&utm_medium=pro_tab">
+									Set Expiration & Usage Limits
+								</a>
+							</p>
                         </div>
-                        
-                        <div>
-                            <img src="' . $image_url . 'lock-2.png">
-                            Multiple Password Management
-                            <span class="pp-docs-link">
-                                <a target="_blank" href="https://passwordprotectedwp.com/documentation/pro/manage-multiple-websites/?utm_source=plugin&utm_medium=pro_tab">Docs</a>
-                            </span>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/whitelist-specific-user-roles/?utm_source=plugin&utm_medium=pro_tab">
+									Whitelist User Roles
+								</a>
+							</p>
+                        </div>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/password-activity-logs/?utm_source=plugin&utm_medium=pro_tab">
+									Track Password Activity
+								</a>
+							</p>
+                        </div>
+
+						<div class="pp-features-list-banner">
+                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <p>
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/request-access-password/?utm_source=plugin&utm_medium=pro_tab">
+									Password Access Request
+								</a>
+							</p>
                         </div>
                         
                     </div>
-                    
-                    <div class="pp-clearfix"></div>
                 </div>
                 
                 <div class="pp-banner-footer">
-                    <a target="_blank" href="https://passwordprotectedwp.com/pricing/?utm_source=plugin&utm_medium=pro_tab&utm_campaign=plugin">' . esc_html__( 'Get Password Protected Pro', 'password-protected' ) . '</a>
+                    <a target="_blank" href="https://passwordprotectedwp.com/pricing/?utm_source=plugin&utm_medium=pro_tab&utm_campaign=plugin">' . esc_html__( 'Upgrade to Premium', 'password-protected' ) . '</a>
                 </div>
             </div>
         </div>';
