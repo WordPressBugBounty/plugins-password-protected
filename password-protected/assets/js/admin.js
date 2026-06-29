@@ -2,6 +2,8 @@ jQuery( document ).ready(function( $ ) {
 
     toggle_recaptcha_version( $ );
     set_recaptcha_version_fields( $ );
+    password_protected_set_menu_location();
+
 
     $( '.click-to-display-popup' ).on( 'click', function( e ) {
         let elementId = '#pro-popup';
@@ -70,7 +72,14 @@ jQuery( document ).ready(function( $ ) {
     } );
 
     $( '.click-to-display-upgrade-popup' ).on( 'click', function( e ) {
+        e.preventDefault();
+
         let element_id = '#pro-upgrade-popup';
+        let pricing_url = $( this ).data( 'pricing-url' );
+
+        if ( ! pricing_url ) {
+            pricing_url = 'https://passwordprotectedwp.com/pricing/?utm_source=plugin&utm_medium=business_pop_up&utm_campaign=plugin';
+        }
 
         if ( $( element_id ).length ) {
             $( element_id ).remove();
@@ -134,7 +143,7 @@ jQuery( document ).ready(function( $ ) {
                         </div>
                     </div>
 
-                    <a class="pp-pro-link" style="" href="https://passwordprotectedwp.com/pricing/?utm_source=plugin&utm_medium=business_pop_up&utm_campaign=plugin">Get Business Plan Now ></a>
+                    <a class="pp-pro-link" style="" href="${pricing_url}">Get Business Plan Now ></a>
                 </div>
                 
                 
@@ -142,6 +151,13 @@ jQuery( document ).ready(function( $ ) {
         </div>`;
 
         $( 'body' ).append( popup_html );
+    } );
+
+    $( '.pp-customizer-mockup.click-to-display-upgrade-popup' ).on( 'keydown', function( e ) {
+        if ( e.key === 'Enter' || e.key === ' ' ) {
+            e.preventDefault();
+            $( this ).trigger( 'click' );
+        }
     } );
 
 
@@ -237,5 +253,46 @@ function hide_recaptcha_v3_fields( $ ) {
     $("#pp_google_recaptcha_v3_secret_key").parent('div').hide();
     $("#pp_google_recpatcha_v3_score").parent('td').parent('tr').hide();
     $("#pp_google_recpatcha_v3_badge").parent('td').parent('tr').hide();
+}
+
+function password_protected_set_menu_location() {
+    let current_url = window.location.href;
+    let url = new URL( current_url );
+    let searchParams = url.searchParams;
+    let page, tab;
+    page = searchParams.get( 'page' );
+    tab = searchParams.get( 'tab' );
+    
+    if ( 'password-protected' === page ) {
+        switch ( tab ) {
+            case 'content-protection':
+                password_protected_activate_deactivate_menus( 3 )
+                break;
+            case 'manage_passwords':
+                password_protected_activate_deactivate_menus( 4 )
+                break;
+            case 'logs':
+                password_protected_activate_deactivate_menus( 5 )
+                break;
+            case 'protected-screen':
+                password_protected_activate_deactivate_menus( 6 )
+                break;
+            case 'request-password':
+                password_protected_activate_deactivate_menus( 7 )
+                break;
+            case 'general':
+            case null:
+                password_protected_activate_deactivate_menus( 2 )
+                break;
+            default:
+                password_protected_activate_deactivate_menus( 0 )
+                break;
+        }
+    }
+}
+
+function password_protected_activate_deactivate_menus( $index ) {
+    jQuery( '#toplevel_page_password-protected > ul > li' ).removeClass( 'current' );
+    jQuery( `#toplevel_page_password-protected > ul > li:nth-child( ${ $index } )` ).addClass( 'current' );
 }
 

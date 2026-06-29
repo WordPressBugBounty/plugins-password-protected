@@ -2,9 +2,9 @@
 Contributors: wpexpertsio
 Tags: password protection, maintenance mode, password protect page, password protect, restrict content
 Requires at least: 4.6
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 2.8.1
+Stable tag: 2.8.2
 License: GPLv2 or later
 
 Protect your WordPress site, pages, posts, WooCommerce products, and categories with single or multiple passwords.
@@ -127,9 +127,9 @@ For passwordless access, easily create unique bypass links for each password pro
 
 Stay informed and vigilant with detailed activity logs for every password attempt. This feature provides comprehensive insights into site activity, including IP addresses, dates, times, and login statuses, so you can easily monitor and review user interactions.
 
-**✅ Lock Screen Customization [Pro]**
+**✅ Real-Time Lock Screen Customization [Pro]**
 
-Make a lasting impression on visitors with a personalized and professional lock screen. With our Login Designer plugin, you can customize the appearance of your password-protected screen to align with your brand identity and aesthetics.
+Customize your password-protected screen and see every change instantly with live preview. Match your lock screen to your brand with personalized colors, styles, and design settings—all in real time.
 
 With options to customize the background, logo, and other elements of the lock screen, you can create a cohesive and visually appealing experience for users seeking access to your protected/restricted content.
 
@@ -328,20 +328,24 @@ If you want to translate this plugin you can easily contribute to the [Translati
 
 == Changelog ==
 
+= 2.8.2 =
+- New - Added functionality to bypass page cache.
+- Improved code optimization.
+
 = 2.8.1 =
 - Update - Tested up to WordPress 7.0.
 - Fixed - UI checkbox issue.
 
 = 2.8.0 =
-- Tested up to WordPress 6.9
-- Improved code optimization
+- Tested up to WordPress 6.9.
+- Improved code optimization.
 
 = 2.7.12 =
 - Fixed - Fix the Vulnerability issued by WordFence.
 - Fixed - Translation issue.
 
 = 2.7.11 =
-- Fixed: Translation issue
+- Fixed: Translation issue.
 - Improved code optimization.
 
 = 2.7.10 =

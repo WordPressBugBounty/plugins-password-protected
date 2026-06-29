@@ -222,9 +222,7 @@ try{let s=document.getElementById("pp-hide-show-password");s.addEventListener("c
 
 <div class="clear"></div>
 
-<?php if ( class_exists( 'Login_Designer' ) ) : ?>
-	<div id="password-protected-background" style="position:absolute; inset: 0;width: 100%;height: 100%;z-index: -1;transition: opacity 300ms cubic-bezier(0.694, 0, 0.335, 1) 0s"></div>
-<?php endif; ?>
+<div id="password-protected-background" style="position:absolute; inset: 0;width: 100%;height: 100%;z-index: -1;transition: opacity 300ms cubic-bezier(0.694, 0, 0.335, 1) 0s"></div>
 
 </body>
 </html>

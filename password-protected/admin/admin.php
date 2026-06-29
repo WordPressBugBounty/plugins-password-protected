@@ -29,9 +29,180 @@ class Password_Protected_Admin {
 
 		add_action( 'password_protected_subtab_cache-issue_content', array( $this, 'cache_related_issue' ) );
 		add_action( 'admin_footer', array( $this, 'add_script_in_footer' ), 9999 );
-
-
+        add_filter( 'password_protected_setting_tabs', array( $this, 'register_setting_tabs' ), -1 );
+        add_filter( 'password_protected_setting_tabs', array( $this, 'register_help_tabs' ), 9999 );
 	}
+
+    public function register_setting_tabs( $tabs ) {
+        $new_tabs = array(
+            'general'  => array(
+                'title' => __( 'General', 'password-protected' ),
+                'slug'  => 'general',
+                'icon'  => 'dashicons-migrate',
+            ),
+
+            'advanced' => array(
+                'title'    => __( 'Advanced', 'password-protected' ),
+                'slug'     => 'advanced',
+                'icon'     => 'dashicons-admin-settings',
+                'sub-tabs' => array(
+                    'exclude-from-protection' => array(
+                        'title' => __( 'Exclude From Protection', 'password-protected' ),
+                        'slug'  => 'exclude-from-protection',
+                    ),
+
+                    'password-protected-page-description' => array(
+                        'title' => __( 'Protected Page Content', 'password-protected' ),
+                        'slug'  => 'password-protected-page-description',
+                    ),
+
+                    'bypass-url' => array(
+                        'title' => __( 'Bypass URL', 'password-protected' ),
+                        'slug'  => 'bypass-url',
+                    ),
+
+                    'cache-issue' => array(
+                        'title' => __( 'Cache Issue', 'password-protected' ),
+                        'slug'  => 'cache-issue',
+                    ),
+
+                    'custom-error-message' => array(
+                            'title' => __( 'Custom Error Message', 'password-protected' ),
+                            'slug'  => 'custom-error-message',
+                        ),
+                ),
+            ),
+
+            'manage_passwords' => array(
+                'title'           => __( 'Multiple Passwords', 'password-protected' ),
+                'slug'            => 'manage_passwords',
+                'icon'            => 'dashicons-shield',
+                'show_as_submenu' => true,
+                'position'        => 2,
+            ),
+
+            'content-protection' => array(
+                'title'           => __( 'Content Protection', 'password-protected' ),
+                'slug'            => 'content-protection',
+                'icon'            => 'dashicons-superhero',
+                'position'        => 1,
+                'show_as_submenu' => true,
+                'sub-tabs'        => array(
+                    'post-type-protection' => array(
+                        'title' => __( 'Post Type Protection', 'password-protected' ),
+                        'slug'  => 'post-type-protection',
+                    ),
+
+                    'taxonomy-protection' => array(
+                        'title' => __( 'Taxonomy Protection', 'password-protected' ),
+                        'slug'  => 'taxonomy-protection',
+                    ),
+
+                    'partial-protection' => array(
+                            'title' => __( 'Partial Content Protection', 'password-protected' ),
+                            'slug'  => 'partial-protection',
+                        ),
+                ),
+            ),
+
+            'security' => array(
+                'title'    => __( 'Security', 'password-protected' ),
+                'slug'     => 'security',
+                'icon'     => 'dashicons-shield-alt',
+                'sub-tabs' => array(
+                    'whitelist-user-role' => array(
+                        'title' => __( 'Whitelist User Role', 'password-protected' ),
+                        'slug'  => 'whitelist-user-role',
+                    ),
+
+                    'all-captchas' => array(
+                        'title' => __( 'Captcha', 'password-protected' ),
+                        'slug'  => 'all-captchas',
+                    ),
+
+                    'wp-admin-protection' => array(
+                        'title' => __( 'WP-Admin Protection', 'password-protected' ),
+                        'slug'  => 'wp-admin-protection',
+                    ),
+
+                    'attempt-limitation' => array(
+                        'title' => __( 'Attempt Limitation', 'password-protected' ),
+                        'slug'  => 'attempt-limitation',
+                    ),
+                ),
+            ),
+
+            'logs' => array(
+                'title'           => __( 'Logs', 'password-protected' ),
+                'slug'            => 'logs',
+                'icon'            => 'dashicons-media-text',
+                'show_as_submenu' => true,
+                'position'        => 3,
+                'sub-tabs'        => array(
+                    'activity_logs' => array(
+                        'title' => __( 'Activity Logs', 'password-protected' ),
+                        'slug'  => 'activity_logs',
+                    ),
+
+                    'activity-report' => array(
+                        'title' => __( 'Activity Report', 'password-protected' ),
+                        'slug'  => 'activity-report',
+                    ),
+                ),
+            ),
+
+            'protected-screen' => array(
+                'title'           => __( 'Customize', 'password-protected' ),
+                'slug'            => 'protected-screen',
+                'icon'            => 'dashicons-admin-customizer',
+                'show_as_submenu' => true,
+                'position'        => 5,
+            ),
+
+            'request-password' => array(
+                'title'           => __( 'Password Request', 'password-protected' ),
+                'slug'            => 'request-password',
+                'icon'            => 'dashicons-email-alt',
+                'show_as_submenu' => true,
+                'position'        => 4,
+                'sub-tabs'        => array(
+                    'password-request' => array(
+                        'title' => __( 'Request Password', 'password-protected' ),
+                        'slug'  => 'password-request',
+                    ),
+                    'requests'         => array(
+                        'title' => __( 'Requests', 'password-protected' ),
+                        'slug'  => 'requests',
+                    ),
+                    'email-templates'  => array(
+                        'title' => __( 'Email Templates', 'password-protected' ),
+                        'slug'  => 'email-templates',
+                    ),
+                ),
+            ),
+        );
+
+        return array_merge( $tabs, $new_tabs );
+    }
+
+    public function register_help_tabs( $tabs ) {
+
+        $tabs['help'] = array(
+            'title' => __( 'Help', 'password-protected' ),
+            'slug'  => 'help',
+            'icon'  => 'dashicons-editor-help',
+        );
+
+        if ( ! class_exists( 'Password_Protected_Pro' ) ) {
+            $tabs['getpro'] = array(
+                'title' => __( 'Get Pro', 'password-protected' ),
+                'slug'  => 'getpro',
+                'icon'  => 'dashicons-superhero-alt',
+            );
+        }
+
+        return $tabs;
+    }
 
 	public function add_script_in_footer() {
 		?>
@@ -52,202 +223,7 @@ class Password_Protected_Admin {
 	 * customizable using filter hook
 	 */
 	public function password_protected_register_setting_tabs() {
-		$this->setting_tabs = array(
-			'general'  => array(
-				'title' => __( 'General', 'password-protected' ),
-				'slug'  => 'general',
-				'icon'  => 'dashicons-migrate',
-			),
-
-			'advanced' => array(
-				'title'    => __( 'Advanced', 'password-protected' ),
-				'slug'     => 'advanced',
-				'icon'     => 'dashicons-admin-settings',
-				'sub-tabs' => array(
-					'exclude-from-protection' => array(
-						'title' => __( 'Exclude From Protection', 'password-protected' ),
-						'slug'  => 'exclude-from-protection',
-					),
-
-					'password-protected-page-description' => array(
-						'title' => __( 'Protected Page Content', 'password-protected' ),
-						'slug'  => 'password-protected-page-description',
-					),
-
-					'bypass-url' => array(
-						'title' => __( 'Bypass URL', 'password-protected' ),
-						'slug'  => 'bypass-url',
-					),
-
-					'cache-issue' => array(
-						'title' => __( 'Cache Issue', 'password-protected' ),
-						'slug'  => 'cache-issue',
-					),
-
-					'custom-error-message' => array(
-						'title' => __( 'Custom Error Message', 'password-protected' ),
-						'slug'  => 'custom-error-message',
-					),
-				),
-			),
-
-			'manage_passwords' => array(
-				'title' => __( 'Multiple Passwords', 'password-protected' ),
-				'slug'  => 'manage_passwords',
-				'icon'  => 'dashicons-shield',
-			),
-
-			'content-protection' => array(
-				'title'    => __( 'Content Protection', 'password-protected' ),
-				'slug'     => 'content-protection',
-				'icon'     => 'dashicons-superhero',
-				'sub-tabs' => array(
-					'post-type-protection' => array(
-						'title' => __( 'Post Type Protection', 'password-protected' ),
-						'slug'  => 'post-type-protection',
-					),
-
-					'taxonomy-protection' => array(
-						'title' => __( 'Taxonomy Protection', 'password-protected' ),
-						'slug'  => 'taxonomy-protection',
-					),
-
-                    'partial-protection' => array(
-                        'title' => __( 'Partial Content Protection', 'password-protected' ),
-                        'slug'  => 'partial-protection',
-                    ),
-				),
-			),
-
-			'security' => array(
-				'title'    => __( 'Security', 'password-protected' ),
-				'slug'     => 'security',
-				'icon'     => 'dashicons-shield-alt',
-				'sub-tabs' => array(
-					'whitelist-user-role' => array(
-						'title' => __( 'Whitelist User Role', 'password-protected' ),
-						'slug'  => 'whitelist-user-role',
-					),
-
-					'all-captchas' => array(
-						'title' => __( 'Captcha', 'password-protected' ),
-						'slug'  => 'all-captchas',
-					),
-
-					'wp-admin-protection' => array(
-						'title' => __( 'WP-Admin Protection', 'password-protected' ),
-						'slug'  => 'wp-admin-protection',
-					),
-
-					'attempt-limitation' => array(
-						'title' => __( 'Attempt Limitation', 'password-protected' ),
-						'slug'  => 'attempt-limitation',
-					),
-				),
-			),
-
-			'logs' => array(
-				'title' => __( 'Logs', 'password-protected' ),
-				'slug'  => 'logs',
-				'icon'  => 'dashicons-media-text',
-				'sub-tabs' => array(
-					'activity_logs' => array(
-						'title' => __( 'Activity Logs', 'password-protected' ),
-						'slug'  => 'activity_logs',
-					),
-
-					'activity-report' => array(
-						'title' => __( 'Activity Report', 'password-protected' ),
-						'slug'  => 'activity-report',
-					),
-				),
-			),
-
-			'protected-screen' => array(
-				'title'    => __( 'Customization', 'password-protected' ),
-				'slug'     => 'protected-screen',
-				'icon'     => 'dashicons-admin-customizer',
-				'sub-tabs' => array(
-					'logo-styles'        => array(
-						'title' => __( 'Logo', 'password-protected' ),
-						'slug'  => 'logo-styles',
-					),
-					'label-styles'       => array(
-						'title' => __( 'Labels', 'password-protected' ),
-						'slug'  => 'label-styles',
-					),
-					'field-styles'       => array(
-						'title' => __( 'Fields', 'password-protected' ),
-						'slug'  => 'field-styles',
-					),
-					'button-styles'      => array(
-						'title' => __( 'Button', 'password-protected' ),
-						'slug'  => 'button-styles',
-					),
-					'remember-me-styles' => array(
-						'title' => __( 'Remember Me', 'password-protected' ),
-						'slug'  => 'remember-me-styles',
-					),
-					'form-background'    => array(
-						'title' => __( 'Form Background', 'password-protected' ),
-						'slug'  => 'form-background',
-					),
-					'body-background'    => array(
-						'title' => __( 'Body Background', 'password-protected' ),
-						'slug'  => 'body-background',
-					),
-					'below-form'         => array(
-						'title' => __( 'Form Content', 'password-protected' ),
-						'slug'  => 'below-form',
-					),
-					'below-page'         => array(
-						'title' => __( 'Page Content', 'password-protected' ),
-						'slug'  => 'below-page',
-					),
-					'custom-css'         => array(
-						'title' => __( 'Custom CSS', 'password-protected' ),
-						'slug'  => 'custom-css',
-					),
-				),
-			),
-
-            'request-password' => array(
-                'title'    => __( 'Password Request', 'password-protected' ),
-                'slug'     => 'request-password',
-                'icon'     => 'dashicons-email-alt',
-                'sub-tabs' => array(
-                    'password-request' => array(
-                        'title' => __( 'Request Password', 'password-protected' ),
-                        'slug'  => 'password-request',
-                    ),
-                    'requests'         => array(
-                        'title' => __( 'Requests', 'password-protected' ),
-                        'slug'  => 'requests',
-                    ),
-                    'email-templates'  => array(
-                        'title' => __( 'Email Templates', 'password-protected' ),
-                        'slug'  => 'email-templates',
-                    ),
-                ),
-            ),
-		);
-
-		$this->setting_tabs = apply_filters( 'password_protected_setting_tabs', $this->setting_tabs );
-
-		$this->setting_tabs['help']   = array(
-			'title' => __( 'Help', 'password-protected' ),
-			'slug'  => 'help',
-			'icon'  => 'dashicons-editor-help',
-		);
-		$this->setting_tabs['getpro'] = array(
-			'title' => __( 'Get Pro', 'password-protected' ),
-			'slug'  => 'getpro',
-			'icon'  => 'dashicons-superhero-alt',
-		);
-
-		if ( class_exists( 'Password_Protected_Pro' ) ) {
-			unset( $this->setting_tabs['getpro'] );
-		}
+		$this->setting_tabs = apply_filters( 'password_protected_setting_tabs', array() );
 	}
 
 	/**
@@ -414,6 +390,7 @@ class Password_Protected_Admin {
 				'settings_page'
 			)
 		);
+
 		add_menu_page(
 			'Password Protected',
 			'Password Protected',
@@ -423,8 +400,38 @@ class Password_Protected_Admin {
 			'dashicons-lock',
 			99
 		);
+
+        add_submenu_page(
+            'password-protected',
+            'Password Protected',
+            'General',
+            'manage_options',
+            'password-protected',
+            array( $this, 'pp_admin_menu_page_callback' )
+        );
+
 		add_action( 'load-' . $this->settings_page_id, array( $this, 'add_help_tabs' ), 20 );
 
+        $menus = apply_filters( 'password_protected_setting_tabs', array() );
+
+        foreach ( $menus as $menu_key => $menu ) {
+            if ( isset( $menu['show_as_submenu'] ) && $menu['show_as_submenu'] ) {
+                add_submenu_page(
+                    'password-protected',
+                    $menu['title'],
+                    $menu['title'],
+                    'manage_options',
+                    add_query_arg(
+                        array(
+                            'page' => 'password-protected',
+                            'tab'  => $menu['slug'],
+                        ),
+                        admin_url( 'admin.php' )
+                    ),
+                    null
+                );
+            }
+        }
 
 		if ( ! class_exists( 'Password_Protected_Pro' ) ) {
 			add_submenu_page(
@@ -755,6 +762,17 @@ class Password_Protected_Admin {
 			)
 		);
 
+		add_settings_field(
+			'password-protected-page-cache',
+			__( 'Problem With Page Cache', 'password-protected' ),
+			array( $this, 'password_protected_enable_dynamic_args' ),
+			'password-protected&tab=advanced&sub-tab=cache-issue',
+			'password-protected-advanced-tab-cache-issue',
+			array(
+				'label_for' => 'pp_enable_dynamic_args',
+			)
+		);
+
 		// password protected help tab
 		add_settings_section(
 			'password-protected-help',
@@ -796,6 +814,7 @@ class Password_Protected_Admin {
 		register_setting( 'password-protected-advanced-protected-page-content', 'password_protected_text_below_password', array( 'type' => 'string' ) );
 
 		register_setting( 'password_protected_cache_issue', 'password_protected_use_transient' );
+		register_setting( 'password_protected_cache_issue', 'pp_enable_dynamic_args' );
 	}
 
 	/**
@@ -1019,6 +1038,24 @@ class Password_Protected_Admin {
                 echo '<p class="desc"><strong>' . esc_attr( $issue['description'] ) . '</strong></p>';
             endif;
 		endforeach;
+	}
+
+	/**
+	 * Page cache: dynamic URL arguments to bust full-page cache.
+	 */
+	public function password_protected_enable_dynamic_args() {
+		$value = get_option( 'pp_enable_dynamic_args', false );
+		echo '<div class="pp-toggle-wrapper">
+				<input value="yes" type="checkbox" name="pp_enable_dynamic_args" id="pp_enable_dynamic_args" ' . checked( $value, 'yes', false ) . '>
+				<label for="pp_enable_dynamic_args" class="pp-toggle">
+					<span class="pp-toggle-slider"></span>
+				</label>
+			</div>
+			<p class="desc">
+				<strong>
+					<label for="pp_enable_dynamic_args">' . esc_html__( 'Enable if page cache causes login or access issues; adds dynamic query args to URLs.', 'password-protected' ) . '</label>
+				</strong>
+			</p>';
 	}
 
 	/**

@@ -83,12 +83,28 @@ if ( ! function_exists( 'password_protected_cookie' ) ) {
 	}
 }
 
-if ( ! function_exists('pp__add_dynamic_arg') ) {
+if ( ! function_exists( 'pp__add_dynamic_arg' ) ) {
+	/**
+	 * Append a dynamic query argument to bust full-page caches when enabled.
+	 *
+	 * @param string $url URL to modify.
+	 * @return string
+	 */
 	function pp__add_dynamic_arg( $url ) {
-		if ( ! function_exists( 'pp_pro__add_dynamic_arg' ) ) {
+		$is_enabled = get_option( 'pp_enable_dynamic_args', false );
+		if ( 'yes' !== $is_enabled ) {
 			return $url;
 		}
 
-		return pp_pro__add_dynamic_arg( $url );
+		if ( ! is_string( $url ) ) {
+			return $url;
+		}
+
+		return add_query_arg(
+			array(
+				wp_rand( 0, 99999 ) => time(),
+			),
+			$url
+		);
 	}
 }
