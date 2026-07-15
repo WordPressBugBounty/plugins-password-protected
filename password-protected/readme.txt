@@ -4,7 +4,7 @@ Tags: password protection, maintenance mode, password protect page, password pro
 Requires at least: 4.6
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 2.8.2
+Stable tag: 2.8.3
 License: GPLv2 or later
 
 Protect your WordPress site, pages, posts, WooCommerce products, and categories with single or multiple passwords.
@@ -137,6 +137,12 @@ With options to customize the background, logo, and other elements of the lock s
 
 Experience unmatched flexibility and control over access permissions with Multiple Password Management. You can create unlimited passwords for any lock screen. It is also easy to activate or deactivate multiple passwords for various purposes, from testing to membership management.
 
+**✅ Custom URL Redirection [Pro]**
+
+Direct users to the custom destination after they unlock your password-protected site. Assign a unique internal URL to each password when using multiple passwords for entire site protection.
+
+This feature helps you send different user groups to dedicated landing pages, member dashboards, onboarding screens, special offers, private resources, or other relevant content based on the password they use.
+
 **✅ Import & Export Passwords [Pro]**
 
 For quick easy password management, import or export passwords in bulk using a CSV file, complete with usage limits, expiry, status, and more.
@@ -144,6 +150,13 @@ For quick easy password management, import or export passwords in bulk using a C
 **✅ Request Password [Pro]**
 
 Easily request access to protected content. Simply submit your email, the request is sent to the admin for review. The admin can then approve or reject the request directly from the WordPress dashboard. Upon approval, the user will receive the password to access the protected content.
+
+**✅ Gravity Forms Integration [Pro]**
+
+Sell password-protected content via Gravity Forms and automatically grant access upon successful form submission. Collect payments, registrations, lead information, contact details, or any other data before allowing users to access your protected pages, posts, categories, or entire site.
+
+When a user submits the form, Password Protected instantly sends a secure bypass link by email. Users can access the protected content with a single click, eliminating the need to manually share passwords.
+
 
 **Get ✨[Password Protected Pro](https://passwordprotectedwp.com/pricing/?utm_source=wp_org+&utm_medium=password_protected_product_page)✨ Now!**
 
@@ -190,9 +203,11 @@ With features like user role whitelisting and multiple password management, you 
 
 ⚡ **Use Case #1: Offer Premium Content to Your Subscribers**
 
-Unlock the potential of your premium content by offering exclusive access to subscribers with Password Protected plugin. You can securely share articles, e-books, podcasts, and reports while tracking password usage and preventing unauthorized sharing.
+Unlock the full value of your premium content by offering exclusive access to subscribers with Password Protected. Securely share articles, eBooks, reports, videos, podcasts, and downloadable resources while tracking password usage and controlling access.
 
-With the ability to generate multiple passwords, you can ensure that only paying subscribers enjoy your valuable content.
+You can also collect payments, registrations, or lead information through Gravity Forms before granting access. After a successful submission, users receive a secure bypass link by email and can access your protected content immediately without entering a password.
+
+With multiple passwords, bypass links, and advanced access controls, you can create a smooth experience for subscribers while protecting your premium content.
 
 ⚡ **Use Case #2: Give Clients Exclusive Access to Your Portfolio**
 
@@ -225,6 +240,15 @@ Get more sales and customer loyalty by offering member-only WooCommerce products
 Whether it's special deals, discounts, or bonuses, the plugin enables you to password protect any product so you can offer those exclusive products to your valued members, driving sales and fostering a sense of exclusivity.
 
 Check out our detailed guide on how to [password protect WooCommerce products](https://passwordprotectedwp.com/password-protect-woocommerce-products/) and [WooCommerce shop page](https://passwordprotectedwp.com/password-protect-woocommerce-shop-page/).
+
+⚡ **Use Case #7: Sell Protected Content and Grant Instant Access**
+
+Monetize your premium content by requiring users to complete a payment form before accessing protected pages, downloads, resources, courses, or member-only content.
+
+With Gravity Forms integrations, you can collect payments, email addresses, contact information, registrations, or any other details before granting access. After a successful form submission, Password Protected automatically sends a secure bypass link by email, allowing users to unlock the content instantly.
+
+This approach helps you sell protected content, generate qualified leads, grow your email list, and eliminate the hassle of manually sharing passwords with customers and subscribers.
+
 
 == Need Help? Get Expert Assistance ==
 
@@ -327,6 +351,9 @@ If you want to translate this plugin you can easily contribute to the [Translati
 
 
 == Changelog ==
+
+= 2.8.3 =
+- Improved code optimization.
 
 = 2.8.2 =
 - New - Added functionality to bypass page cache.

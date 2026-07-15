@@ -194,6 +194,80 @@ if ( isset( $k['slug'] ) ) {
                     </table>
                 </div>';
 			break;
+		case 'integrations':
+			$url = add_query_arg(
+				array(
+					'utm_source'   => 'plugin',
+					'utm_medium'   => 'pop_up',
+					'utm_campaign' => 'plugin',
+					'utm_content'  => 'form_integrations',
+				),
+				'https://passwordprotectedwp.com/pricing/'
+			);
+			$gf_img     = PASSWORD_PROTECTED_URL . 'assets/images/integrations/gravity-forms.svg';
+			$gutena_img = PASSWORD_PROTECTED_URL . 'assets/images/integrations/gutena-forms.svg';
+			echo '<div class="password-protected-pro-integrations">
+				<h2 class="integrations-title">' . esc_html__( 'Form Integration', 'password-protected' ) . ' <span class="pro-badge"><a href="' . esc_url( $url ) . '">PRO</a></span></h2>
+				<p class="integrations-desc">' . esc_html__( 'Connect Password Protected with your favorite form plugins to control access and secure submissions.', 'password-protected' ) . '</p>
+				<div class="integrations-search">
+					<input type="search" disabled placeholder="' . esc_attr__( 'Search Available Integrations...', 'password-protected' ) . '" />
+				</div>
+				<div class="integrations-grid">
+					<div class="integrations-item pp-integration-card">
+						<div class="integrations-item-inner">
+							<div>
+								<h3>
+									<img src="' . esc_url( $gf_img ) . '" alt="' . esc_attr__( 'Gravity Forms', 'password-protected' ) . '" />
+									' . esc_html__( 'Gravity Forms', 'password-protected' ) . '
+								</h3>
+							</div>
+							<div>
+								<p class="desc">' . esc_html__( 'Use Gravity Forms to collect payments or user information and automatically grant access to protected content.', 'password-protected' ) . ' <span class="pp-integration-read-more">' . esc_html__( 'Read more', 'password-protected' ) . '</span></p>
+							</div>
+							<div>
+								<div class="pp-toggle-wrapper" style="float: right;">
+									<input type="checkbox" disabled id="pp-integration-gravity-forms-dummy" />
+									<label class="pp-toggle" for="pp-integration-gravity-forms-dummy">
+										<span class="pp-toggle-slider"></span>
+									</label>
+								</div>
+								<div style="clear: both;display: table;"></div>
+							</div>
+						</div>
+					</div>
+					<div class="integrations-item pp-integration-card pp-integration-has-coming-soon">
+						<div class="integrations-item-inner">
+							<div>
+								<h3>
+									<img src="' . esc_url( $gutena_img ) . '" alt="' . esc_attr__( 'Gutena Forms', 'password-protected' ) . '" />
+									' . esc_html__( 'Gutena Forms', 'password-protected' ) . '
+								</h3>
+							</div>
+							<div>
+								<p class="desc">' . esc_html__( 'Provide access to password-protected content through payments and form submissions with Gutena Forms.', 'password-protected' ) . ' <span class="pp-integration-read-more">' . esc_html__( 'Read more', 'password-protected' ) . '</span></p>
+							</div>
+							<div>
+								<div class="pp-toggle-wrapper" style="float: right;">
+									<input type="checkbox" disabled id="pp-integration-gutena-form-dummy" />
+									<label class="pp-toggle" for="pp-integration-gutena-form-dummy">
+										<span class="pp-toggle-slider"></span>
+									</label>
+								</div>
+								<div style="clear: both;display: table;"></div>
+							</div>
+						</div>
+						<div class="pp-coming-soon">
+							<span>' . esc_html__( 'Coming Soon!', 'password-protected' ) . '</span>
+						</div>
+					</div>
+					<div class="integrations-item pp-integration-suggest">
+						<h3>' . esc_html__( 'Want More Integrations?', 'password-protected' ) . '</h3>
+						<p>' . esc_html__( 'We’re continuously expanding compatibility. Share what you’d like us to support next.', 'password-protected' ) . '</p>
+						<span class="pp-integration-suggest-btn is-disabled" aria-disabled="true">' . esc_html__( 'Suggest Integration', 'password-protected' ) . '</span>
+					</div>
+				</div>
+			</div>';
+			break;
 		case 'activity_logs':
 			$url = add_query_arg(
 				array(

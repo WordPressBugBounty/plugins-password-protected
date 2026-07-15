@@ -81,6 +81,12 @@ class Password_Protected_Admin {
                 'position'        => 2,
             ),
 
+            'integrations' => array(
+                'title'           => __( 'Integrations', 'password-protected' ),
+                'slug'            => 'integrations',
+                'icon'            => 'dashicons-admin-plugins',
+            ),
+
             'content-protection' => array(
                 'title'           => __( 'Content Protection', 'password-protected' ),
                 'slug'            => 'content-protection',
@@ -331,6 +337,7 @@ class Password_Protected_Admin {
 			add_action( 'password_protected_subtab_attempt-limitation_content', array( $this, 'dummy_content' ) );
 			add_action( 'password_protected_subtab_bypass-url_content', array( $this, 'dummy_content' ) );
 			add_action( 'password_protected_tab_manage_passwords_content', array( $this, 'dummy_content' ) );
+			add_action( 'password_protected_tab_integrations_content', array( $this, 'dummy_content' ) );
 			add_action( 'password_protected_subtab_post-type-protection_content', array( $this, 'dummy_content' ) );
 			add_action( 'password_protected_subtab_taxonomy-protection_content', array( $this, 'dummy_content' ) );
 			add_action( 'password_protected_subtab_partial-protection_content', array( $this, 'dummy_content' ) );
