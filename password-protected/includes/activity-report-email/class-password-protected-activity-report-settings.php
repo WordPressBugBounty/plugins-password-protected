@@ -92,17 +92,15 @@ if ( ! class_exists( 'Password_protected_Activity_Report_Settings' ) ) {
 		}
 
 		public function activity_report_field_callback( $args ) {
-			$checked = get_option( 'password_protected_activity_report_enable', 'no' );
-			$checked = 'yes' === $checked ? 'checked' : '';
 			echo '<div class="pp-toggle-wrapper">
-				<input id="' . esc_attr( $args['label_for'] ) . '" value="yes" name="password_protected_activity_report_enable" type="checkbox" ' . $checked . ' />
+				<input id="' . esc_attr( $args['label_for'] ) . '" value="yes" name="password_protected_activity_report_enable" type="checkbox" ' . checked( get_option( 'password_protected_activity_report_enable', 'no' ), 'yes', false ) . ' />
 				<label for="' . esc_attr( $args['label_for'] ) . '" class="pp-toggle">
 					<span class="pp-toggle-slider"></span>
 				</label>
 			</div>
 			<p class="description">
 				<label for="' . esc_attr( $args['label_for'] ) . '">
-					' . __( 'Enable this option to receive weekly activity report on your email.', 'password-protected' ) . '
+					' . esc_html__( 'Enable this option to receive weekly activity report on your email.', 'password-protected' ) . '
 				</label>
 			</p>';
 		}
@@ -189,9 +187,11 @@ if ( ! class_exists( 'Password_protected_Activity_Report_Settings' ) ) {
 		}
 
 		public static function get_browser() {
+			// phpcs:disable WordPress.Security.NonceVerification.Missing
 			if ( isset( $_POST['password_protected_user_agent'] ) ) {
 				return sanitize_text_field( wp_unslash( $_POST['password_protected_user_agent'] ) );
 			}
+			// phpcs:enable
 
 			return 'UNKNOWN';
 		}

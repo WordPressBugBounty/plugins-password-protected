@@ -66,7 +66,7 @@ class Password_Protected_reCAPTCHA {
     public function google_recaptcha_settings() {
         ?>
         <div class="reCaptchaTab">
-            <h1><?php _e( 'Google reCAPTCHA Settings', 'password-protected' ); ?></h1>
+            <h1><?php esc_html_e( 'Google reCAPTCHA Settings', 'password-protected' ); ?></h1>
             <!-- <form method="post" action="options.php"> -->
                 <?php
                 // settings_fields( 'password-protected-google-recaptcha-advanced' );
@@ -90,7 +90,7 @@ class Password_Protected_reCAPTCHA {
 		// reCAPTCHA Section
 		add_settings_section(
 			$this->options_group,
-			__( ' ', 'password-protected' ),
+			'',
 			array( $this, 'reCAPTCHA_section' ),
 			$this->tab
 		);
@@ -191,13 +191,12 @@ class Password_Protected_reCAPTCHA {
 	 * @return  void  password protected reCAPTCHA status field
 	 */
 	public function reCAPTCHA_enable() {
-        $checked = isset( $this->settings['enable'] ) ? 'checked' : '';
         echo '<div class="pp-toggle-wrapper">
             <input 
                 name="' . esc_attr( $this->options_name ) . '[enable]" 
                 id="pp_enable_recaptcha" 
                 type="checkbox" 
-                value="1" ' . $checked . '
+                value="1" ' . checked( isset( $this->settings['enable'] ), true, false ) . '
             />
             <label class="pp-toggle" for="pp_enable_recaptcha">
                 <span class="pp-toggle-slider"></span>
@@ -205,7 +204,7 @@ class Password_Protected_reCAPTCHA {
         </div>
         <label for="pp_enable_recaptcha">
                  ' .
-				__( 'Enabled', 'password-protected' ) . '
+				esc_html__( 'Enabled', 'password-protected' ) . '
         </label>';
 	}
 
@@ -254,6 +253,7 @@ class Password_Protected_reCAPTCHA {
                     id="pp_google_recaptcha_v2_site_key" 
                     value="' . esc_attr( $this->settings['v2_site_key'] ) . '" 
                     class="regular-text"
+                    required
                 />
                 <p class="description">
                     Enter Google reCAPTCHA v2 Site Key.&nbsp;
@@ -270,6 +270,7 @@ class Password_Protected_reCAPTCHA {
                         id="pp_google_recaptcha_v3_site_key" 
                         value="' . esc_attr( $this->settings['v3_site_key'] ) . '" 
                         class="regular-text"
+                        required
                     />
                 <p class="description">
                     Enter Google reCAPTCHA v3 Site Key.&nbsp;
@@ -295,7 +296,8 @@ class Password_Protected_reCAPTCHA {
                     type="text" 
                     id="pp_google_recaptcha_v2_secret_key" 
                     value="' . esc_attr( $this->settings['v2_secret_key'] ) . '" 
-                    class="regular-text" 
+                    class="regular-text"
+                    required
                 />
                 <p class="description">
                     Enter Google reCAPTCHA v2 Secret Key.&nbsp;
@@ -310,7 +312,8 @@ class Password_Protected_reCAPTCHA {
                     type="text" 
                     id="pp_google_recaptcha_v3_secret_key" 
                     value="' . esc_attr( $this->settings['v3_secret_key'] ) . '" 
-                    class="regular-text" 
+                    class="regular-text"
+                    required
                 />
                 <p class="description">
                     Enter Google reCAPTCHA v3 Secret Key.&nbsp;
@@ -487,7 +490,7 @@ class Password_Protected_reCAPTCHA {
 	public function display_recaptcha_v2() {
         global $Password_Protected;
 		wp_enqueue_style( 'pp-recaptcha-style', plugin_dir_url( __DIR__ ) . 'assets/css/recaptcha.css', array(), $Password_Protected->version );
-		wp_enqueue_script( 'pp-recaptcha-api-v2', esc_url( 'https://www.google.com/recaptcha/api.js' ), array(), null );
+		wp_enqueue_script( 'pp-recaptcha-api-v2', esc_url( 'https://www.google.com/recaptcha/api.js' ), array(), $Password_Protected->version, false );
 		echo '<div 
                 class="g-recaptcha" 
                 data-sitekey="' . esc_attr( $this->settings['v2_site_key'] ) . '" 
@@ -504,43 +507,42 @@ class Password_Protected_reCAPTCHA {
 	 * @return  void  password protected reCAPTCHA v3 field
 	 */
 	public function display_recaptcha_v3() {
+		global $Password_Protected;
 		$grecaptcha_v3_site_key = isset( $this->settings['v3_site_key'] ) ? esc_attr( $this->settings['v3_site_key'] ) : '';
 		$grecaptcha_v3_badge    = isset( $this->settings['v3_badge'] ) ? esc_attr( $this->settings['v3_badge'] ) : 'bottomright';
 
-		$script = <<<EOT
-            if('function' !== typeof pprecaptcha) {
-                function pprecaptcha() {
-                    grecaptcha.ready(function() {
-                        [].forEach.call(document.querySelectorAll('.pp-g-recaptcha'), function(el) {
-                            const action = el.getAttribute('data-action');
-                            const form = el.form;
-                            form.addEventListener('submit', function(e) {
-                                e.preventDefault();
-                                grecaptcha.execute('$grecaptcha_v3_site_key', {action: action}).then(function(token) {
-                                    el.setAttribute('value', token);
-                                    const button = form.querySelector('[type="submit"]');
-                                    if(button) {
-                                        const input = document.createElement('input');
-                                        input.type = 'hidden';
-                                        input.name = button.getAttribute('name');
-                                        input.value = button.value;
-                                        input.classList.add('pp-submit-input');
-                                        var inputEls = document.querySelectorAll('.pp-submit-input');
-                                        [].forEach.call(inputEls, function(inputEl) {
-                                            inputEl.remove();
-                                        });
-                                        form.appendChild(input);
-                                    }
-                                    HTMLFormElement.prototype.submit.call(form);
-                                });
-                            });
-                        });
-                    });
-                }
-            }
-EOT;
+		$script = "if('function' !== typeof pprecaptcha) {\n" .
+			"    function pprecaptcha() {\n" .
+			"        grecaptcha.ready(function() {\n" .
+			"            [].forEach.call(document.querySelectorAll('.pp-g-recaptcha'), function(el) {\n" .
+			"                const action = el.getAttribute('data-action');\n" .
+			"                const form = el.form;\n" .
+			"                form.addEventListener('submit', function(e) {\n" .
+			"                    e.preventDefault();\n" .
+			"                    grecaptcha.execute('" . $grecaptcha_v3_site_key . "', {action: action}).then(function(token) {\n" .
+			"                        el.setAttribute('value', token);\n" .
+			"                        const button = form.querySelector('[type=\"submit\"]');\n" .
+			"                        if(button) {\n" .
+			"                            const input = document.createElement('input');\n" .
+			"                            input.type = 'hidden';\n" .
+			"                            input.name = button.getAttribute('name');\n" .
+			"                            input.value = button.value;\n" .
+			"                            input.classList.add('pp-submit-input');\n" .
+			"                            var inputEls = document.querySelectorAll('.pp-submit-input');\n" .
+			"                            [].forEach.call(inputEls, function(inputEl) {\n" .
+			"                                inputEl.remove();\n" .
+			"                            });\n" .
+			"                            form.appendChild(input);\n" .
+			"                        }\n" .
+			"                        HTMLFormElement.prototype.submit.call(form);\n" .
+			"                    });\n" .
+			"                });\n" .
+			"            });\n" .
+			"        });\n" .
+			"    }\n" .
+			"}";
 
-		wp_enqueue_script( 'recaptcha-api-v3', ( 'https://www.google.com/recaptcha/api.js?onload=pprecaptcha&render=' . esc_attr( $grecaptcha_v3_site_key ) . '&badge=' . esc_attr( $grecaptcha_v3_badge ) ), array(), null );
+		wp_enqueue_script( 'recaptcha-api-v3', ( 'https://www.google.com/recaptcha/api.js?onload=pprecaptcha&render=' . esc_attr( $grecaptcha_v3_site_key ) . '&badge=' . esc_attr( $grecaptcha_v3_badge ) ), array(), $Password_Protected->version, false );
 		wp_add_inline_script( 'recaptcha-api-v3', $script ); ?>
 		<input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response-password_protected" class="pp-g-recaptcha" data-action="password_protected">
 		<?php
@@ -560,6 +562,7 @@ EOT;
 			return $errors; // return errors
 		}
 
+		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		if ( $this->settings['version'] === 'google_recaptcha_v2' ) {
 
 			$grecaptcha_v2_site_key   = isset( $this->settings['v2_site_key'] ) ? esc_attr( $this->settings['v2_site_key'] ) : '';
@@ -575,7 +578,7 @@ EOT;
 					array(
 						'body' => array(
 							'secret'   => $grecaptcha_v2_secret_key,
-							'response' => sanitize_text_field( $_POST['g-recaptcha-response'] ),
+							'response' => sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ),
 						),
 					)
 				);
@@ -614,7 +617,7 @@ EOT;
 					array(
 						'body' => array(
 							'secret'   => $grecaptcha_v3_secret_key,
-							'response' => sanitize_text_field( $_POST['g-recaptcha-response'] ),
+							'response' => sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ),
 							'remoteip' => self::get_ip_address(),
 						),
 					)
@@ -642,6 +645,7 @@ EOT;
 
 			return $errors;
 		}
+		// phpcs:enable
 
 	}
 
@@ -655,17 +659,17 @@ EOT;
 	private static function get_ip_address() {
 		$ipaddress = '';
 		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) ) {
-			$ipaddress = sanitize_text_field( $_SERVER['HTTP_CLIENT_IP'] );
+			$ipaddress = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );
 		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-			$ipaddress = sanitize_text_field( $_SERVER['HTTP_X_FORWARDED_FOR'] );
+			$ipaddress = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
 		} elseif ( isset( $_SERVER['HTTP_X_FORWARDED'] ) ) {
-			$ipaddress = sanitize_text_field( $_SERVER['HTTP_X_FORWARDED'] );
+			$ipaddress = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED'] ) );
 		} elseif ( isset( $_SERVER['HTTP_FORWARDED_FOR'] ) ) {
-			$ipaddress = sanitize_text_field( $_SERVER['HTTP_FORWARDED_FOR'] );
+			$ipaddress = sanitize_text_field( wp_unslash( $_SERVER['HTTP_FORWARDED_FOR'] ) );
 		} elseif ( isset( $_SERVER['HTTP_FORWARDED'] ) ) {
-			$ipaddress = sanitize_text_field( $_SERVER['HTTP_FORWARDED'] );
+			$ipaddress = sanitize_text_field( wp_unslash( $_SERVER['HTTP_FORWARDED'] ) );
 		} elseif ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-			$ipaddress = sanitize_text_field( $_SERVER['REMOTE_ADDR'] );
+			$ipaddress = sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) );
 		} else {
 			$ipaddress = 'UNKNOWN';
 		}

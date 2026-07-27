@@ -7,6 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+
 if ( ! function_exists( 'pp_free_fs' ) ) {
 	/**
 	 * Freemius integration
@@ -18,7 +20,7 @@ if ( ! function_exists( 'pp_free_fs' ) ) {
 		global $pp_free_fs;
 
 		if ( ! isset( $pp_free_fs ) ) {
-			require_once dirname( __DIR__  ) . '/freemius/start.php';
+			require_once dirname( __DIR__  ) . '/vendor/freemius/start.php';
 
 			$pp_free_fs = fs_dynamic_init(
 				array(
@@ -42,5 +44,7 @@ if ( ! function_exists( 'pp_free_fs' ) ) {
 		return $pp_free_fs;
 	}
 }
+
+// phpcs:enable
 
 pp_free_fs();

@@ -848,6 +848,19 @@ input#password_protected_password_new, input#password_protected_password_confirm
     float: left;
 }
 
+.pp-sidebar-new-badge {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 0 6px;
+    border-radius: 10px;
+    background: #22c55e;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 16px;
+    vertical-align: middle;
+}
+
 .pp-sidebar-widget li:has( .sidebar-body-text-container ), .pp-sidebar-widget li:has( .sidebar-body-image-container ) {
     clear: both;
     display: table;

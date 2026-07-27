@@ -245,10 +245,10 @@ class Password_Protected_Admin {
 				'password-protected-poppins',
 				'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap',
 				array(),
-				null
+				$Password_Protected->version
 			);
 			wp_enqueue_style( 'password-protected-page-script', PASSWORD_PROTECTED_URL . 'assets/css/admin.css', array( 'password-protected-poppins' ), $Password_Protected->version );
-			wp_enqueue_script( 'password-protected-admin-script', PASSWORD_PROTECTED_URL . 'assets/js/admin.js', array('jquery'), $Password_Protected->version );
+			wp_enqueue_script( 'password-protected-admin-script', PASSWORD_PROTECTED_URL . 'assets/js/admin.js', array( 'jquery' ), $Password_Protected->version, true );
 			wp_localize_script(
 				'password-protected-admin-script',
 				'passwordProtectedAdminObject',
@@ -360,7 +360,9 @@ class Password_Protected_Admin {
             add_action( 'password_protected_subtab_email-templates_content', array( $this, 'dummy_content' ) );
 		}
 
-		if ( isset( $_GET['page'] ) && 'password-protected-get-pro' === $_GET['page'] ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Admin submenu redirect.
+		if ( isset( $_GET['page'] ) && 'password-protected-get-pro' === sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
+			// phpcs:ignore WordPress.Security.SafeRedirect.wp_redirect_wp_redirect -- External marketing URL.
 			wp_redirect( 'https://passwordprotectedwp.com/pricing/?utm_source=Plugin&utm_medium=Submenu' );
 			exit;
 		}
@@ -460,13 +462,13 @@ class Password_Protected_Admin {
 
         <div class="wrap">
             <div id="icon-options-general" class="icon32"><br /></div>
-            <h2><?php _e( 'Password Protected Settings', 'password-protected' ) ?></h2>
+            <h2><?php esc_html_e( 'Password Protected Settings', 'password-protected' ); ?></h2>
             <form method="post" action="options.php">
 				<?php
 				settings_fields( 'password-protected' );
 				do_settings_sections( 'password-protected' );
 				?>
-                <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Save Changes' ) ?>"></p>
+                <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="<?php esc_attr_e( 'Save Changes', 'password-protected' ); ?>"></p>
             </form>
 			<?php
 			// do_settings_sections( 'password-protected-login-designer' );
@@ -484,8 +486,11 @@ class Password_Protected_Admin {
 	 * Admin Menu Settings Page
 	 */
 	public function pp_admin_menu_page_callback() {
-		$tab    = ( isset( $_GET['tab'] ) && sanitize_text_field( $_GET['page'] ) == 'password-protected' ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
-		$subtab = ( isset( $_GET['sub-tab'] ) && sanitize_text_field( $_GET['page'] ) == 'password-protected' ) ? sanitize_text_field( $_GET['sub-tab'] ) : '';
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$pp_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		$tab     = ( isset( $_GET['tab'] ) && 'password-protected' === $pp_page ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'general';
+		$subtab  = ( isset( $_GET['sub-tab'] ) && 'password-protected' === $pp_page ) ? sanitize_text_field( wp_unslash( $_GET['sub-tab'] ) ) : '';
+		// phpcs:enable
 
 		// for backward compatibility.
 		$this->setting_tabs = array_filter(
@@ -504,10 +509,16 @@ class Password_Protected_Admin {
 		}
 		?>
         <div class="wrap">
-            <?php $attributes = class_exists( 'Password_Protected_Pro' ) ? 'style="display: block;"' : 'class="wrap-row"' ; ?>
-            <div <?php echo $attributes; ?>>
-                <?php $attributes = class_exists( 'Password_Protected_Pro' ) ? 'style="width: 100%;"' : 'class="wrap-col-70"'; ?>
-                <div <?php echo $attributes; ?>>
+            <?php if ( class_exists( 'Password_Protected_Pro' ) ) : ?>
+            <div style="display: block;">
+            <?php else : ?>
+            <div class="wrap-row">
+            <?php endif; ?>
+                <?php if ( class_exists( 'Password_Protected_Pro' ) ) : ?>
+                <div style="width: 100%;">
+                <?php else : ?>
+                <div class="wrap-col-70">
+                <?php endif; ?>
 					<?php settings_errors(); ?>
 
                     <div class="pp-wrapper">
@@ -515,7 +526,7 @@ class Password_Protected_Admin {
                         <div class="pp-nav-wrapper">
 							<?php foreach( $this->setting_tabs as $index => $setting_tab ) : ?>
                                 <div class="pp-nav-tab <?php echo ( $tab === $setting_tab['slug'] ) ? 'pp-nav-tab-active' : ''; ?> <?php echo ( 'getpro' === $setting_tab['slug'] ) ? 'pp-pro-tab' : ''; ?>">
-                                    <a href="<?php echo admin_url( 'admin.php?page=password-protected&tab=' . $setting_tab['slug'] ); ?>" class="get-pro-txt">
+                                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=password-protected&tab=' . $setting_tab['slug'] ) ); ?>" class="get-pro-txt">
 										<?php if ( 'getpro' === $setting_tab['slug'] ) : ?>
 											<span class="pp-get-pro-tab-icon">
 												<img src="<?php echo esc_url( PASSWORD_PROTECTED_URL . 'assets/images/pro-tab-icon.png' ); ?>" alt="" class="pro-tab-icon">
@@ -550,7 +561,7 @@ class Password_Protected_Admin {
 											?>
 										<?php } ?>
 										<?php foreach ( $this->setting_tabs[ $tab ]['sub-tabs'] as $sub_tab ) : ?>
-                                            <a class="<?php echo $subtab === $sub_tab['slug'] ? 'active' : '' ?>" href="<?php echo admin_url( 'admin.php?page=password-protected&tab=' . $tab . '&sub-tab=' . $sub_tab['slug'] ); ?>"><?php echo $sub_tab['title']; ?></a>
+                                            <a class="<?php echo esc_attr( $subtab === $sub_tab['slug'] ? 'active' : '' ); ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=password-protected&tab=' . $tab . '&sub-tab=' . $sub_tab['slug'] ) ); ?>"><?php echo esc_html( $sub_tab['title'] ); ?></a>
 										<?php endforeach; ?>
                                     </div>
                                 </div>
@@ -563,13 +574,18 @@ class Password_Protected_Admin {
                     </div>
                 </div>
 
-	            <?php $attributes = class_exists( 'Password_Protected_Pro' ) ? 'style="display:none;"' : 'id="pp-sidebar" class="wrap-col-25"'; ?>
-                <div <?php echo $attributes; ?>>
+	            <?php if ( class_exists( 'Password_Protected_Pro' ) ) : ?>
+                <div style="display:none;">
+                <?php else : ?>
+                <div id="pp-sidebar" class="wrap-col-25">
+                <?php endif; ?>
 					<?php
+					// phpcs:disable WordPress.Security.NonceVerification.Recommended
 					$_tab = '';
 					if ( isset( $_GET['tab'] ) ) {
 						$_tab = sanitize_text_field( wp_unslash( $_GET['tab'] ) );
 					}
+					// phpcs:enable
 					if ( 'getpro' !== $_tab ) :
 						do_settings_sections( 'password-protected-try-pro' );
 						// do_settings_sections( 'password-protected-login-designer' );
@@ -586,7 +602,16 @@ class Password_Protected_Admin {
 		echo '<form action="options.php" method="post" enctype="multipart/form-data">';
 		settings_fields( 'password-protected-advanced-protected-page-content' );
 		do_settings_sections( 'password-protected&tab=advanced&sub-tab=password-protected-page-description' );
-		do_action('text_before_after_login_form', $_GET);
+		$pp_get_args = array();
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if ( ! empty( $_GET ) && is_array( $_GET ) ) {
+			foreach ( $_GET as $pp_key => $pp_value ) {
+				$pp_get_args[ sanitize_key( $pp_key ) ] = sanitize_text_field( wp_unslash( $pp_value ) );
+			}
+		}
+		// phpcs:enable
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Pro extension hook.
+		do_action( 'text_before_after_login_form', $pp_get_args );
 		submit_button();
 		echo '</form>';
 	}
@@ -660,9 +685,9 @@ class Password_Protected_Admin {
 		$current_screen->add_help_tab( array(
 			'id'      => 'PASSWORD_PROTECTED_SETTINGS',
 			'title'   => __( 'Password Protected', 'password-protected' ),
-			'content' => __( '<p><strong>Password Protected Status</strong><br />Turn on/off password protection.</p>', 'password-protected' )
+			'content' => wp_kses_post( __( '<p><strong>Password Protected Status</strong><br />Turn on/off password protection.</p>', 'password-protected' )
 			             . __( '<p><strong>Protected Permissions</strong><br />Allow access for logged in users and administrators without needing to enter a password. You will need to enable this option if you want administrators to be able to preview the site in the Theme Customizer. Also allow RSS Feeds to be accessed when the site is password protected.</p>', 'password-protected' )
-			             . __( '<p><strong>Password Fields</strong><br />To set a new password, enter it into both fields. You cannot set an `empty` password. To disable password protection uncheck the Enabled checkbox.</p>', 'password-protected' )
+			             . __( '<p><strong>Password Fields</strong><br />To set a new password, enter it into both fields. You cannot set an `empty` password. To disable password protection uncheck the Enabled checkbox.</p>', 'password-protected' ) ),
 		) );
 
 	}
@@ -820,8 +845,14 @@ class Password_Protected_Admin {
 		register_setting( 'password-protected-advanced-protected-page-content', 'password_protected_text_above_password', array( 'type' => 'string' ) );
 		register_setting( 'password-protected-advanced-protected-page-content', 'password_protected_text_below_password', array( 'type' => 'string' ) );
 
-		register_setting( 'password_protected_cache_issue', 'password_protected_use_transient' );
-		register_setting( 'password_protected_cache_issue', 'pp_enable_dynamic_args' );
+		register_setting( 'password_protected_cache_issue', 'password_protected_use_transient', array(
+			'type'              => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+		) );
+		register_setting( 'password_protected_cache_issue', 'pp_enable_dynamic_args', array(
+			'type'              => 'string',
+			'sanitize_callback' => 'sanitize_text_field',
+		) );
 	}
 
 	/**
@@ -910,7 +941,7 @@ class Password_Protected_Admin {
                 </label>
             </div>
         <p>
-            <label for="password_protected_status">' . __( 'Do you want to enable password protection for whole site?', 'password-protected' ) . '</label>
+            <label for="password_protected_status">' . esc_html__( 'Do you want to enable password protection for whole site?', 'password-protected' ) . '</label>
         </p>
         ';
 
@@ -924,25 +955,25 @@ class Password_Protected_Admin {
 		echo '<p>
             <label for="password_protected_administrators">
                 <input type="checkbox" name="password_protected_administrators" id="password_protected_administrators" value="1" ' . checked( 1, get_option( 'password_protected_administrators' ), false ) . ' />'
-		     . __( 'Allow Administrators', 'password-protected' )
+		     . esc_html__( 'Allow Administrators', 'password-protected' )
 		     . '</label>
         </p>
         <p>
             <label for="password_protected_users">
                 <input type="checkbox" name="password_protected_users" id="password_protected_users" value="1" ' . checked( 1, get_option( 'password_protected_users' ), false ) . ' />'
-		     . __( 'Allow Logged In Users', 'password-protected' )
+		     . esc_html__( 'Allow Logged In Users', 'password-protected' )
 		     . '</label>
         </p>
         <p>
             <label for="password_protected_feeds">
                 <input type="checkbox" name="password_protected_feeds" id="password_protected_feeds" value="1" ' . checked( 1, get_option( 'password_protected_feeds' ), false ) . ' />'
-		     . __( 'Allow RSS Feeds', 'password-protected' )
+		     . esc_html__( 'Allow RSS Feeds', 'password-protected' )
 		     . '</label>
         </p>
         <p>
             <label for="password_protected_rest">
                 <input type="checkbox" name="password_protected_rest" id="password_protected_rest" value="1" ' . checked( 1, get_option( 'password_protected_rest' ), false ) . ' />'
-		     . __( 'Allow REST API', 'password-protected' )
+		     . esc_html__( 'Allow REST API', 'password-protected' )
 		     . '</label>
         </p>';
 
@@ -953,8 +984,8 @@ class Password_Protected_Admin {
 	 */
 	public function password_protected_password_field() {
 
-		echo '<input type="password" name="password_protected_password[new]" id="password_protected_password_new" size="16" value="" autocomplete="off"> <p><span class="description">' . __( 'If you would like to change the password, type a new one. Otherwise, leave this blank.', 'password-protected' ) . '</span></p><br>
-			<input type="password" name="password_protected_password[confirm]" id="password_protected_password_confirm" size="16" value="" autocomplete="off"> <p><span class="description">' . __( 'Type your new password again.', 'password-protected' ) . '</span></p>';
+		echo '<input type="password" name="password_protected_password[new]" id="password_protected_password_new" size="16" value="" autocomplete="off"> <p><span class="description">' . esc_html__( 'If you would like to change the password, type a new one. Otherwise, leave this blank.', 'password-protected' ) . '</span></p><br>
+			<input type="password" name="password_protected_password[confirm]" id="password_protected_password_confirm" size="16" value="" autocomplete="off"> <p><span class="description">' . esc_html__( 'Type your new password again.', 'password-protected' ) . '</span></p>';
 
 	}
 
@@ -966,7 +997,13 @@ class Password_Protected_Admin {
 
 		echo '<p class="description">' . esc_html__( 'Enter one IP address per line.', 'password-protected' );
 		if ( isset( $_SERVER['REMOTE_ADDR'] ) ) {
-			echo ' ' . esc_html( sprintf( __( 'Your IP address is %s.', 'password-protected' ), $_SERVER['REMOTE_ADDR'] ) );
+			echo ' ' . esc_html(
+				sprintf(
+					/* translators: %s: visitor IP address. */
+					__( 'Your IP address is %s.', 'password-protected' ),
+					sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) )
+				)
+			);
 		}
 		echo '</p>';
 
@@ -984,7 +1021,7 @@ class Password_Protected_Admin {
             </label>
         </div>
         <p>
-            <label for="password_protected_remember_me">' . __( 'Allow Remember me', 'password-protected' ) . '</label>
+            <label for="password_protected_remember_me">' . esc_html__( 'Do you want to enable remember me toggle for Password Protected screen?', 'password-protected' ) . '</label>
         </p>';
 
 	}
@@ -994,7 +1031,7 @@ class Password_Protected_Admin {
 	 */
 	public function password_protected_remember_me_lifetime_field() {
 
-		echo '<label><input name="password_protected_remember_me_lifetime" id="password_protected_remember_me_lifetime" min="1" type="number" value="' . get_option( 'password_protected_remember_me_lifetime', 14 ) . '" /></label>';
+		echo '<label><input name="password_protected_remember_me_lifetime" id="password_protected_remember_me_lifetime" min="1" type="number" value="' . esc_attr( get_option( 'password_protected_remember_me_lifetime', 14 ) ) . '" /></label>';
 
 	}
 
@@ -1042,7 +1079,7 @@ class Password_Protected_Admin {
             </p>';
 
             if ( isset( $issue['description'] ) ) :
-                echo '<p class="desc"><strong>' . esc_attr( $issue['description'] ) . '</strong></p>';
+                echo '<p class="desc"><strong>' . esc_html( $issue['description'] ) . '</strong></p>';
             endif;
 		endforeach;
 	}
@@ -1071,9 +1108,9 @@ class Password_Protected_Admin {
 	public function password_protected_help_tab() {
 		echo '<div class="pp-help-notice">
             <p>'
-		     . __( 'Password protect your web site. Users will be asked to enter a password to view the site.', 'password-protected' )
+		     . esc_html__( 'Password protect your web site. Users will be asked to enter a password to view the site.', 'password-protected' )
 		     . '<br />'
-		     . __( 'For more information about Password Protected settings, view the "Help" tab at the top of this page.', 'password-protected' )
+		     . esc_html__( 'For more information about Password Protected settings, view the "Help" tab at the top of this page.', 'password-protected' )
 		     . '</p>
         </div>';
 	}
@@ -1089,7 +1126,7 @@ class Password_Protected_Admin {
 				<div class="pp-sidebar-header">	
 					<div class="pp-row">
 						<div class="pp-crown-icon">
-							<img src="' . $image_url . 'pro-crown.png" />
+							<img src="' . esc_url( $image_url . 'pro-crown.png' ) . '" />
 						</div>
 						<div>
 							<p class="heading-2">Password</p>
@@ -1107,49 +1144,52 @@ class Password_Protected_Admin {
                 <div class="pp-sidebar-body">
                     <ul>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Protect Custom Post Types</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Protect Custom Post Types</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Exclude Specific Page, Post & Product</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Exclude Specific Page, Post & Product</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Partial Content Protection</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Partial Content Protection</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Protect Categories</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Protect Categories</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Protect WordPress Login Page</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Protect WordPress Login Page</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Lock Specific Posts & Pages</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Lock Specific Posts & Pages</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Manage Unlimited Passwords</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Manage Unlimited Passwords</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Set Expiration & Usage Limits</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Set Expiration & Usage Limits</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Limit Login Attempts</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Limit Login Attempts</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Create Secure Bypass Links</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Create Secure Bypass Links</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Lock Screen Customization</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Lock Screen Customization</span>
+                        </li>
+                        <li>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Gravity Forms Integration <span class="pp-sidebar-new-badge">NEW</span></span>
                         </li>
 						<li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Password Access Request</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Password Access Request</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Whitelist User Roles</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Whitelist User Roles</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">Track Password Activity</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">Track Password Activity</span>
                         </li>
                         <li>
-                            <span class="sidebar-body-image-container"><img src="' . $image_url . 'lock-2.png"  alt="" /></span> <span class="sidebar-body-text-container">hCaptcha & Cloudflare Turnstile</span>
+                            <span class="sidebar-body-image-container"><img src="' . esc_url( $image_url . 'lock-2.png' ) . '"  alt="" /></span> <span class="sidebar-body-text-container">hCaptcha & Cloudflare Turnstile</span>
                         </li>
                     </ul>
                 </div>
@@ -1172,19 +1212,22 @@ class Password_Protected_Admin {
 		echo '<div class="pp-sidebar-widget">
             <div id="pp-sidebar-box">
                 <h3>' .
-		     sprintf(
-			     __( '%1$s Now you can customize your Password Protected screen with the %3$s %2$s', 'password-protected' ),
-			     '🎨',
-			     '🌈',
-			     '<a href="' . $search_login_designer . '">' . __( 'Login Designer Plugin', 'password-protected' ) . '</a>'
+		     wp_kses_post(
+			     sprintf(
+				     /* translators: %1$s: paint palette emoji, %2$s: rainbow emoji, %3$s: link to Login Designer plugin. */
+				     __( '%1$s Now you can customize your Password Protected screen with the %3$s %2$s', 'password-protected' ),
+				     '🎨',
+				     '🌈',
+				     '<a href="' . esc_url( $search_login_designer ) . '">' . esc_html__( 'Login Designer Plugin', 'password-protected' ) . '</a>'
+			     )
 		     )
 		     . '</h3>
                 
-                <img width="100%" src="'. PASSWORD_PROTECTED_URL .'assets/images/login-designer-demo.gif" alt="Login Designer Demo GIF">
+                <img width="100%" src="' . esc_url( PASSWORD_PROTECTED_URL . 'assets/images/login-designer-demo.gif' ) . '" alt="Login Designer Demo GIF">
                 
                 <h3>
-                    <a class="pp-try button-primary" href="' . $search_login_designer . '">
-                        👉 ' . __( 'Try it now! It\'s Free', 'password-protected' ) . '
+                    <a class="pp-try button-primary" href="' . esc_url( $search_login_designer ) . '">
+                        👉 ' . esc_html__( 'Try it now! It\'s Free', 'password-protected' ) . '
                     </a>
                 </h3>
             </div>
@@ -1264,7 +1307,7 @@ class Password_Protected_Admin {
 			$supported = $Password_Protected->is_plugin_supported();
 
 			if ( is_wp_error( $supported ) ) {
-				echo $this->admin_error_display( $supported->get_error_message( $supported->get_error_code() ) );
+				echo wp_kses_post( $this->admin_error_display( $supported->get_error_message( $supported->get_error_code() ) ) );
 			}
 		}
 
@@ -1277,20 +1320,20 @@ class Password_Protected_Admin {
 				$error_message = __( 'You have enabled password protection but not yet set a password. Please set one below.', 'password-protected' );
 				$error = apply_filters( 'password_protected_password_status_activation', $error_message );
 				if( !empty( $error ) ) {
-					echo $this->admin_error_display( $error );
+					echo wp_kses_post( $this->admin_error_display( $error ) );
 				}
 			}
 
 			if ( current_user_can( 'manage_options' ) && ( (bool) get_option( 'password_protected_administrators' ) || (bool) get_option( 'password_protected_users' ) ) ) {
 				if ( (bool) get_option( 'password_protected_administrators' ) && (bool) get_option( 'password_protected_users' ) ) {
-					echo $this->admin_error_display( __( 'You have enabled password protection and allowed administrators and logged in users - other users will still need to enter a password to view the site.', 'password-protected' ) );
+					echo wp_kses_post( $this->admin_error_display( __( 'You have enabled password protection and allowed administrators and logged in users - other users will still need to enter a password to view the site.', 'password-protected' ) ) );
 				} elseif ( (bool) get_option( 'password_protected_administrators' ) ) {
 					if ( (bool) get_option( 'password_protected_status' ) ) {
-						echo $this->admin_error_display( __( 'You have enabled password protection and allowed administrators - other users will still need to enter a password to view the site.', 'password-protected' ) );
+						echo wp_kses_post( $this->admin_error_display( __( 'You have enabled password protection and allowed administrators - other users will still need to enter a password to view the site.', 'password-protected' ) ) );
 					}
 				} elseif ( (bool) get_option( 'password_protected_users' ) ) {
 					if ( (bool) get_option( 'password_protected_status' ) ) {
-						echo $this->admin_error_display( __( 'You have enabled password protection and allowed logged in users - other users will still need to enter a password to view the site.', 'password-protected' ) );
+						echo wp_kses_post( $this->admin_error_display( __( 'You have enabled password protection and allowed logged in users - other users will still need to enter a password to view the site.', 'password-protected' ) ) );
 					}
 				}
 			}
@@ -1309,7 +1352,7 @@ class Password_Protected_Admin {
 	 */
 	private function admin_error_display( $string ) {
 
-		return '<div class="error"><p>' .  $string . '</p></div>';
+		return '<div class="error"><p>' . esc_html( $string ) . '</p></div>';
 
 	}
 
@@ -1383,7 +1426,7 @@ class Password_Protected_Admin {
 				<div class="pp-banner-header">
 					<div class="pp-row">
 						<div class="pp-crown-icon">
-							<img src="' . $image_url . 'pro-crown.png" />
+							<img src="' . esc_url( $image_url . 'pro-crown.png' ) . '" />
 						</div>
 						<div>
 							<div class="pp-head-wt-pro-tag">
@@ -1401,7 +1444,7 @@ class Password_Protected_Admin {
                     <div class="pp-cols">
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/post-and-page-protection/how-to-secure-all-posts-and-pages/?utm_source=plugin&utm_medium=pro_tab">
 									Protect Custom Post Types
@@ -1410,7 +1453,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/bypass-url/?utm_source=plugin&utm_medium=pro_tab">
 									Create Secure Bypass Links
@@ -1419,7 +1462,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/post-and-page-protection/?utm_source=plugin&utm_medium=pro_tab">
 									Lock Specific Posts & Pages
@@ -1428,7 +1471,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/manage-multiple-websites/?utm_source=plugin&utm_medium=pro_tab">
 									Manage Unlimited Passwords
@@ -1437,7 +1480,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/limit-password-attempts-and-lockdown-time/?utm_source=plugin&utm_medium=pro_tab">
 									Limit Login Attempts
@@ -1446,7 +1489,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/integration/?utm_source=plugin&utm_medium=pro_tab">
 									hCaptcha & Cloudflare Turnstile
@@ -1455,7 +1498,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/customize-your-password-protected-screen/?utm_source=plugin&utm_medium=pro_tab">
 									Lock Screen Customization
@@ -1467,7 +1510,7 @@ class Password_Protected_Admin {
                     <div class="pp-cols pp-cols-section-2">
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/partial-content-protection/?utm_source=plugin&utm_medium=pro_tab">
 									Partial Content Protection
@@ -1476,7 +1519,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/password-protect-wp-admin/?utm_source=plugin&utm_medium=pro_tab">
 									Protect WordPress Login Page
@@ -1485,7 +1528,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/exclude-pages-posts-and-post-types/?utm_source=plugin&utm_medium=pro_tab">
 									Exclude Specific Page, Post, & Product
@@ -1494,7 +1537,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/documentation/?utm_source=plugin&utm_medium=pro_tab">
 									Set Expiration & Usage Limits
@@ -1503,16 +1546,16 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
-								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/whitelist-specific-user-roles/?utm_source=plugin&utm_medium=pro_tab">
-									Whitelist User Roles
+								<a target="_blank" href="https://passwordprotectedwp.com/docs/integration/gravity-forms/?utm_source=plugin&utm_medium=pro_tab">
+									Gravity Forms Integration <span class="pp-sidebar-new-badge">NEW</span>
 								</a>
 							</p>
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/password-activity-logs/?utm_source=plugin&utm_medium=pro_tab">
 									Track Password Activity
@@ -1521,7 +1564,7 @@ class Password_Protected_Admin {
                         </div>
 
 						<div class="pp-features-list-banner">
-                            <img src="' . $image_url . 'pro-feature-lock.png">
+                            <img src="' . esc_url( $image_url . 'pro-feature-lock.png' ) . '">
                             <p>
 								<a target="_blank" href="https://passwordprotectedwp.com/docs/pro/request-access-password/?utm_source=plugin&utm_medium=pro_tab">
 									Password Access Request

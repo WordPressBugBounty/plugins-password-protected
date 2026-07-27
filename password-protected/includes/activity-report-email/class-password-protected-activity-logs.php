@@ -59,34 +59,60 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		public static function get_items() {
 
 			global $wpdb;
-			$table_name     = $wpdb->prefix . self::$table;
+			$table_name  = $wpdb->prefix . self::$table;
+			$search_term = self::check_for_search();
+			$filter      = self::check_for_filter();
+			$timestamp   = self::get_time_from_keyword( $filter );
+			$has_filter  = ( null !== $filter && ! empty( $timestamp ) );
+			$has_search  = ( null !== $search_term );
 
-			$search_term    = self::check_for_search();
-			$filter         = self::check_for_filter();
-			$timestamp       = self::get_time_from_keyword( $filter );
-
-
-			if( $filter != NULL && !empty( $timestamp ) )
-				$query = " WHERE `created_at` BETWEEN " . reset( $timestamp ) . " AND " . end( $timestamp );
-			else
-				$query = "";
-
-			if( $search_term == NULL ) {
-				$search = $query . " ORDER BY `id` DESC";
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
+			if ( $has_search && $has_filter ) {
+				$like = '%' . $wpdb->esc_like( $search_term ) . '%';
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$logs = $wpdb->get_results(
+					$wpdb->prepare(
+						'SELECT * FROM `' . $table_name . '` WHERE CONCAT_WS( \' \', `ip`, `browser`, `status` ) LIKE %s AND `created_at` BETWEEN %d AND %d ORDER BY `id` DESC',
+						$like,
+						(int) reset( $timestamp ),
+						(int) end( $timestamp )
+					),
+					ARRAY_A
+				);
+			} elseif ( $has_search ) {
+				$like = '%' . $wpdb->esc_like( $search_term ) . '%';
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$logs = $wpdb->get_results(
+					$wpdb->prepare(
+						'SELECT * FROM `' . $table_name . '` WHERE CONCAT_WS( \' \', `ip`, `browser`, `status` ) LIKE %s ORDER BY `id` DESC',
+						$like
+					),
+					ARRAY_A
+				);
+			} elseif ( $has_filter ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$logs = $wpdb->get_results(
+					$wpdb->prepare(
+						'SELECT * FROM `' . $table_name . '` WHERE `created_at` BETWEEN %d AND %d ORDER BY `id` DESC',
+						(int) reset( $timestamp ),
+						(int) end( $timestamp )
+					),
+					ARRAY_A
+				);
 			} else {
-				$query = empty($query) ? '' : str_replace( "WHERE", "and", $query );
-				$search = "WHERE CONCAT_WS( ' ', `ip`,  `browser`, `status` ) LIKE '%$search_term%'" . $query;
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$logs = $wpdb->get_results(
+					'SELECT * FROM `' . $table_name . '` ORDER BY `id` DESC',
+					ARRAY_A
+				);
+			}
+			// phpcs:enable
+
+			if ( ! is_wp_error( $logs ) && count( $logs ) > 0 ) {
+				return $logs;
 			}
 
-			$logs = $wpdb->get_results(
-				" SELECT * FROM  $table_name " . $search,
-				ARRAY_A
-			);
-
-			if( !is_wp_error( $logs ) && count( $logs ) > 0 )
-				return $logs;
-			else
-				return array();
+			return array();
 		}
 
 		/**
@@ -110,6 +136,7 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 				'object_type'   => $request['object_type'],
 			);
 			$format = array( '%s', '%s', '%s', '%s' );
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom activity log table.
 			return $wpdb->insert( $table_name, $data, $format );
 		}
 
@@ -123,6 +150,7 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		public static function delete_item( $id ) {
 			global $wpdb;
 
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom activity log table.
 			return $wpdb->delete(
 				$wpdb->prefix . self::$table,
 				['id' => $id],
@@ -136,10 +164,13 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		 * @param  mixed $ids
 		 */
 		public static function delete_items( $ids ) {
-			global $wpdb;
-
-			$table_name = $wpdb->prefix . self::$table;
-			$wpdb->query( "DELETE FROM `{$table_name}` WHERE ID IN( $ids )" );
+			if ( is_string( $ids ) ) {
+				$ids = explode( ',', $ids );
+			}
+			$ids = array_filter( array_map( 'absint', (array) $ids ) );
+			foreach ( $ids as $id ) {
+				self::delete_item( $id );
+			}
 		}
 
 		/**
@@ -148,7 +179,8 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		public static function delete_all_items() {
 			global $wpdb;
 			$table_name = $wpdb->prefix . self::$table;
-			$wpdb->query("TRUNCATE TABLE $table_name");
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom activity log table uses $wpdb->prefix.
+			$wpdb->query( "TRUNCATE TABLE `{$table_name}`" );
 		}
 
 		/**
@@ -158,10 +190,10 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		 */
 		public static function check_for_search() {
 			if( isset( $_POST['s'] ) ) {
-				if ( ! isset( $_POST['search_activity_logs_nonce'] )  || ! wp_verify_nonce( $_POST['search_activity_logs_nonce'], 'password_protected_search_activity_logs' )  ) {
+				if ( ! isset( $_POST['search_activity_logs_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['search_activity_logs_nonce'] ) ), 'password_protected_search_activity_logs' ) ) {
 					wp_die('Sorry, your nonce did not verify.');
 				}
-				return trim( sanitize_text_field( $_POST['s'] )  );
+				return trim( sanitize_text_field( wp_unslash( $_POST['s'] ) )  );
 
 			} else {
 				return null;
@@ -174,13 +206,13 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		 * @return string|null
 		 */
 		public static function check_for_filter() {
-			if( isset( $_GET['show_logs'] ) ) {
+			if( isset( $_GET['show_logs'], $_GET['_wpnonce'] ) ) {
 
-				$nonce = sanitize_text_field( $_GET['_wpnonce'] );
+				$nonce = sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) );
 				if( ! wp_verify_nonce( $nonce, 'activity-logs-filter' ) ) {
-					wp_die( __( 'Security check: Your nonce did not verify!', 'password-protected-pro' ) );
+					wp_die( esc_html__( 'Security check: Your nonce did not verify!', 'password-protected' ) );
 				} else {
-					return sanitize_text_field( $_GET['show_logs'] );
+					return sanitize_text_field( wp_unslash( $_GET['show_logs'] ) );
 				}
 			}
 			return null;
@@ -195,9 +227,9 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		 */
 		public static function get_time_from_keyword( $keyword = '' ) {
 
-			$today                 = strtotime( date( 'Y-m-d' ) . ' midnight', self::$now );
-			$todays_date           = date( 'd', self::$now );
-			$weekday               = date( 'w', self::$now );
+			$today                 = strtotime( current_time( 'Y-m-d' ) . ' midnight', self::$now );
+			$todays_date           = current_time( 'd' );
+			$weekday               = current_time( 'w' );
 			$result                = array();
 
 			$keyword               = strtolower( (string) $keyword );
@@ -228,7 +260,7 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 
 			// This month
 			elseif ( $keyword === 'thismonth' ) {
-				$result[] = strtotime( date( 'Y-m-01' ) . ' midnight', self::$now );
+				$result[] = strtotime( current_time( 'Y-m-01' ) . ' midnight', self::$now );
 				$result[] = self::$now;
 			}
 

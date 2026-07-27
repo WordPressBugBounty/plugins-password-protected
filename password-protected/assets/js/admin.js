@@ -167,6 +167,30 @@ jQuery( document ).ready(function( $ ) {
     $('div.turnStileTab').hide();
     $('div.noneTab').hide();
 
+    function updateCaptchaRequiredFields() {
+        var captchaKeyFields = '#pp_google_recaptcha_v2_site_key, #pp_google_recaptcha_v2_secret_key, #pp_google_recaptcha_v3_site_key, #pp_google_recaptcha_v3_secret_key, #pp_hcaptcha_site_key, #pp_hcaptcha_secret_key, #pp_cloudflare_site_key, #pp_cloudflare_secret_key';
+        $(captchaKeyFields).prop('required', false);
+
+        var selected = $('span.captcha-setting-field input[type="radio"]:checked').val();
+
+        if (selected === 'recaptcha') {
+            var selectedVersion = $("input[name='password_protected_recaptcha[version]']:checked").val();
+            if (selectedVersion === 'google_recaptcha_v2') {
+                $('#pp_google_recaptcha_v2_site_key, #pp_google_recaptcha_v2_secret_key').prop('required', true);
+            } else {
+                $('#pp_google_recaptcha_v3_site_key, #pp_google_recaptcha_v3_secret_key').prop('required', true);
+            }
+        }
+
+        if (selected === 'hcaptcha') {
+            $('#pp_hcaptcha_site_key, #pp_hcaptcha_secret_key').prop('required', true);
+        }
+
+        if (selected === 'turnstile') {
+            $('#pp_cloudflare_site_key, #pp_cloudflare_secret_key').prop('required', true);
+        }
+    }
+
     function updateCaptchaTabs() {
     let selected = $('span.captcha-setting-field input[type="radio"]:checked').val();
 
@@ -196,10 +220,13 @@ jQuery( document ).ready(function( $ ) {
         $('div.noneTab').show();
         $('div.hCaptchaTab, div.reCaptchaTab, div.turnStileTab').hide();
     }
+
+    updateCaptchaRequiredFields();
 }
 
 updateCaptchaTabs();
 $('span.captcha-setting-field input[type="radio"]').on('change', updateCaptchaTabs);
+$("input[name='password_protected_recaptcha[version]']").on('change', updateCaptchaRequiredFields);
 
 // Hide enable toggles in captchas, We are doing enable when tab click.
 jQuery('.turnStileTab #pppro_enable_cloudflare').closest('tr').hide();

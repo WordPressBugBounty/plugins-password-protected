@@ -14,7 +14,7 @@ echo '<div class="disabled-content click-to-display-popup">
 if ( isset( $k['slug'] ) ) {
 	switch ( $k['slug'] ) {
 		case 'exclude-from-protection':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -24,7 +24,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>Exclude From Password Protection <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Exclude From Password Protection <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <table class="form-table">
                         <tr>
                             <th><label for="">Exclude Pages</label></th>
@@ -50,7 +50,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'custom-error-message':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -60,7 +60,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>Custom Error Message <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Custom Error Message <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <table class="form-table">
                         <tr>
                             <th><label for="">Password Expiry & Limit Error Message</label></th>
@@ -73,7 +73,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'attempt-limitation':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -83,7 +83,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>Limit Password Attempts <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Limit Password Attempts <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <table class="form-table">
                         <tr>
                             <th><label for="">No of Attempts</label></th>
@@ -102,7 +102,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'bypass-url':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -112,7 +112,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>Bypass URL <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Bypass URL <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <table class="form-table">
                         <tr>
                             <th>
@@ -149,7 +149,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'manage_passwords':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -159,7 +159,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>Manage Passwords <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Manage Passwords <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <button disabled class="button button-secondary">Add New Password</button>
                     <br><br>
                     
@@ -195,7 +195,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'integrations':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -204,10 +204,10 @@ if ( isset( $k['slug'] ) ) {
 				),
 				'https://passwordprotectedwp.com/pricing/'
 			);
-			$gf_img     = PASSWORD_PROTECTED_URL . 'assets/images/integrations/gravity-forms.svg';
-			$gutena_img = PASSWORD_PROTECTED_URL . 'assets/images/integrations/gutena-forms.svg';
+			$password_protected_gf_img     = PASSWORD_PROTECTED_URL . 'assets/images/integrations/gravity-forms.svg';
+			$password_protected_gutena_img = PASSWORD_PROTECTED_URL . 'assets/images/integrations/gutena-forms.svg';
 			echo '<div class="password-protected-pro-integrations">
-				<h2 class="integrations-title">' . esc_html__( 'Form Integration', 'password-protected' ) . ' <span class="pro-badge"><a href="' . esc_url( $url ) . '">PRO</a></span></h2>
+				<h2 class="integrations-title">' . esc_html__( 'Form Integration', 'password-protected' ) . ' <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
 				<p class="integrations-desc">' . esc_html__( 'Connect Password Protected with your favorite form plugins to control access and secure submissions.', 'password-protected' ) . '</p>
 				<div class="integrations-search">
 					<input type="search" disabled placeholder="' . esc_attr__( 'Search Available Integrations...', 'password-protected' ) . '" />
@@ -217,12 +217,12 @@ if ( isset( $k['slug'] ) ) {
 						<div class="integrations-item-inner">
 							<div>
 								<h3>
-									<img src="' . esc_url( $gf_img ) . '" alt="' . esc_attr__( 'Gravity Forms', 'password-protected' ) . '" />
+									<img src="' . esc_url( $password_protected_gf_img ) . '" alt="' . esc_attr__( 'Gravity Forms', 'password-protected' ) . '" />
 									' . esc_html__( 'Gravity Forms', 'password-protected' ) . '
 								</h3>
 							</div>
 							<div>
-								<p class="desc">' . esc_html__( 'Use Gravity Forms to collect payments or user information and automatically grant access to protected content.', 'password-protected' ) . ' <span class="pp-integration-read-more">' . esc_html__( 'Read more', 'password-protected' ) . '</span></p>
+								<p class="desc">' . esc_html__( 'Use Gravity Forms to collect payments or user information and automatically grant access to protected content.', 'password-protected' ) . ' <a class="pp-integration-read-more" href="https://passwordprotectedwp.com/docs/integration/gravity-forms/" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Learn more', 'password-protected' ) . '</a></p>
 							</div>
 							<div>
 								<div class="pp-toggle-wrapper" style="float: right;">
@@ -239,7 +239,7 @@ if ( isset( $k['slug'] ) ) {
 						<div class="integrations-item-inner">
 							<div>
 								<h3>
-									<img src="' . esc_url( $gutena_img ) . '" alt="' . esc_attr__( 'Gutena Forms', 'password-protected' ) . '" />
+									<img src="' . esc_url( $password_protected_gutena_img ) . '" alt="' . esc_attr__( 'Gutena Forms', 'password-protected' ) . '" />
 									' . esc_html__( 'Gutena Forms', 'password-protected' ) . '
 								</h3>
 							</div>
@@ -269,7 +269,7 @@ if ( isset( $k['slug'] ) ) {
 			</div>';
 			break;
 		case 'activity_logs':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -279,7 +279,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>Activity Logs <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Activity Logs <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <table class="wp-list-table widefat fixed striped table-view-list toplevel_page_password-protected">
                         <thead>
                             <tr>
@@ -310,7 +310,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'post-type-protection':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -320,7 +320,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>Post type protection <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Post type protection <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <table class="form-table">
                         <tr>
                             <th>Post Type</th>
@@ -342,7 +342,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'taxonomy-protection':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -352,7 +352,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>Category/Taxonomy protection <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Category/Taxonomy protection <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
 
                     <table class="form-table">
                         <tr>
@@ -367,7 +367,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'partial-protection':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -378,7 +378,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Category/Taxonomy protection <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Category/Taxonomy protection <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
 
                     <table class="form-table">
                         <tr>
@@ -401,7 +401,7 @@ if ( isset( $k['slug'] ) ) {
 
 			break;
 		case 'whitelist-user-role':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -411,7 +411,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>White List User Roles <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>White List User Roles <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <table class="form-table">
                         <tr>
                             <th>Enable Whitelist User Roles</th>
@@ -452,7 +452,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'wp-admin-protection':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -462,7 +462,7 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 			echo '<div>
-                    <h2>Enable Admin Protection <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Enable Admin Protection <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <table class="form-table">
                         <tr>
                             <th>Enable</th>
@@ -519,7 +519,7 @@ if ( isset( $k['slug'] ) ) {
 			break;
 
 		case 'logo-styles':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -529,14 +529,14 @@ if ( isset( $k['slug'] ) ) {
 				'https://passwordprotectedwp.com/pricing/'
 			);
 
-			$image_url = admin_url( 'images/wordpress-logo.svg' );
+			$password_protected_image_url = admin_url( 'images/wordpress-logo.svg' );
 
 			echo '<div>
-                    <h2>Logo Styles <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Logo Styles <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
 
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="logo">logo</label></th><td><div class="pp-media-wrapper">
 					<input type="hidden" value="0" id="logo" name="password_protected_logo_styles[logo]">
-					<div class="pp-media-preview"><img src="' . esc_attr( $image_url ) . '" alt="' . esc_attr( $image_url ) . '"></div>
+					<div class="pp-media-preview"><img src="' . esc_url( $password_protected_image_url ) . '" alt="' . esc_attr( $password_protected_image_url ) . '"></div>
 					<button class="button pp-media-upload">Upload</button>
 					<button class="button pp-media-remove">Remove</button>
 				</div></td></tr><tr><th scope="row"><label for="logo_width">Logo Width</label></th><td><div class="range-slider-wrapper"><label for="logo_width" pp-customizer-placeholder="px"><strong>84px</strong></label><input pp-default-value="84" id="logo_width" class="regular-text range-slider-input" name="password_protected_logo_styles[logo_width]" min="30" max="400" step="1" value="84" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="84">Reset</button></div></td></tr><tr><th scope="row"><label for="logo_height">Logo Height</label></th><td><div class="range-slider-wrapper"><label for="logo_height" pp-customizer-placeholder="px"><strong>84px</strong></label><input pp-default-value="84" id="logo_height" class="regular-text range-slider-input" name="password_protected_logo_styles[logo_height]" min="30" max="400" step="1" value="84" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="84">Reset</button></div></td></tr><tr><th scope="row"><label for="redirect_url">Redirect URL</label></th><td><select id="redirect_url" name="password_protected_logo_styles[redirect_url]" class="regular-text">
@@ -550,7 +550,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'label-styles':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -561,7 +561,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Label Styles <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Label Styles <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="label">Label</label></th><td><input type="text" value="Password" id="label" name="password_protected_labels_styles[label]" class="regular-text"></td></tr><tr><th scope="row"><label for="font">Font</label></th><td><select id="font" name="password_protected_labels_styles[font]" class="regular-text">
 					<option value="default" selected="selected">Default</option><option value="Abril Fatface">Abril Fatface</option><option value="Georgia">Georgia</option><option value="Helvetica">Helvetica</option><option value="Lato">Lato</option><option value="Lora">Lora</option><option value="Karla">Karla</option><option value="Josefin Sans">Josefin Sans</option><option value="Montserrat">Montserrat</option><option value="Open Sans">Open Sans</option><option value="Oswald">Oswald</option><option value="Overpass">Overpass</option><option value="Poppins">Poppins</option><option value="PT Sans">PT Sans</option><option value="Roboto">Roboto</option><option value="Fira Sans">Fira Sans</option><option value="Times New Roman">Times New Roman</option><option value="Nunito">Nunito</option><option value="Merriweather">Merriweather</option><option value="Rubik">Rubik</option><option value="Playfair Display">Playfair Display</option><option value="Spectral">Spectral</option>
@@ -570,7 +570,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'field-styles':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -581,7 +581,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Field Styles <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Field Styles <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="bg-color">Background Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(251, 251, 251);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#fbfbfb" id="bg-color" name="password_protected_fields_styles[bg-color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 0px; top: 3.6425px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(250, 0, 0), rgb(250, 250, 250));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 0%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr><tr><th scope="row"><label for="border">Border</label></th><td><div class="range-slider-wrapper"><label for="border" pp-customizer-placeholder="px"><strong>1px</strong></label><input pp-default-value="1" id="border" class="regular-text range-slider-input" name="password_protected_fields_styles[border]" min="0" max="10" step="1" value="1" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="1">Reset</button></div></td></tr><tr><th scope="row"><label for="border-color">Border Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(221, 221, 221);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#dddddd" id="border-color" name="password_protected_fields_styles[border-color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 0px; top: 23.6762px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(219, 0, 0), rgb(222, 222, 222));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 0%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr><tr><th scope="row"><label for="margin-bottom">Margin Bottom</label></th><td><div class="range-slider-wrapper"><label for="margin-bottom" pp-customizer-placeholder="px"><strong>16px</strong></label><input pp-default-value="16" id="margin-bottom" class="regular-text range-slider-input" name="password_protected_fields_styles[margin-bottom]" min="1" max="60" step="1" value="16" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="16">Reset</button></div></td></tr><tr><th scope="row"><label for="padding">Padding</label></th><td><div class="range-slider-wrapper"><label for="padding" pp-customizer-placeholder="px"><strong>0px</strong></label><input pp-default-value="0" id="padding" class="regular-text range-slider-input" name="password_protected_fields_styles[padding]" min="0" max="40" step="1" value="0" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="0">Reset</button></div></td></tr><tr><th scope="row"><label for="padding-top">Padding Top</label></th><td><div class="range-slider-wrapper"><label for="padding-top" pp-customizer-placeholder="px"><strong>3px</strong></label><input pp-default-value="3" id="padding-top" class="regular-text range-slider-input" name="password_protected_fields_styles[padding-top]" min="0" max="40" step="1" value="3" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="3">Reset</button></div></td></tr><tr><th scope="row"><label for="padding-bottom">Padding Bottom</label></th><td><div class="range-slider-wrapper"><label for="padding-bottom" pp-customizer-placeholder="px"><strong>3px</strong></label><input pp-default-value="3" id="padding-bottom" class="regular-text range-slider-input" name="password_protected_fields_styles[padding-bottom]" min="0" max="40" step="1" value="3" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="3">Reset</button></div></td></tr><tr><th scope="row"><label for="border-radius">Border Radius</label></th><td><div class="range-slider-wrapper"><label for="border-radius" pp-customizer-placeholder="px"><strong>0px</strong></label><input pp-default-value="0" id="border-radius" class="regular-text range-slider-input" name="password_protected_fields_styles[border-radius]" min="0" max="60" step="1" value="0" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="0">Reset</button></div></td></tr><tr><th scope="row"><label for="shadow">Shadow</label></th><td><div class="range-slider-wrapper"><label for="shadow" pp-customizer-placeholder="px"><strong>0px</strong></label><input pp-default-value="0" id="shadow" class="regular-text range-slider-input" name="password_protected_fields_styles[shadow]" min="0" max="30" step="1" value="0" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="0">Reset</button></div></td></tr><tr><th scope="row"><label for="shadow-opacity">Shadow Opacity</label></th><td><div class="range-slider-wrapper"><label for="shadow-opacity" pp-customizer-placeholder="%"><strong>7%</strong></label><input pp-default-value="7" id="shadow-opacity" class="regular-text range-slider-input" name="password_protected_fields_styles[shadow-opacity]" min="0" max="100" step="1" value="7" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="7">Reset</button></div></td></tr><tr><th scope="row"><label for="shadow-inset">Shadow Inset</label></th><td><div class="pp-toggle-wrapper">
 					<input type="checkbox" value="yes" id="shadow-inset" name="password_protected_fields_styles[shadow-inset]">
@@ -598,7 +598,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'button-styles':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -609,7 +609,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Button Styles <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Button Styles <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="bg-color">Background Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(0, 133, 186);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#0085ba" id="bg-color" name="password_protected_button_styles[bg-color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 99.6628px; top: 49.1737px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 0, 0), rgb(255, 128, 0), rgb(255, 255, 0), rgb(128, 255, 0), rgb(0, 255, 0), rgb(0, 255, 128), rgb(0, 255, 255), rgb(0, 128, 255), rgb(0, 0, 255), rgb(128, 0, 255), rgb(255, 0, 255), rgb(255, 0, 128), rgb(255, 0, 0));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(0, 132, 184), rgb(186, 186, 186));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 100%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr><tr><th scope="row"><label for="border">Border</label></th><td><div class="range-slider-wrapper"><label for="border" pp-customizer-placeholder="px"><strong>1px</strong></label><input pp-default-value="1" id="border" class="regular-text range-slider-input" name="password_protected_button_styles[border]" min="0" max="10" step="1" value="1" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="1">Reset</button></div></td></tr><tr><th scope="row"><label for="border-color">Border Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(0, 115, 170);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#0073aa" id="border-color" name="password_protected_button_styles[border-color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 100.675px; top: 60.1012px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 0, 0), rgb(255, 128, 0), rgb(255, 255, 0), rgb(128, 255, 0), rgb(0, 255, 0), rgb(0, 255, 128), rgb(0, 255, 255), rgb(0, 128, 255), rgb(0, 0, 255), rgb(128, 0, 255), rgb(255, 0, 255), rgb(255, 0, 128), rgb(255, 0, 0));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(0, 115, 168), rgb(171, 171, 171));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 100%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr><tr><th scope="row"><label for="padding">Padding</label></th><td><div class="range-slider-wrapper"><label for="padding" pp-customizer-placeholder="px"><strong>12px</strong></label><input pp-default-value="12" id="padding" class="regular-text range-slider-input" name="password_protected_button_styles[padding]" min="0" max="60" step="1" value="12" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="12">Reset</button></div></td></tr><tr><th scope="row"><label for="padding-top">Padding Top</label></th><td><div class="range-slider-wrapper"><label for="padding-top" pp-customizer-placeholder="px"><strong>4px</strong></label><input pp-default-value="4" id="padding-top" class="regular-text range-slider-input" name="password_protected_button_styles[padding-top]" min="1" max="20" step="1" value="4" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="4">Reset</button></div></td></tr><tr><th scope="row"><label for="padding-bottom">Padding Bottom</label></th><td><div class="range-slider-wrapper"><label for="padding-bottom" pp-customizer-placeholder="px"><strong>4px</strong></label><input pp-default-value="4" id="padding-bottom" class="regular-text range-slider-input" name="password_protected_button_styles[padding-bottom]" min="1" max="20" step="1" value="4" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="4">Reset</button></div></td></tr><tr><th scope="row"><label for="border-radius">Border Radius</label></th><td><div class="range-slider-wrapper"><label for="border-radius" pp-customizer-placeholder="px"><strong>3px</strong></label><input pp-default-value="3" id="border-radius" class="regular-text range-slider-input" name="password_protected_button_styles[border-radius]" min="0" max="60" step="1" value="3" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="3">Reset</button></div></td></tr><tr><th scope="row"><label for="shadow">Shadow</label></th><td><div class="range-slider-wrapper"><label for="shadow" pp-customizer-placeholder="px"><strong>0px</strong></label><input pp-default-value="0" id="shadow" class="regular-text range-slider-input" name="password_protected_button_styles[shadow]" min="0" max="30" step="1" value="0" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="0">Reset</button></div></td></tr><tr><th scope="row"><label for="shadow-opacity">Shadow Opacity</label></th><td><div class="range-slider-wrapper"><label for="shadow-opacity" pp-customizer-placeholder="%"><strong>0%</strong></label><input pp-default-value="0" id="shadow-opacity" class="regular-text range-slider-input" name="password_protected_button_styles[shadow-opacity]" min="0" max="100" step="1" value="0" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="0">Reset</button></div></td></tr></tbody></table>
                     <h2>Text Styles</h2>
@@ -620,7 +620,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'remember-me-styles':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -631,7 +631,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Checkbox Styles <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Checkbox Styles <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="size">Size</label></th><td><div class="range-slider-wrapper"><label for="size" pp-customizer-placeholder="px"><strong>16px</strong></label><input pp-default-value="16" id="size" class="regular-text range-slider-input" name="password_protected_rememberme_styles[size]" min="16" max="20" step="1" value="16" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="16">Reset</button></div></td></tr><tr><th scope="row"><label for="bg-color">Background Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(251, 251, 251);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#fbfbfb" id="bg-color" name="password_protected_rememberme_styles[bg-color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 0px; top: 3.6425px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(250, 0, 0), rgb(250, 250, 250));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 0%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr><tr><th scope="row"><label for="border">Border</label></th><td><div class="range-slider-wrapper"><label for="border" pp-customizer-placeholder="px"><strong>0px</strong></label><input pp-default-value="0" id="border" class="regular-text range-slider-input" name="password_protected_rememberme_styles[border]" min="0" max="3" step="1" value="0" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="0">Reset</button></div></td></tr><tr><th scope="row"><label for="border-color">Border Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(180, 185, 190);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#b4b9be" id="border-color" name="password_protected_rememberme_styles[border-color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 106.24px; top: 45.5312px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 240, 240), rgb(255, 247, 240), rgb(255, 255, 240), rgb(247, 255, 240), rgb(240, 255, 240), rgb(240, 255, 247), rgb(240, 255, 255), rgb(240, 247, 255), rgb(240, 240, 255), rgb(247, 240, 255), rgb(255, 240, 255), rgb(255, 240, 247), rgb(255, 240, 240));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(0, 94, 189), rgb(191, 191, 191));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 5%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr><tr><th scope="row"><label for="border-radius">Border Radius</label></th><td><div class="range-slider-wrapper"><label for="border-radius" pp-customizer-placeholder="px"><strong>0px</strong></label><input pp-default-value="0" id="border-radius" class="regular-text range-slider-input" name="password_protected_rememberme_styles[border-radius]" min="0" max="30" step="1" value="0" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="0">Reset</button></div></td></tr></tbody></table>
                     
                     <h2>Label Styles</h2>
@@ -642,7 +642,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'form-background':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -653,7 +653,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Form Background <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Form Background <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
 
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="bg-color">Background Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(255, 255, 255);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#ffffff" id="bg-color" name="password_protected_form_bg_styles[bg-color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 0px; top: 0px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(255, 0, 0), rgb(255, 255, 255));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 0%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr><tr><th scope="row"><label for="border-radius">Border Radius</label></th><td><div class="range-slider-wrapper"><label for="border-radius" pp-customizer-placeholder="px"><strong>0px</strong></label><input pp-default-value="0" id="border-radius" class="regular-text range-slider-input" name="password_protected_form_bg_styles[border-radius]" min="0" max="50" step="1" value="0" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="0">Reset</button></div></td></tr><tr><th scope="row"><label for="shadow">Shadow</label></th><td><div class="range-slider-wrapper"><label for="shadow" pp-customizer-placeholder="px"><strong>3px</strong></label><input pp-default-value="3" id="shadow" class="regular-text range-slider-input" name="password_protected_form_bg_styles[shadow]" min="0" max="70" step="1" value="3" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="3">Reset</button></div></td></tr><tr><th scope="row"><label for="shadow-opacity">Shadow Opacity</label></th><td><div class="range-slider-wrapper"><label for="shadow-opacity" pp-customizer-placeholder="%"><strong>13%</strong></label><input pp-default-value="13" id="shadow-opacity" class="regular-text range-slider-input" name="password_protected_form_bg_styles[shadow-opacity]" min="0" max="100" step="1" value="13" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="13">Reset</button></div></td></tr><tr><th scope="row"><label for="side-padding">Side Padding</label></th><td><div class="range-slider-wrapper"><label for="side-padding" pp-customizer-placeholder="px"><strong>24px</strong></label><input pp-default-value="24" id="side-padding" class="regular-text range-slider-input" name="password_protected_form_bg_styles[side-padding]" min="0" max="100" step="1" value="24" type="range"><button type="button" style="margin: 5px 0 0 5px" class="button button-secondary button-small reset-range" pp-default-value="24">Reset</button></div></td></tr><tr><th scope="row"><label for="transparent">Transparent</label></th><td><div class="pp-toggle-wrapper">
 					<input type="checkbox" value="yes" id="transparent" name="password_protected_form_bg_styles[transparent]">
@@ -665,7 +665,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'body-background':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -676,7 +676,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Body Background <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Body Background <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="bg-color">Background Color</label></th><td><div class="wp-picker-container"><button type="button" class="button wp-color-result" aria-expanded="false" style="background-color: rgb(241, 241, 241);"><span class="wp-color-result-text">Select Color</span></button><span class="wp-picker-input-wrap hidden"><label><span class="screen-reader-text">Color value</span><input type="text" value="#f1f1f1" id="bg-color" name="password_protected_body_bg_styles[bg-color]" class="regular-text pp-color-selector wp-color-picker"></label><input type="button" class="button button-small wp-picker-clear" value="Clear" aria-label="Clear color"></span><div class="wp-picker-holder"><div class="iris-picker iris-border" style="display: none; width: 255px; height: 202.125px; padding-bottom: 23.2209px;"><div class="iris-picker-inner"><div class="iris-square" style="width: 182.125px; height: 182.125px;"><a class="iris-square-value ui-draggable ui-draggable-handle" href="#" style="left: 0px; top: 9.10625px;"><span class="iris-square-handle ui-slider-handle"></span></a><div class="iris-square-inner iris-square-horiz" style="background-image: -webkit-linear-gradient(left, rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255), rgb(255, 255, 255));"></div><div class="iris-square-inner iris-square-vert" style="background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0), rgb(0, 0, 0));"></div></div><div class="iris-slider iris-strip" style="height: 205.346px; width: 28.2px; background-image: -webkit-linear-gradient(top, rgb(240, 0, 0), rgb(242, 242, 242));"><div class="iris-slider-offset ui-slider ui-corner-all ui-slider-vertical ui-widget ui-widget-content"><span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default" style="bottom: 0%;"></span></div></div></div><div class="iris-palette-container"><a class="iris-palette" tabindex="0" style="background-color: rgb(0, 0, 0); height: 19.5784px; width: 19.5784px; margin-left: 0px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(255, 255, 255); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 51, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(221, 153, 51); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(238, 238, 34); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(129, 215, 66); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(30, 115, 190); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a><a class="iris-palette" tabindex="0" style="background-color: rgb(130, 36, 227); height: 19.5784px; width: 19.5784px; margin-left: 3.6425px;"></a></div></div></div></div></td></tr><tr><th scope="row"><label for="bg-image">Background Image</label></th><td><div class="pp-media-wrapper">
 					<input type="hidden" value="5" id="bg-image" name="password_protected_body_bg_styles[bg-image]">
@@ -694,7 +694,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'below-form':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -705,7 +705,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Form Content <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Form Content <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="font">Font</label></th><td><select id="font" name="password_protected_below_form_styles[font]" class="regular-text">
 					<option value="default" selected="selected">Default</option><option value="Abril Fatface">Abril Fatface</option><option value="Georgia">Georgia</option><option value="Helvetica">Helvetica</option><option value="Lato">Lato</option><option value="Lora">Lora</option><option value="Karla">Karla</option><option value="Josefin Sans">Josefin Sans</option><option value="Montserrat">Montserrat</option><option value="Open Sans">Open Sans</option><option value="Oswald">Oswald</option><option value="Overpass">Overpass</option><option value="Poppins">Poppins</option><option value="PT Sans">PT Sans</option><option value="Roboto">Roboto</option><option value="Fira Sans">Fira Sans</option><option value="Times New Roman">Times New Roman</option><option value="Nunito">Nunito</option><option value="Merriweather">Merriweather</option><option value="Rubik">Rubik</option><option value="Playfair Display">Playfair Display</option><option value="Spectral">Spectral</option>
@@ -716,7 +716,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'below-page':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -727,7 +727,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Page Content <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Page Content <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="font">Font</label></th><td><select id="font" name="password_protected_below_form_styles[font]" class="regular-text">
 					<option value="default" selected="selected">Default</option><option value="Abril Fatface">Abril Fatface</option><option value="Georgia">Georgia</option><option value="Helvetica">Helvetica</option><option value="Lato">Lato</option><option value="Lora">Lora</option><option value="Karla">Karla</option><option value="Josefin Sans">Josefin Sans</option><option value="Montserrat">Montserrat</option><option value="Open Sans">Open Sans</option><option value="Oswald">Oswald</option><option value="Overpass">Overpass</option><option value="Poppins">Poppins</option><option value="PT Sans">PT Sans</option><option value="Roboto">Roboto</option><option value="Fira Sans">Fira Sans</option><option value="Times New Roman">Times New Roman</option><option value="Nunito">Nunito</option><option value="Merriweather">Merriweather</option><option value="Rubik">Rubik</option><option value="Playfair Display">Playfair Display</option><option value="Spectral">Spectral</option>
@@ -738,7 +738,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'custom-css':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -749,7 +749,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Custom CSS <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Custom CSS <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="custom-css">Custom CSS</label></th><td><textarea id="custom-css" name="password_protected_custom_css_styles[custom-css]" class="large-text"></textarea></td></tr></tbody></table>
                     
@@ -757,7 +757,7 @@ if ( isset( $k['slug'] ) ) {
 			break;
 
 		case 'password-request':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -768,7 +768,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Request Password <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Request Password <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="enable-password-requests">Enable Password Requests</label></th><td><div class="pp-toggle-wrapper">
 					<input type="checkbox" value="yes" id="enable-password-requests" name="pp_password_request_setting[enable-password-requests]" checked="checked">
@@ -779,7 +779,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'requests':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -790,7 +790,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Requests <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Requests <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <div class="pp-settings-wrapper">
 								<div style="margin: 10px 0;">
@@ -819,7 +819,7 @@ if ( isset( $k['slug'] ) ) {
                 </div>';
 			break;
 		case 'email-templates':
-			$url = add_query_arg(
+			$password_protected_url = add_query_arg(
 				array(
 					'utm_source'   => 'plugin',
 					'utm_medium'   => 'pop_up',
@@ -830,7 +830,7 @@ if ( isset( $k['slug'] ) ) {
 			);
 
 			echo '<div>
-                    <h2>Email Templates <span class="pro-badge"><a href="' . $url . '">PRO</a></span></h2>
+                    <h2>Email Templates <span class="pro-badge"><a href="' . esc_url( $password_protected_url ) . '">PRO</a></span></h2>
                     
                     <div class="ppp-email-templates" id="validations"><h2>Validation\'s</h2>
 <table class="form-table" role="presentation"><tbody><tr><th scope="row"><label for="rp-validation-subject">Email Subject</label></th><td><input type="text" value="Verify Your Email Address for Password Request" id="rp-validation-subject" name="pp_email_templates_setting[rp-validation-subject]" class="regular-text"><p class="desc"><strong>Email template for validation email subject. Use <code>{site_name}</code> to replace with site name.</strong></p></td></tr><tr><th scope="row"><label for="rp-validation-body">Email Body</label></th><td><textarea id="rp-validation-body" name="pp_email_templates_setting[rp-validation-body]" class="regular-text">Hello,

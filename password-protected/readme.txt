@@ -1,10 +1,10 @@
-=== Password Protected — Lock Entire Site, Pages, Posts, Categories, and Partial Content ===
+=== Password Protected ===
 Contributors: wpexpertsio
 Tags: password protection, maintenance mode, password protect page, password protect, restrict content
-Requires at least: 4.6
-Tested up to: 7.1
+Requires at least: 4.9.6
+Tested up to: 7.0
 Requires PHP: 5.6
-Stable tag: 2.8.3
+Stable tag: 2.8.4
 License: GPLv2 or later
 
 Protect your WordPress site, pages, posts, WooCommerce products, and categories with single or multiple passwords.
@@ -20,6 +20,44 @@ Password Protected is a robust password protection plugin for WordPress that emp
 Additionally, you can secure the password protected screen from WordPress attacks such as a WordPress brute force attack with the limit login feature.
 
 Therefore, the [Password Protected WordPress plugin](https://passwordprotectedwp.com/) ensures comprehensive security, covering everything from WordPress pages to WooCommerce products, all with a user-friendly interface.
+
+== Password Protect Any WordPress Content, Your Way ==
+
+With Password Protected, you can secure everything from entire websites to individual content sections while controlling exactly who gets access and how.
+
+* **Password protect** entire WordPress site
+
+* **Password protect** specific pages and posts
+
+* **Protect WooCommerce** products and categories
+
+* **Protect custom post** types and taxonomies
+
+* **Lock specific sections** of content with partial content protection
+
+* **Allow trusted user** roles to bypass password screens
+
+* **Grant access based** on IP addresses
+
+* **Create and manage** multiple passwords for different users
+
+* **Generate bypass links** for password-free access
+
+* **Sell protected content** using Gravity Forms
+
+* **Automatically email** access links after form submissions
+
+* **Redirect users to custom** pages after successful access
+
+* **Block bots with Google** reCAPTCHA, hCaptcha, and Cloudflare Turnstile
+
+* **Monitor login attempts** and access activity
+
+* **Set password expiration** dates and usage limits
+
+* **Customize your password** protected screen to match your brand
+
+* **Add an extra layer of** security to your WordPress login page
 
 
 == Why Do You Need to Password Protect WordPress Site? ==
@@ -351,6 +389,11 @@ If you want to translate this plugin you can easily contribute to the [Translati
 
 
 == Changelog ==
+
+= 2.8.4 =
+- Fixed - Captcha Validation Issue
+- Fixed – Security enhancement on behalf of CVE-2026-11995
+- Update - Feedback SDK update
 
 = 2.8.3 =
 - Improved code optimization.

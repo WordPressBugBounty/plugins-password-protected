@@ -30,12 +30,23 @@ if ( ! class_exists( 'Password_Protected_Send_Email_Notification' ) ) {
 		public function send_email_notification() {
 			global $wpdb;
 			$timestamps = Password_Protected_Activity_Logs::get_time_from_keyword( 'thisweek' );
-			$sql        = 'SELECT
-			    SUM( IF ( `status` = %s, 1, 0 ) ) as success,
-			    SUM( IF ( `status` = %s, 1, 0 ) ) as failed
-			FROM %i WHERE created_at between %d and %d;';
-			$sql        = $wpdb->prepare( $sql, 'Success', 'Failure', $wpdb->prefix . 'pp_activity_logs', $timestamps[0], $timestamps[1] );
-			$results    = $wpdb->get_row( $sql, ARRAY_A );
+			$table_name = $wpdb->prefix . 'pp_activity_logs';
+			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Custom activity log table uses $wpdb->prefix.
+			$results    = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT
+						SUM( IF ( `status` = %s, 1, 0 ) ) as success,
+						SUM( IF ( `status` = %s, 1, 0 ) ) as failed
+					FROM `' . $table_name . '` WHERE created_at BETWEEN %d AND %d",
+					'Success',
+					'Failure',
+					(int) $timestamps[0],
+					(int) $timestamps[1]
+				),
+				ARRAY_A
+			);
+			// phpcs:enable
 
 			$success_attempts =
 			$failed_attempts  = 0;

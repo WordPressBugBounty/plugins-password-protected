@@ -7,8 +7,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$has_pro   = class_exists( 'Password_Protected_pro' );
-$image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
+$password_protected_has_pro   = class_exists( 'Password_Protected_pro' );
+$password_protected_image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -37,15 +37,24 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                         <div style="width: 424px;height: 60px;line-height: 15px;">
                             <p style="font-size: 12px;font-weight: 400;font-family: Inter,serif;line-height: 25px">
 								<?php
-								printf( __( 'Hi %1$s,', 'password-protected' ), '<b>' . get_option( 'admin_email' ) . '</b>' );
+								echo wp_kses_post(
+									sprintf(
+										/* translators: %s: admin email address. */
+										__( 'Hi %1$s,', 'password-protected' ),
+										'<b>' . esc_html( get_option( 'admin_email' ) ) . '</b>'
+									)
+								);
 								?>
                             </p>
                             <p style="font-size: 12px;font-weight: 400;font-family: Inter,serif;line-height: 25px">
 								<?php
-								printf(
-									__( 'Here is a quick overview of who is accessing your site %1$s to %2$s', 'password-protected' ),
-									'<b>' . esc_attr( gmdate( 'd-M', $time[0] ) ). '</b>',
-									'<b>' . esc_attr( gmdate( 'd-M', $time[1] ) ) . '</b>',
+								echo wp_kses_post(
+									sprintf(
+										/* translators: %1$s: report start date, %2$s: report end date. */
+										__( 'Here is a quick overview of who is accessing your site %1$s to %2$s', 'password-protected' ),
+										'<b>' . esc_attr( gmdate( 'd-M', $time[0] ) ). '</b>',
+										'<b>' . esc_attr( gmdate( 'd-M', $time[1] ) ) . '</b>',
+									)
 								);
 								?>
                             </p>
@@ -62,7 +71,7 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                                         <td style="vertical-align: top">
                                             <div style="width: 38px;height: 38px;border-radius: 50px;background: #BEB8E4; margin: auto">
                                                 <div style="line-height: 38px;text-align:center;">
-                                                    <img src="<?php echo esc_url( $image_url ); ?>total-attempts.png" />
+                                                    <img src="<?php echo esc_url( $password_protected_image_url ); ?>total-attempts.png" />
                                                 </div>
                                             </div>
                                         </td>
@@ -86,7 +95,7 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                                         <td style="vertical-align: top;">
                                             <div style="width: 38px;height: 38px;border-radius: 50px;background: #26e2c0; margin: auto">
                                                 <div style="line-height: 38px;text-align:center;">
-                                                    <img src="<?php echo esc_url( $image_url ) ?>success.png" alt="">
+                                                    <img src="<?php echo esc_url( $password_protected_image_url ) ?>success.png" alt="">
                                                 </div>
                                             </div>
                                         </td>
@@ -110,7 +119,7 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                                         <td style="vertical-align: top">
                                             <div style="width: 38px;height: 38px;border-radius: 50px;background: #e4b8d0; margin: auto">
                                                 <div style="line-height: 38px;text-align:center;">
-                                                    <img src="<?php echo esc_url( $image_url ); ?>failed.png" alt="">
+                                                    <img src="<?php echo esc_url( $password_protected_image_url ); ?>failed.png" alt="">
                                                 </div>
                                             </div>
                                         </td>
@@ -132,12 +141,12 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                             <div style="clear:both;display:table;"></div>
                         </div>
 
-                        <?php if ( ! $has_pro ) : ?>
+                        <?php if ( ! $password_protected_has_pro ) : ?>
                             <div style="margin: 20px 0">
                                 <div style="width: 424px;height: 257px;border-radius: 10px;border: 1px solid #CDCDCD;overflow: hidden">
                                     <div style="width: 100%;height: 33px;background: #F9AA39;">
                                         <p style="font-family: Inter,serif;font-weight: 600;line-height: 32px;font-size: 14px;color: #fff;padding: 0 15px">
-                                            <img src="<?php esc_url( $image_url ); ?>chart.png" alt="">
+                                            <img src="<?php esc_url( $password_protected_image_url ); ?>chart.png" alt="">
 					                        <?php esc_html_e( 'Want more insights about your visitors?', 'password-protected' ); ?>
                                         </p>
                                     </div>
@@ -149,7 +158,7 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
 
                                     <div style="padding: 5px 15px;">
                                         <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
+                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
                                         </div>
                                         <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
 					                        <?php esc_html_e( 'Protect Specific Post Types', 'password-protected' ); ?>
@@ -157,7 +166,7 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                                     </div>
                                     <div style="padding: 5px 15px;border-top: 1px solid #CDCDCD;border-bottom: 1px solid #CDCDCD;">
                                         <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
+                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
                                         </div>
                                         <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
 					                        <?php esc_html_e( 'Protect Specific Categories / Taxonomies', 'password-protected' ); ?>
@@ -165,7 +174,7 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                                     </div>
                                     <div style="padding: 5px 15px;">
                                         <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
+                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
                                         </div>
                                         <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
 					                        <?php esc_html_e( 'Display Activity Log for Each Password Attempt', 'password-protected' ); ?>
@@ -173,7 +182,7 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                                     </div>
                                     <div style="padding: 5px 15px;border-top: 1px solid #CDCDCD;border-bottom: 1px solid #CDCDCD;">
                                         <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
+                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
                                         </div>
                                         <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
 			                                <?php esc_html_e( 'Set a Password Expiration Date and Usage Limit', 'password-protected' ); ?>
@@ -181,7 +190,7 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                                     </div>
                                     <div style="padding: 5px 15px;">
                                         <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
+                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
                                         </div>
                                         <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
 			                                <?php esc_html_e( 'Get a Bypass URL to Access your WordPress Site without a Password', 'password-protected' ); ?>
@@ -209,9 +218,12 @@ $image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                     <td style="vertical-align: bottom;width: 100%;">
                         <p style="font-family: Inter,serif;font-size: 12px;line-height: 15px;font-weight: 500;color: #8076FF;text-align:center;">
                             <?php
-                                printf(
-                                    __( 'This email was autogenerated and sent from %1$s.', 'password-protected' ),
-                                    '<a href="' . esc_url( site_url() ) . '">' . esc_attr( get_bloginfo( 'name' ) ) . '</a>'
+                                echo wp_kses_post(
+                                    sprintf(
+                                        /* translators: %s: site name linked to the site URL. */
+                                        __( 'This email was autogenerated and sent from %1$s.', 'password-protected' ),
+                                        '<a href="' . esc_url( site_url() ) . '">' . esc_html( get_bloginfo( 'name' ) ) . '</a>'
+                                    )
                                 );
                             ?>
                         </p>

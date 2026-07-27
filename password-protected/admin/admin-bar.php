@@ -101,10 +101,10 @@ class Admin_Bar {
 
 			?>
 			<style type="text/css">
-			#wp-admin-bar-password_protected { background-color: <?php echo $background; ?> !important; }
+			#wp-admin-bar-password_protected { background-color: <?php echo esc_attr( $background ); ?> !important; }
 			#wp-admin-bar-password_protected > .ab-item { color: #fff !important;  }
-			#wp-admin-bar-password_protected > .ab-item:before { content: "<?php echo $icon; ?>"; top: 2px; color: #fff !important; margin-right: 0px; }
-			#wp-admin-bar-password_protected:hover > .ab-item { background-color: <?php echo $background; ?> !important; color: #fff; }
+			#wp-admin-bar-password_protected > .ab-item:before { content: "<?php echo esc_attr( $icon ); ?>"; top: 2px; color: #fff !important; margin-right: 0px; }
+			#wp-admin-bar-password_protected:hover > .ab-item { background-color: <?php echo esc_attr( $background ); ?> !important; color: #fff; }
 			</style>
 			<?php
 

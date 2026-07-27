@@ -9,6 +9,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+
 if ( ! function_exists( 'pp_get_transient_identifier' ) ) {
 	/**
 	 * Get identifier
@@ -43,7 +45,7 @@ if ( ! function_exists( 'pp_get_ip_address' ) ) {
 
 		foreach ( $ip_parameters as $key ) {
 			if ( array_key_exists( $key, $_SERVER ) === true ) {
-				foreach ( explode(',', $_SERVER[ $key ] ) as $ip ) {
+				foreach ( explode( ',', sanitize_text_field( wp_unslash( $_SERVER[ $key ] ) ) ) as $ip ) {
 					$ip = trim( $ip );
 
 					if ( filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE ) !== false ){
@@ -105,3 +107,4 @@ if ( ! function_exists( 'pp_delete_transient' ) ) {
 		delete_transient( $transient );
 	}
 }
+// phpcs:enable
