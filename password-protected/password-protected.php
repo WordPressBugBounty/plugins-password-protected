@@ -1,18 +1,22 @@
 <?php
 /*
 Plugin Name: Password Protected
-Plugin URI: https://wordpress.org/plugins/password-protected/
+Plugin URI: https://passwordprotectedwp.com/
 Description: A very simple way to quickly password protect your WordPress site with a single password. Please note: This plugin does not restrict access to uploaded files and images and does not work with some caching setups.
-Version: 2.8.4
+Version: 2.8.5
 Author: Password Protected
 Text Domain: password-protected
 Author URI: https://passwordprotectedwp.com/
-License: GPLv2
+Requires at least: 4.9.6
+Requires PHP: 5.6
+Tested up to: 7.1
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 /*
 This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License, version 2, as
-published by the Free Software Foundation.
+it under the terms of the GNU General Public License, version 2 or (at your option)
+any later version, as published by the Free Software Foundation.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -45,7 +49,7 @@ $Password_Protected = new Password_Protected();
 
 class Password_Protected {
 
-	var $version 	   = '2.8.4';
+	var $version 	   = '2.8.5';
 	var $admin   	   = null;
 	var $errors  	   = null;
 	var $admin_caching = null;
@@ -58,6 +62,7 @@ class Password_Protected {
 		$this->errors = new WP_Error();
 
 		register_activation_hook( __FILE__, array( &$this, 'install' ) );
+		register_deactivation_hook( __FILE__, array( &$this, 'deactivate' ) );
 
 
 		add_filter( 'password_protected_is_active', array( $this, 'allow_ip_addresses' ) );
@@ -91,6 +96,8 @@ class Password_Protected {
 
 		include_once dirname( __FILE__ ) . '/admin/admin-bar.php';
 		include_once dirname( __FILE__ ) . '/includes/compatibility.php';
+		include_once dirname( __FILE__ ) . '/includes/class-password-protected-extension-compat.php';
+		Password_Protected_Extension_Compat::init();
 		if ( is_admin() ) {
 
 			include_once dirname( __FILE__ ) . '/admin/admin-caching.php';
@@ -108,8 +115,7 @@ class Password_Protected {
 		include_once dirname( __FILE__ ) . '/includes/activity-report-email/class-password-protected-activity-report-settings.php';
 
 		include_once dirname( __FILE__ ) . '/admin/class-pp-all-captcha-tabs.php';
-		include_once dirname( __FILE__ ) . '/includes/class-customize.php';
-		new Password_Protected_Free_allCaptchas();
+		Password_Protected_Free_allCaptchas::getInstance();
 
 	}
 	
@@ -306,14 +312,56 @@ class Password_Protected {
 	}
 
 	/**
-	 * Encrypt Password
+	 * Hash Master Password (SEC-004)
 	 *
-	 * @param  string $password  Password.
-	 * @return string             Encrypted password.
+	 * Hashes the site master password using WordPress's modern password hashing
+	 * (bcrypt by default, argon2 if available). Used for the master password
+	 * stored in the `password_protected_password` option.
+	 *
+	 * @param  string $password  Plaintext password.
+	 * @return string             Hashed password (bcrypt/argon2).
 	 */
-	public function encrypt_password( $password ) {
+	public function hash_master_password( $password ) {
 
-		return md5( $password );
+		return wp_hash_password( $password );
+
+	}
+
+	/**
+	 * Verify Master Password (SEC-004)
+	 *
+	 * Verifies a submitted password against the stored master-password hash.
+	 * Uses wp_check_password() which automatically handles legacy MD5 hashes
+	 * (32-char hex) and modern bcrypt/argon2 hashes. After a successful match
+	 * against a legacy MD5 hash, the caller should rehash with
+	 * hash_master_password() and update the option.
+	 *
+	 * @param  string $password  Submitted plaintext password.
+	 * @param  string $stored    Stored hash (MD5 or bcrypt/argon2).
+	 * @return bool               True if password matches.
+	 */
+	public function verify_master_password( $password, $stored ) {
+
+		if ( empty( $stored ) ) {
+			return false;
+		}
+
+		return wp_check_password( $password, $stored );
+	}
+
+	/**
+	 * Is Stored Hash Legacy MD5 (SEC-004)
+	 *
+	 * Detects whether the stored master-password hash is a legacy unsalted
+	 * MD5 (32-char lowercase hex). Used to trigger a one-time upgrade to
+	 * bcrypt/argon2 on the next successful login.
+	 *
+	 * @param  string $stored  Stored hash.
+	 * @return bool             True if hash is legacy MD5.
+	 */
+	public function is_legacy_md5_hash( $stored ) {
+
+		return is_string( $stored ) && (bool) preg_match( '/^[a-f0-9]{32}$/', $stored );
 
 	}
 
@@ -348,28 +396,38 @@ class Password_Protected {
 
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( $this->is_active() && isset( $_REQUEST['password_protected_pwd'] ) ) {
-			
+
 			$password_protected_pwd 	= sanitize_text_field( wp_unslash( $_REQUEST['password_protected_pwd'] ) );
 			$default_password         	= get_option( 'password_protected_password' );
-			
+
 			$auth 						= false;
 			$p_id                       = 0;
 
 			if ( empty( $default_password ) ) {
 
-				$authentication = $this->password_protected_check_pro_password( $password_protected_pwd );
+				$authentication = $this->password_protected_check_additional_passwords( $password_protected_pwd );
 				$auth = $authentication['auth'];
 				$p_id = $authentication['p_id'];
 
 			} else {
-				
-				if ( ( hash_equals( $default_password, $this->encrypt_password( $password_protected_pwd ) ) && $default_password != '' ) || apply_filters( 'password_protected_process_login', false, $password_protected_pwd ) ) {
+
+				// SEC-004: verify the master password using wp_check_password() so
+				// both legacy MD5 and modern bcrypt/argon2 hashes are accepted.
+				$master_match = $this->verify_master_password( $password_protected_pwd, $default_password );
+
+				if ( $master_match || apply_filters( 'password_protected_process_login', false, $password_protected_pwd ) ) {
 					$auth = true;
+
+					// SEC-004: one-time upgrade from legacy MD5 to bcrypt/argon2.
+					if ( $master_match && $this->is_legacy_md5_hash( $default_password ) ) {
+						$new_hash = $this->hash_master_password( $password_protected_pwd );
+						update_option( 'password_protected_password', $new_hash );
+					}
 				}
 
 				if ( ! $auth ) {
 
-					$authentication = $this->password_protected_check_pro_password( $password_protected_pwd );
+					$authentication = $this->password_protected_check_additional_passwords( $password_protected_pwd );
 					$auth = $authentication['auth'];
 					$p_id = $authentication['p_id'];
 				}
@@ -379,16 +437,21 @@ class Password_Protected {
 			$this->errors 				= apply_filters( 'password_protected_verify_recaptcha', $this->errors );
 
 			if( count( @$this->errors->errors ) > 0 ) return;
-			
+
 			$this->password_protected_process_login( $auth, $password_protected_pwd, $p_id );
-			
+
 		}
 		// phpcs:enable
 
 	}
 
-	public function password_protected_process_login( bool $auth, $requested_password, $password_id ) {
-	
+	public function password_protected_process_login( $auth, $requested_password, $password_id ) {
+
+		// Backport COMPAT-001: scalar type hint removed for PHP 5.6 compatibility.
+		if ( ! is_bool( $auth ) ) {
+			$auth = (bool) $auth;
+		}
+
 		if( $auth )
 			$throttle = apply_filters( 'password_protected_check_for_throttling', true );
 
@@ -434,36 +497,35 @@ class Password_Protected {
 	}
 	
 	/**
-	 * password_protected_check_pro_password
+	 * Check additional passwords via the password_protected_authenticate_additional filter.
 	 *
 	 * @param  mixed $requested_password
-	 * @return void
+	 * @return array{ auth: bool, p_id: int }
 	 */
-	public function password_protected_check_pro_password( $requested_password ) {
-		
-		$pro_passwords				= apply_filters( 'password_protected_passwords', array() );
-		$pro_passwords 				= array_filter( $pro_passwords );
-		$auth						= false;
-		$p_id                       = 0;
+	public function password_protected_check_additional_passwords( $requested_password ) {
 
-		if( is_array( $pro_passwords ) && count( $pro_passwords ) > 0 ) {
-					
-			foreach( $pro_passwords as $i => $p ) {
+		$result = apply_filters(
+			'password_protected_authenticate_additional',
+			array(
+				'auth'        => false,
+				'password_id' => 0,
+			),
+			$requested_password,
+			$this->errors
+		);
 
-				if ( ( hash_equals( $p, $this->encrypt_password( $requested_password ) ) && $pro_passwords != '' ) || apply_filters( 'password_protected_process_login', false, $requested_password ) ) {
-					
-					$auth = apply_filters( 'password_protected_login_password_matched', $p, $this->errors );
-					$p_id = $i;
-					break;
-				
-				}
+		if ( ! is_array( $result ) ) {
+			return array(
+				'auth' => false,
+				'p_id' => 0,
+			);
+		}
 
-			}
+		$auth  = ! empty( $result['auth'] );
+		$p_id  = isset( $result['password_id'] ) ? (int) $result['password_id'] : 0;
 
-		} else {
-
-			$auth = false;
-		
+		if ( ! $auth && apply_filters( 'password_protected_process_login', false, $requested_password ) ) {
+			$auth = true;
 		}
 
 		return array(
@@ -488,7 +550,7 @@ class Password_Protected {
 	 */
 	public function maybe_show_login() {
 
-		if ( class_exists( 'Login_designer' ) || class_exists( 'Password_Protected_Pro_Customizer' ) ) {
+		if ( class_exists( 'Login_designer' ) || apply_filters( 'password_protected_allow_customize_preview', false ) ) {
 			if ( is_customize_preview() ) {
 				return 1;
 			}
@@ -681,7 +743,10 @@ class Password_Protected {
 			return false;
 		}
 
-		extract( $cookie_elements, EXTR_OVERWRITE );
+		$site_id    = isset( $cookie_elements['site_id'] ) ? $cookie_elements['site_id'] : '';
+		$expiration = isset( $cookie_elements['expiration'] ) ? $cookie_elements['expiration'] : 0;
+		$hmac       = isset( $cookie_elements['hmac'] ) ? $cookie_elements['hmac'] : '';
+		$scheme     = isset( $cookie_elements['scheme'] ) ? $cookie_elements['scheme'] : $scheme;
 
 		$expired = $expiration;
 
@@ -792,7 +857,9 @@ class Password_Protected {
 			$secure = is_ssl();
 		}
 
-		$secure_password_protected_cookie = apply_filters( 'password_protected_secure_password_protected_cookie', false, $secure );
+		// SEC-004: default the Secure flag to the computed is_ssl() value so HTTPS
+		// cookies are marked Secure out of the box. Filters can still override.
+		$secure_password_protected_cookie = apply_filters( 'password_protected_secure_password_protected_cookie', $secure, $secure );
 		$password_protected_cookie        = $this->generate_auth_cookie( $expiration, 'password_protected' );
 
 		$use_transient = get_option( 'password_protected_use_transient', 'default' );
@@ -843,12 +910,24 @@ class Password_Protected {
 		if ( empty( $old_version ) || $old_version == '1.1' ) {
 			$pwd = get_option( 'password_protected_password' );
 			if ( ! empty( $pwd ) ) {
-				$new_pwd = $this->encrypt_password( $pwd );
+				$new_pwd = md5( $pwd );
 				update_option( 'password_protected_password', $new_pwd );
 			}
 		}
 
 		update_option( 'password_protected_version', $this->version );
+
+	}
+
+	/**
+	 * Deactivate
+	 *
+	 * Clears scheduled cron events on deactivation so the weekly activity
+	 * report email does not keep firing after the plugin is deactivated.
+	 */
+	public function deactivate() {
+
+		wp_clear_scheduled_hook( 'password_protected_email_notification_hook' );
 
 	}
 
@@ -987,25 +1066,12 @@ class Password_Protected {
 	 * @return  WP_Error|boolean
 	 */
 	public function only_allow_logged_in_rest_access( $access ) {
-		if ( $this->is_active() ) {
-			if ( is_user_logged_in() ) {
-				global $current_user;
-				if ( $current_user->has_cap( 'edit_posts' ) || $current_user->has_cap( 'edit_pages' ) ) {
-					return $access;
-				}
-			}
 
-			if ( $this->is_user_logged_in() ) {
-				return $access;
-			}
+        if ( $this->is_active() && ! $this->is_user_logged_in() && ! is_user_logged_in() && ! (bool) get_option( 'password_protected_rest' ) ) {
+            return new WP_Error( 'rest_cannot_access', __( 'Only authenticated users can access the REST API.', 'password-protected' ), array( 'status' => rest_authorization_required_code() ) );
+        }
 
-			if ( get_option( 'password_protected_rest' ) && is_user_logged_in() ) {
-				return $access;
-			}
-			return new WP_Error( 'rest_cannot_access', __( 'Only authenticated users can access the REST API.', 'password-protected' ), array( 'status' => rest_authorization_required_code() ) );
-		}
-
-		return $access;
+        return $access;
 	}
 
 	/**

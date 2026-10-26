@@ -2,12 +2,11 @@
 /**
  * Email Template for Activity report
  *
- * @package Password Protected Pro
+ * @package Password Protected
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$password_protected_has_pro   = class_exists( 'Password_Protected_pro' );
 $password_protected_image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
 ?>
 <!DOCTYPE html>
@@ -141,77 +140,17 @@ $password_protected_image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
                             <div style="clear:both;display:table;"></div>
                         </div>
 
-                        <?php if ( ! $password_protected_has_pro ) : ?>
-                            <div style="margin: 20px 0">
-                                <div style="width: 424px;height: 257px;border-radius: 10px;border: 1px solid #CDCDCD;overflow: hidden">
-                                    <div style="width: 100%;height: 33px;background: #F9AA39;">
-                                        <p style="font-family: Inter,serif;font-weight: 600;line-height: 32px;font-size: 14px;color: #fff;padding: 0 15px">
-                                            <img src="<?php esc_url( $password_protected_image_url ); ?>chart.png" alt="">
-					                        <?php esc_html_e( 'Want more insights about your visitors?', 'password-protected' ); ?>
-                                        </p>
-                                    </div>
-                                    <div style="border-bottom: 1px solid #CDCDCD;">
-                                        <p style="text-align:center;font-family: Inter,serif;font-weight: 700;font-size: 13px;line-height: 16px;color: #8076FF;padding:5px 0;">
-					                        <?php esc_html_e( 'Get the Password Protected PRO and see,', 'password-protected' ); ?>
-                                        </p>
-                                    </div>
-
-                                    <div style="padding: 5px 15px;">
-                                        <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
-                                        </div>
-                                        <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
-					                        <?php esc_html_e( 'Protect Specific Post Types', 'password-protected' ); ?>
-                                        </div>
-                                    </div>
-                                    <div style="padding: 5px 15px;border-top: 1px solid #CDCDCD;border-bottom: 1px solid #CDCDCD;">
-                                        <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
-                                        </div>
-                                        <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
-					                        <?php esc_html_e( 'Protect Specific Categories / Taxonomies', 'password-protected' ); ?>
-                                        </div>
-                                    </div>
-                                    <div style="padding: 5px 15px;">
-                                        <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
-                                        </div>
-                                        <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
-					                        <?php esc_html_e( 'Display Activity Log for Each Password Attempt', 'password-protected' ); ?>
-                                        </div>
-                                    </div>
-                                    <div style="padding: 5px 15px;border-top: 1px solid #CDCDCD;border-bottom: 1px solid #CDCDCD;">
-                                        <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
-                                        </div>
-                                        <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
-			                                <?php esc_html_e( 'Set a Password Expiration Date and Usage Limit', 'password-protected' ); ?>
-                                        </div>
-                                    </div>
-                                    <div style="padding: 5px 15px;">
-                                        <div style="display: inline-block;">
-                                            <img src="<?php echo esc_url( $password_protected_image_url ); ?>check.png" style="margin-bottom: -1px;" alt="">
-                                        </div>
-                                        <div style="display: inline-block;font-family: Inter,serif;font-weight: 400;font-size: 11px;line-height: 20px;">
-			                                <?php esc_html_e( 'Get a Bypass URL to Access your WordPress Site without a Password', 'password-protected' ); ?>
-                                        </div>
-                                    </div>
-
-                                    <div style="border-top: 1px solid #CDCDCD;">
-                                        <div style="padding: 10px;">
-                                            <a href="https://passwordprotectedwp.com/pricing/?utm_source=plugin&utm_medium=email_template" style="display: block;width: 120px;height: 22px;background-color:#F9AA39;font-weight: 500;font-size: 10px;font-family: Inter,serif;border-radius: 10px;color: #fff;text-decoration: none;">
-											<span style="line-height: 20px;padding: 0 5px 0 10px;display: inline-block;">
-                                                <?php esc_html_e( 'Upgrade to PRO', 'password-protected' ); ?>
-                                            </span>
-                                                <span style="line-height: 20px;display: inline-block;">&gt;</span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php else : ?>
-                            <?php do_action( 'password_protected_pro_email_notification_template', 'items_table' ); ?>
-                        <?php endif; ?>
+						<?php
+						do_action(
+							'password_protected_activity_notification_content',
+							array(
+								'total'   => $total,
+								'success' => $success,
+								'failed'  => $failed,
+								'time'    => $time,
+							)
+						);
+						?>
                     </td>
                 </tr>
                 <tr>

@@ -87,10 +87,8 @@ add_action( 'password_protected_login_head', 'wp_login_viewport_meta' );
 <?php
 
 if ( version_compare( $wp_version, '3.9-dev', '>=' ) ) {
-    wp_enqueue_style( 'wp-base-styles', true, array(), $Password_Protected->version );
 	wp_admin_css( 'login', true );
 } else {
-    wp_enqueue_style( 'wp-base-styles', true, array(), $Password_Protected->version );
 	wp_admin_css( 'wp-admin', true );
 	wp_admin_css( 'colors-fresh', true );
 }
@@ -200,7 +198,7 @@ do_action( 'password_protected_login_head' );
                 name="wp-submit"
                 id="wp-submit"
                 class="button button-primary button-large"
-                value="<?php esc_attr_e( 'Log In', 'password-protected' ); ?>"
+                value="<?php echo esc_attr( apply_filters( 'password_protected_login_button_text', __( 'Log In', 'password-protected' ) ) ); ?>"
                 tabindex="103"
             />
 			<input type="hidden" name="password_protected_cookie_test" value="1" />

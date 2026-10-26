@@ -7,6 +7,8 @@
  * @since  2.1
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
+
 class Password_Protected_Admin_Caching {
 
 	/**

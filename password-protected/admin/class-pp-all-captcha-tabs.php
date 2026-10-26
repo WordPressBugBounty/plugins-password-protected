@@ -76,61 +76,28 @@ class Password_Protected_Free_allCaptchas {
         <?php
     }
 
-    public function pro_version_verify() {
-
-        global $Password_Protected_Pro;
-
-        if ( isset( $Password_Protected_Pro->version ) && version_compare( $Password_Protected_Pro->version, '1.9', '>=' ) ) {
-            return true;
-        }
-
-        return false;
-
-    }
-
 	public function all_captchas_enable() {
         
                 $captcha_providers = array(
                     'recaptcha' => array(
                         'label' => 'reCAPTCHA',
-                        'pro'   => false,
                     ),
-                    'hcaptcha' => array(
-                        'label' => 'hCaptcha',
-                        'pro'   => true,
-                    ),
-                    'turnstile' => array(
-                        'label' => 'Turnstile',
-                        'pro'   => true,
-                    ),
-                    'none' => array(
+                    'none'      => array(
                         'label' => 'None',
-                        'pro'   => false,
                     ),
                 );
+                $captcha_providers = apply_filters( 'password_protected_captcha_providers', $captcha_providers );
                 $i = 1;
-
-                if ( $this->pro_version_verify() ) {
-                    $captcha_providers['hcaptcha']['pro']   = false;
-                    $captcha_providers['turnstile']['pro']  = false;
-                }     
                 ?>
                 <span class="captcha-setting-field">
                 <?php
                 foreach ( $captcha_providers as $value => $provider ) {
-                        $input_id   = 'captcha-setting-captcha-provider[' . $i . ']';
-                        $input_name = 'captcha_provider'; // common name for radio group
-                        $label      = $provider['label'];
-                        $is_pro     = $provider['pro'];
+                        $input_id = 'captcha-setting-captcha-provider[' . $i . ']';
+                        $label    = $provider['label'];
 
-                        echo '<span class="captcha-settings-field-radio-wrapper' . ( $is_pro ? ' click-to-display-purchase-popup' : '' ) . '">';
+                        echo '<span class="captcha-settings-field-radio-wrapper">';
                         echo '<input type="radio" id="' . esc_attr( $input_id ) . '" name="' . esc_attr( $this->options_name ) . '" value="' . esc_attr( $value ) . '" ' . checked( $this->settings === $value, true, false ) . ' />';
-                        echo '<label for="' . esc_attr( $input_id ) . '" class="option-' . esc_attr( strtolower( $value ) ) . '' . ( $is_pro ? '-free' : '' ) . '">' . esc_html( $label ) . '</label>';
-
-                        if ( $is_pro ) {
-                            echo '<span class="pro-badge captchaProBadge"><a class="actionDisable" href="https://passwordprotectedwp.com/pricing/">PRO</a></span>';
-                        }
-
+                        echo '<label for="' . esc_attr( $input_id ) . '" class="option-' . esc_attr( strtolower( $value ) ) . '">' . esc_html( $label ) . '</label>';
                         echo '</span>';
 
                     $i++;

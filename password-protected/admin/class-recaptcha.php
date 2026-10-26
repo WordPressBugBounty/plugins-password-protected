@@ -49,7 +49,7 @@ class Password_Protected_reCAPTCHA {
 	 * @return array
 	 * @since  2.6
 	 */
-	private function get_default_reCAPTCHA_settings(): array {
+	private function get_default_reCAPTCHA_settings() {
 		return array(
 			'enable'        => 0,
 			'version'       => 'google_recaptcha_v2',
@@ -606,43 +606,84 @@ class Password_Protected_reCAPTCHA {
 			$grecaptcha_v3_site_key   = isset( $this->settings['v3_site_key'] ) ? esc_attr( $this->settings['v3_site_key'] ) : '';
 			$grecaptcha_v3_secret_key = isset( $this->settings['v3_secret_key'] ) ? esc_attr( $this->settings['v3_secret_key'] ) : '';
 			$grecaptcha_v3_score      = isset( $this->settings['v3_score'] ) ? esc_attr( $this->settings['v3_score'] ) : '0.3';
+			$grecaptcha_v3_score      = (float) $grecaptcha_v3_score;
 
 			if ( empty( $grecaptcha_v3_site_key ) || empty( $grecaptcha_v3_secret_key ) ) {
 				$errors->add( 001, 'Google reCaptcha keys not found.' );
 			}
 
-			if ( isset( $_POST['g-recaptcha-response'] ) && ! empty( $_POST['g-recaptcha-response'] ) ) {
-				$response = wp_remote_post(
-					'https://www.google.com/recaptcha/api/siteverify',
-					array(
-						'body' => array(
-							'secret'   => $grecaptcha_v3_secret_key,
-							'response' => sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ),
-							'remoteip' => self::get_ip_address(),
-						),
-					)
-				);
+			// Fail-closed: a missing or empty token must always reject.
+			$token = isset( $_POST['g-recaptcha-response'] ) ? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ) : '';
 
-				$data = wp_remote_retrieve_body( $response );
-				$data = json_decode( $data );
+			if ( empty( $token ) ) {
+				$error_message = wp_kses( __( '<strong>ERROR:</strong> Please confirm you are not a robot.', 'password-protected' ), array( 'strong' => array() ) );
+				$errors->add( 'captcha_invalid', $error_message );
 
-				if ( isset( $data->{'error-codes'} ) && is_array( $data->{'error-codes'} ) && count( $data->{'error-codes'} ) ) {
-					foreach ( $data->{'error-codes'} as $index => $error_code ) {
-						$errors->add( $index, $error_code );
-					}
-				}
+				return $errors;
+			}
 
-				if ( isset( $data->success ) && true === $data->success ) {
-					$grecaptcha_v3_score = (float) $grecaptcha_v3_score;
-					if ( isset( $data->action ) && ( 'password_protected' === $data->action ) && isset( $data->score ) && $data->score >= $grecaptcha_v3_score ) {
-						return $errors;
-					} else {
-						$error_message = wp_kses( __( '<strong>ERROR:</strong> Low Score ', 'password-protected' ) . ':' . esc_html( $data->score ), array( 'strong' => array() ) );
-						$errors->add( 002, $error_message );
-					}
+			$response = wp_remote_post(
+				'https://www.google.com/recaptcha/api/siteverify',
+				array(
+					'body' => array(
+						'secret'   => $grecaptcha_v3_secret_key,
+						'response' => $token,
+						'remoteip' => self::get_ip_address(),
+					),
+				)
+			);
+
+			// Fail-closed: transport errors must reject.
+			if ( is_wp_error( $response ) ) {
+				$error_message = wp_kses( __( '<strong>ERROR:</strong> reCAPTCHA verification failed. Please try again.', 'password-protected' ), array( 'strong' => array() ) );
+				$errors->add( 'captcha_transport_error', $error_message );
+
+				return $errors;
+			}
+
+			$body = wp_remote_retrieve_body( $response );
+			$data = json_decode( $body );
+
+			// Fail-closed: invalid/empty JSON must reject.
+			if ( empty( $data ) || ! is_object( $data ) ) {
+				$error_message = wp_kses( __( '<strong>ERROR:</strong> reCAPTCHA verification failed. Please try again.', 'password-protected' ), array( 'strong' => array() ) );
+				$errors->add( 'captcha_invalid_response', $error_message );
+
+				return $errors;
+			}
+
+			if ( isset( $data->{'error-codes'} ) && is_array( $data->{'error-codes'} ) && count( $data->{'error-codes'} ) ) {
+				foreach ( $data->{'error-codes'} as $index => $error_code ) {
+					$errors->add( $index, $error_code );
 				}
 			}
 
+			// Fail-closed: success flag must be explicitly true.
+			if ( ! isset( $data->success ) || true !== $data->success ) {
+				$error_message = wp_kses( __( '<strong>ERROR:</strong> Please confirm you are not a robot.', 'password-protected' ), array( 'strong' => array() ) );
+				$errors->add( 'captcha_invalid', $error_message );
+
+				return $errors;
+			}
+
+			// Fail-closed: action must match exactly.
+			if ( ! isset( $data->action ) || 'password_protected' !== $data->action ) {
+				$error_message = wp_kses( __( '<strong>ERROR:</strong> reCAPTCHA action mismatch.', 'password-protected' ), array( 'strong' => array() ) );
+				$errors->add( 'captcha_action_mismatch', $error_message );
+
+				return $errors;
+			}
+
+			// Fail-closed: score must be present and meet threshold.
+			if ( ! isset( $data->score ) || (float) $data->score < $grecaptcha_v3_score ) {
+				$score_display = isset( $data->score ) ? esc_html( $data->score ) : 'N/A';
+				$error_message = wp_kses( __( '<strong>ERROR:</strong> Low Score ', 'password-protected' ) . ':' . $score_display, array( 'strong' => array() ) );
+				$errors->add( 002, $error_message );
+
+				return $errors;
+			}
+
+			// All checks passed.
 			return $errors;
 		}
 		// phpcs:enable
@@ -657,6 +698,12 @@ class Password_Protected_reCAPTCHA {
 	 * @return  string  client IP address
 	 */
 	private static function get_ip_address() {
+		// Delegate to the canonical trusted-proxy-aware resolver (SEC-003).
+		if ( function_exists( 'pp_resolve_client_ip' ) ) {
+			return pp_resolve_client_ip();
+		}
+
+		// Fallback if transient-functions.php is not loaded.
 		$ipaddress = '';
 		if ( isset( $_SERVER['HTTP_CLIENT_IP'] ) ) {
 			$ipaddress = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ) );

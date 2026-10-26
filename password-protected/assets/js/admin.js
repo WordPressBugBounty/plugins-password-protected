@@ -160,6 +160,21 @@ jQuery( document ).ready(function( $ ) {
         }
     } );
 
+    $( '.pp-pwd-toggle' ).on( 'click', function() {
+        var targetId = $( this ).data( 'target' );
+        var input = $( '#' + targetId );
+        var icon = $( this ).find( '.dashicons' );
+
+        if ( input.attr( 'type' ) === 'password' ) {
+            input.attr( 'type', 'text' );
+            icon.removeClass( 'dashicons-visibility' ).addClass( 'dashicons-hidden' );
+            $( this ).attr( 'aria-label', 'Hide password' );
+        } else {
+            input.attr( 'type', 'password' );
+            icon.removeClass( 'dashicons-hidden' ).addClass( 'dashicons-visibility' );
+            $( this ).attr( 'aria-label', 'Show password' );
+        }
+    } );
 
     // captcha tab jquery for hide and show on radio
     $('div.hCaptchaTab').hide();

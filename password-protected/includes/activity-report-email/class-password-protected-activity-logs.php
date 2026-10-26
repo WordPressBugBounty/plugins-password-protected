@@ -16,39 +16,20 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		 * @var int
 		 */
 		public static $now = 0;
+
+		/**
+		 * Email report window timestamps for the current request [ start, end ].
+		 *
+		 * @var array|null
+		 */
+		private static $email_report_window = null;
+
 		/**
 		 * Method __construct
 		 */
 		public function __construct() {
 			self::$now          = current_time( 'timestamp' );
 			self::$table        = 'pp_activity_logs';
-			$database_updated = get_option( 'pp_activity_logs_db_updated' );
-			if ( ! $database_updated ) {
-				if ( ! function_exists( 'maybe_add_column' ) ) {
-					require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-				}
-				global $wpdb;
-				$table_name = $wpdb->prefix . self::$table;
-				$used_password_col = maybe_add_column(
-					$table_name,
-					'used_password',
-					'ALTER TABLE ' . $table_name . ' ADD `used_password` VARCHAR ( 255 ) NULL AFTER `status`'
-				);
-				$password_id_col   = maybe_add_column(
-					$table_name,
-					'password_id',
-					'ALTER TABLE ' . $table_name . ' ADD `password_id` VARCHAR( 255 ) NULL AFTER `id`'
-				);
-				$object_type_col   = maybe_add_column(
-					$table_name,
-					'object_type',
-					'ALTER TABLE ' . $table_name . ' ADD `object_type` VARCHAR( 255 ) NULL AFTER `status`'
-				);
-
-				if ( $used_password_col && $password_id_col && $object_type_col ) {
-					update_option( 'pp_activity_logs_db_updated', true );
-				}
-			}
 		}
 
 		/**
@@ -126,16 +107,16 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 			global $wpdb;
 			$table_name = $wpdb->prefix . self::$table;
 
-			$data = array(
-				'ip'            => $request['ip'],
-				'browser'       => $request['browser'],
-				'status'        => $request['status'],
-				'created_at'    => $request['created_at'],
-				'used_password' => $request['used_password'],
-				'password_id'   => $request['password_id'],
-				'object_type'   => $request['object_type'],
-			);
-			$format = array( '%s', '%s', '%s', '%s' );
+		$data = array(
+			'ip'            => $request['ip'],
+			'browser'       => $request['browser'],
+			'status'        => $request['status'],
+			'created_at'    => $request['created_at'],
+			'used_password' => $request['used_password'],
+			'password_id'   => $request['password_id'],
+			'object_type'   => $request['object_type'],
+		);
+		$format = array( '%s', '%s', '%s', '%s', '%s', '%s', '%s' );
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Custom activity log table.
 			return $wpdb->insert( $table_name, $data, $format );
 		}
@@ -216,6 +197,86 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 				}
 			}
 			return null;
+		}
+
+		/**
+		 * Store the activity report email date window for this request.
+		 *
+		 * @param array $timestamps Start and end Unix timestamps.
+		 * @return void
+		 */
+		public static function set_email_report_window( array $timestamps ) {
+			if ( count( $timestamps ) >= 2 ) {
+				self::$email_report_window = array(
+					(int) $timestamps[0],
+					(int) $timestamps[1],
+				);
+			}
+		}
+
+		/**
+		 * Get the activity report email date window (set by sender or fallback to this week).
+		 *
+		 * @return array{0: int, 1: int}
+		 */
+		public static function get_email_report_window() {
+			if ( is_array( self::$email_report_window ) && count( self::$email_report_window ) >= 2 ) {
+				return self::$email_report_window;
+			}
+
+			return self::get_time_from_keyword( 'thisweek' );
+		}
+
+		/**
+		 * Aggregate success/failed attempt counts for a time window.
+		 *
+		 * @param int $start Start timestamp (inclusive).
+		 * @param int $end   End timestamp (inclusive).
+		 * @return array{success: int, failed: int, total: int}
+		 */
+		public static function get_attempt_totals_for_window( $start, $end ) {
+			$start = (int) $start;
+			$end   = (int) $end;
+
+			if ( $start <= 0 || $end <= 0 || $end < $start ) {
+				return array(
+					'success' => 0,
+					'failed'  => 0,
+					'total'   => 0,
+				);
+			}
+
+			global $wpdb;
+			$table_name = $wpdb->prefix . self::$table;
+
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Custom activity log table; table name is internally constructed from $wpdb->prefix + class constant.
+			$row = $wpdb->get_row(
+				$wpdb->prepare(
+					'SELECT
+						COALESCE( SUM( IF( status = %s, 1, 0 ) ), 0 ) AS success,
+						COALESCE( SUM( IF( status = %s, 1, 0 ) ), 0 ) AS failed
+					FROM `' . $table_name . '`
+					WHERE CAST( created_at AS UNSIGNED ) BETWEEN %d AND %d',
+					'Success',
+					'Failure',
+					$start,
+					$end
+				),
+				ARRAY_A
+			);
+
+			$success = 0;
+			$failed  = 0;
+			if ( is_array( $row ) ) {
+				$success = isset( $row['success'] ) ? (int) $row['success'] : 0;
+				$failed  = isset( $row['failed'] ) ? (int) $row['failed'] : 0;
+			}
+
+			return array(
+				'success' => $success,
+				'failed'  => $failed,
+				'total'   => $success + $failed,
+			);
 		}
 
 		/**
