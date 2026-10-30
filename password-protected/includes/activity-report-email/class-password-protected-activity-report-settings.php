@@ -2,7 +2,7 @@
 /**
  * Class Password Protected Activity Report Settings
  *
- * @package Password Protected Pro
+ * @package Password_Protected
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -15,6 +15,8 @@ if ( ! class_exists( 'Password_protected_Activity_Report_Settings' ) ) {
 			add_action( 'admin_init', array( $this, 'update_database' ), -1 );
 			add_action( 'admin_init', array( $this, 'settings_fields' ), 10 );
 			add_action( 'password_protected_subtab_activity-report_content', array( $this, 'activity_report' ) );
+			add_action( 'password_protected_subtab_activity_logs_content', array( $this, 'activity_logs_admin' ) );
+			add_action( 'load-toplevel_page_password-protected', array( $this, 'maybe_register_activity_logs_screen_option' ) );
 
             add_action( 'password_protected_register_activity_logging', array( $this, 'register_default_activity_logging' ), 10 );
             add_action( 'plugins_loaded', array( $this, 'dispatch_activity_logging_registration' ), 20 );
@@ -75,18 +77,6 @@ if ( ! class_exists( 'Password_protected_Activity_Report_Settings' ) ) {
                     update_option( 'pp_activity_logs_db_updated', true );
                 }
             }
-
-		// SEC-002: one-time scrub of any historically stored plaintext passwords.
-        /*
-		$scrubbed = get_option( 'pp_activity_logs_scrubbed' );
-		if ( ! $scrubbed ) {
-			global $wpdb;
-			$logs_table = $wpdb->prefix . 'pp_activity_logs';
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is internally constructed from prefix + constant; one-time migration.
-			$wpdb->query( "UPDATE `{$logs_table}` SET `used_password` = '' WHERE `used_password` != ''" );
-			update_option( 'pp_activity_logs_scrubbed', true );
-		}
-        */
 	}
 
 		public function settings_fields() {
@@ -119,11 +109,7 @@ if ( ! class_exists( 'Password_protected_Activity_Report_Settings' ) ) {
 		}
 
 		public function sanitize_report_fields( $fields ) {
-			if ( empty( $fields ) ) {
-				return 'no';
-			}
-
-			return $fields;
+			return ( ! empty( $fields ) && 'yes' === $fields ) ? 'yes' : 'no';
 		}
 
 		public function activity_report_field_callback( $args ) {
@@ -154,6 +140,53 @@ if ( ! class_exists( 'Password_protected_Activity_Report_Settings' ) ) {
 				submit_button();
 
 			echo '</form>';
+		}
+
+		/**
+		 * Activity logs list table (Free); defer to Pro when the extension is active.
+		 */
+		public function activity_logs_admin() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
+			if ( ! function_exists( 'is_plugin_active' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/plugin.php';
+			}
+
+			if ( is_plugin_active( 'password-protected-pro/password-protected-pro.php' ) ) {
+				return;
+			}
+
+			require_once PASSWORD_PROTECTED_DIR . 'includes/activity-report-email/class-password-protected-activity-logs.php';
+			require_once PASSWORD_PROTECTED_DIR . 'includes/activity-report-email/class-password-protected-activity-logs-list-table.php';
+			Password_Protected_Activity_Logs_List_Table::display_table();
+		}
+
+		/**
+		 * Per-page screen option on the activity logs sub-tab.
+		 */
+		public function maybe_register_activity_logs_screen_option() {
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Admin screen bootstrap.
+			if ( ! isset( $_GET['page'], $_GET['tab'], $_GET['sub-tab'] ) ) {
+				return;
+			}
+
+			if ( 'password-protected' !== sanitize_text_field( wp_unslash( $_GET['page'] ) ) ) {
+				return;
+			}
+
+			if ( 'logs' !== sanitize_text_field( wp_unslash( $_GET['tab'] ) ) ) {
+				return;
+			}
+
+			if ( 'activity_logs' !== sanitize_text_field( wp_unslash( $_GET['sub-tab'] ) ) ) {
+				return;
+			}
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+			require_once PASSWORD_PROTECTED_DIR . 'includes/activity-report-email/class-password-protected-activity-logs-list-table.php';
+			Password_Protected_Activity_Logs_List_Table::register_screen_option();
 		}
 
 		/**

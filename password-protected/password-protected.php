@@ -3,13 +3,13 @@
 Plugin Name: Password Protected
 Plugin URI: https://passwordprotectedwp.com/
 Description: A very simple way to quickly password protect your WordPress site with a single password. Please note: This plugin does not restrict access to uploaded files and images and does not work with some caching setups.
-Version: 2.8.5
+Version: 2.8.6
 Author: Password Protected
 Text Domain: password-protected
+Domain Path: /languages
 Author URI: https://passwordprotectedwp.com/
-Requires at least: 4.9.6
-Requires PHP: 5.6
-Tested up to: 7.1
+Requires at least: 6.5
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
@@ -49,7 +49,7 @@ $Password_Protected = new Password_Protected();
 
 class Password_Protected {
 
-	var $version 	   = '2.8.5';
+	var $version 	   = '2.8.6';
 	var $admin   	   = null;
 	var $errors  	   = null;
 	var $admin_caching = null;
@@ -373,6 +373,11 @@ class Password_Protected {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['password-protected'] ) && 'logout' === sanitize_text_field( wp_unslash( $_REQUEST['password-protected'] ) ) ) {
 
+			if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['_wpnonce'] ) ), 'password_protected_logout' ) ) {
+				$this->safe_redirect( home_url( '/' ) );
+				exit;
+			}
+
 			$this->logout();
 
 			if ( isset( $_REQUEST['redirect_to'] ) ) {
@@ -664,7 +669,9 @@ class Password_Protected {
 			unset( $query['redirect_to'] );
 		}
 
-		return add_query_arg( $query, home_url() );
+		$url = add_query_arg( $query, home_url() );
+
+		return wp_nonce_url( $url, 'password_protected_logout' );
 
 	}
 

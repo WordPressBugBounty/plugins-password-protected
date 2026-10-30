@@ -34,7 +34,7 @@ if ( ! class_exists( 'Password_Protected_Extension_Compat' ) ) {
 				add_action( 'admin_init', array( __CLASS__, 'handle_dismiss_notice' ), 10 );
 				add_action( 'admin_notices', array( __CLASS__, 'render_extension_compat_admin_notice' ), 10 );
 				add_action( 'network_admin_notices', array( __CLASS__, 'render_extension_compat_admin_notice' ), 10 );
-				add_action( 'admin_footer', array( __CLASS__, 'wire_dismissible_notice_script' ) );
+				add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_extension_compat_notice_script' ) );
 			}
 		}
 
@@ -121,12 +121,10 @@ if ( ! class_exists( 'Password_Protected_Extension_Compat' ) ) {
 				return;
 			}
 
-			deactivate_plugins( self::PASSWORD_PROTECTED_EXTENSION_BASENAME, true );
-
 			update_option(
 				self::PASSWORD_PROTECTED_EXTENSION_COMPAT_NOTICE_OPTION,
 				array(
-					'deactivated_at'    => time(),
+					'notified_at'       => time(),
 					'extension_version' => $extension_version,
 					'free_version'      => $free_version,
 				),
@@ -154,7 +152,7 @@ if ( ! class_exists( 'Password_Protected_Extension_Compat' ) ) {
 			);
 
 			$message = esc_html__(
-				'For compatibility reasons, your Pro plugin has been temporarily deactivated. Please update the Pro plugin to the latest version and reactivate it to continue using Pro features.',
+				'Password Protected Pro is outdated for this version of the free plugin. Please update Pro to version 2.4.0 or newer to avoid compatibility issues.',
 				'password-protected'
 			);
 
@@ -170,7 +168,7 @@ if ( ! class_exists( 'Password_Protected_Extension_Compat' ) ) {
 		/**
 		 * Map core dismiss control to our dismiss endpoint.
 		 */
-		public static function wire_dismissible_notice_script() {
+		public static function enqueue_extension_compat_notice_script() {
 			if ( ! current_user_can( 'activate_plugins' ) ) {
 				return;
 			}
@@ -179,23 +177,27 @@ if ( ! class_exists( 'Password_Protected_Extension_Compat' ) ) {
 				return;
 			}
 
-			?>
-			<script>
-			( function () {
-				var notice = document.querySelector( '.password-protected-extension-compat-notice' );
-				if ( ! notice ) {
-					return;
-				}
-				var dismissUrl = notice.getAttribute( 'data-dismiss-url' );
-				var button = notice.querySelector( '.notice-dismiss' );
-				if ( button && dismissUrl ) {
-					button.addEventListener( 'click', function () {
-						window.location.href = dismissUrl;
-					} );
-				}
-			} )();
-			</script>
-			<?php
+			global $Password_Protected;
+			$version = ( isset( $Password_Protected->version ) ) ? $Password_Protected->version : '1.0.0';
+
+			wp_register_script( 'password-protected-extension-compat-notice', false, array(), $version, true );
+			wp_enqueue_script( 'password-protected-extension-compat-notice' );
+			wp_add_inline_script(
+				'password-protected-extension-compat-notice',
+				"( function () {
+					var notice = document.querySelector( '.password-protected-extension-compat-notice' );
+					if ( ! notice ) {
+						return;
+					}
+					var dismissUrl = notice.getAttribute( 'data-dismiss-url' );
+					var button = notice.querySelector( '.notice-dismiss' );
+					if ( button && dismissUrl ) {
+						button.addEventListener( 'click', function () {
+							window.location.href = dismissUrl;
+						} );
+					}
+				} )();"
+			);
 		}
 
 		/**

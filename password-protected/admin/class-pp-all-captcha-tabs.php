@@ -19,7 +19,7 @@ class Password_Protected_Free_allCaptchas {
 	public $settings      = array();
 
 	public function __construct() {
-		$this->settings = get_option( $this->options_name );
+		$this->settings = get_option( $this->options_name, 'none' );
 		add_action( 'admin_init', array( $this, 'register_all_captchas_settings' ), 6 );
 		add_action( 'password_protected_subtab_all-captchas_content', array( $this, 'all_captchas_settings' ) );
 	}
@@ -57,8 +57,46 @@ class Password_Protected_Free_allCaptchas {
 			$this->options_group
 		);
 
-		register_setting( $this->options_group, $this->options_name, array( 'type' => 'array' ) );
+		register_setting(
+			$this->options_group,
+			$this->options_name,
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => array( $this, 'sanitize_captcha_provider' ),
+				'default'           => 'none',
+			)
+		);
 
+	}
+
+	/**
+	 * Allowlist captcha provider slug.
+	 *
+	 * @param mixed $value Submitted provider.
+	 * @return string
+	 */
+	public function sanitize_captcha_provider( $value ) {
+		$allowed = array( 'recaptcha', 'none' );
+		$value   = is_string( $value ) ? sanitize_key( $value ) : 'none';
+
+		/**
+		 * Filter allowed captcha provider slugs before saving.
+		 *
+		 * @param string[] $allowed Allowed provider slugs.
+		 */
+		$allowed = apply_filters( 'password_protected_allowed_captcha_providers', $allowed );
+
+		if ( ! is_array( $allowed ) ) {
+			$allowed = array( 'recaptcha', 'none' );
+		}
+
+		$allowed = array_map( 'sanitize_key', $allowed );
+
+		if ( in_array( $value, $allowed, true ) ) {
+			return $value;
+		}
+
+		return 'none';
 	}
 
 	public function all_captchas_settings() {

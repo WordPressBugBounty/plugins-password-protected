@@ -151,6 +151,11 @@ $password_protected_image_url = PASSWORD_PROTECTED_URL . 'assets/images/';
 							)
 						);
 						?>
+                        <div style="text-align: center;margin-top: 16px;">
+                            <a href="<?php echo esc_url( admin_url( 'admin.php?page=password-protected&tab=logs&sub-tab=activity_logs' ) ); ?>" style="display: inline-block;padding: 8px 16px;background-color:#8076FF;font-weight: 500;font-size: 12px;font-family: Inter,serif;border-radius: 10px;color: #fff;text-decoration: none;">
+								<?php esc_html_e( 'View activity logs', 'password-protected' ); ?>
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 <tr>

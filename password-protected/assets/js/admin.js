@@ -338,3 +338,29 @@ function password_protected_activate_deactivate_menus( $index ) {
     jQuery( `#toplevel_page_password-protected > ul > li:nth-child( ${ $index } )` ).addClass( 'current' );
 }
 
+jQuery( function( $ ) {
+	$( document ).on( 'click', '.pp-activity-log-password-toggle', function( e ) {
+		e.preventDefault();
+
+		var $btn = $( this );
+		var $wrap = $btn.closest( '.pp-activity-log-password' );
+		var $mask = $wrap.find( '.pp-activity-log-password-mask' );
+		var $value = $wrap.find( '.pp-activity-log-password-value' );
+		var expanded = $btn.attr( 'aria-expanded' ) === 'true';
+		var $icon = $btn.find( '.dashicons' );
+		var showAria = ( typeof passwordProtectedAdminObject !== 'undefined' && passwordProtectedAdminObject.showPassword ) ? passwordProtectedAdminObject.showPassword : 'Show password';
+		var hideAria = ( typeof passwordProtectedAdminObject !== 'undefined' && passwordProtectedAdminObject.hidePassword ) ? passwordProtectedAdminObject.hidePassword : 'Hide password';
+
+		if ( expanded ) {
+			$value.prop( 'hidden', true );
+			$mask.prop( 'hidden', false );
+			$icon.removeClass( 'dashicons-hidden' ).addClass( 'dashicons-visibility' );
+			$btn.attr( 'aria-expanded', 'false' ).attr( 'aria-label', showAria );
+		} else {
+			$value.prop( 'hidden', false );
+			$mask.prop( 'hidden', true );
+			$icon.removeClass( 'dashicons-visibility' ).addClass( 'dashicons-hidden' );
+			$btn.attr( 'aria-expanded', 'true' ).attr( 'aria-label', hideAria );
+		}
+	} );
+} );

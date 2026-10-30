@@ -159,7 +159,59 @@ class Password_Protected_reCAPTCHA {
 		);
 
 		// register settings in an array group.
-		register_setting( $this->options_group, $this->options_name, array( 'type' => 'array' ) );
+		register_setting(
+			$this->options_group,
+			$this->options_name,
+			array(
+				'type'              => 'array',
+				'sanitize_callback' => array( $this, 'sanitize_recaptcha_settings' ),
+			)
+		);
+	}
+
+	/**
+	 * Sanitize reCAPTCHA settings array.
+	 *
+	 * @param mixed $input Raw settings.
+	 * @return array
+	 */
+	public function sanitize_recaptcha_settings( $input ) {
+		if ( ! is_array( $input ) ) {
+			return $this->get_default_reCAPTCHA_settings();
+		}
+
+		$defaults = $this->get_default_reCAPTCHA_settings();
+		$output   = $defaults;
+
+		$output['enable'] = ! empty( $input['enable'] ) ? 1 : 0;
+
+		$versions = array( 'google_recaptcha_v2', 'google_recaptcha_v3' );
+		if ( isset( $input['version'] ) && in_array( $input['version'], $versions, true ) ) {
+			$output['version'] = $input['version'];
+		}
+
+		$key_fields = array( 'v2_site_key', 'v3_site_key', 'v2_secret_key', 'v3_secret_key' );
+		foreach ( $key_fields as $field ) {
+			if ( isset( $input[ $field ] ) ) {
+				$output[ $field ] = sanitize_text_field( $input[ $field ] );
+			}
+		}
+
+		if ( isset( $input['v3_score'] ) ) {
+			$output['v3_score'] = max( 0, min( 1, (float) $input['v3_score'] ) );
+		}
+
+		$badges = array( 'bottomright', 'bottomleft', 'inline' );
+		if ( isset( $input['v3_badge'] ) && in_array( $input['v3_badge'], $badges, true ) ) {
+			$output['v3_badge'] = $input['v3_badge'];
+		}
+
+		$themes = array( 'light', 'dark' );
+		if ( isset( $input['v2_theme'] ) && in_array( $input['v2_theme'], $themes, true ) ) {
+			$output['v2_theme'] = $input['v2_theme'];
+		}
+
+		return $output;
 	}
 
 	/**

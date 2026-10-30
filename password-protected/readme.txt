@@ -1,72 +1,50 @@
-=== Password Protected - Protect Your Site Content With a Password ===
+=== Password Protected ===
 Contributors: wpexpertsio
 Tags: password protection, maintenance mode, password protect page, password protect, restrict content
-Requires at least: 4.9.6
-Tested up to: 7.1.3
+Requires at least: 6.5
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 2.8.5
+Stable tag: 2.8.6
 License: GPLv2 or later
 
-Protect your WordPress site, pages, posts, WooCommerce products, and categories with single or multiple passwords.
+Password protect your WordPress site with one password. Control access, whitelist trusted IPs, and monitor password activity.
 
 == Description ==
 
 [👑 Get Pro](https://passwordprotectedwp.com/pricing/?utm_source=wp_org&utm_medium=readme) | [Live Demo](https://tastewp.com/new/?pre-installed-plugin-slug=password-protected) | [Documentation](https://passwordprotectedwp.com/documentation/?utm_source=wp_org&utm_medium=readme) | [Support](https://objectsws.atlassian.net/servicedesk/customer/portal/18)
 
-Do you want to secure your WordPress site, to password protect pages, posts, WooCommerce categories, etc.❓ If so, then you need to install ✨**the Password Protected plugin**✨.
+**Password Protected** lets you password protect your WordPress site with a single password and prevent unauthorized access. The Free version includes IP address whitelisting, Google reCAPTCHA, passwordless admin access, and password attempt activity monitoring.
 
-Password Protected is a robust password protection plugin for WordPress that empowers you to password protect entire posts, pages, WordPress categories, WooCommerce products, the WordPress login (wp-admin) page, and even partial content with ease.
+With **Password Protected Pro**, you can password protect individual pages, posts, WooCommerce products, categories, custom post types, and partial content. Pro also lets you manage multiple passwords, create bypass links, and control access to protected content.
 
-Additionally, you can secure the password protected screen from WordPress attacks such as a WordPress brute force attack with the limit login feature.
-
-Therefore, the [Password Protected WordPress plugin](https://passwordprotectedwp.com/) ensures comprehensive security, covering everything from WordPress pages to WooCommerce products, all with a user-friendly interface.
+[Password Protected](https://passwordprotectedwp.com/) provides flexible WordPress password protection for your entire website or specific content.
 
 == Password Protect Any WordPress Content, Your Way ==
 
-With Password Protected, you can secure everything from entire websites to individual content sections while controlling exactly who gets access and how.
+Protect your WordPress site or specific content and control who gets access.
 
 **In Free Version you can:**
-
 * **Password protect** entire WordPress site
-
 * **Grant access based** on IP addresses
-
 * **Block bots with** Google reCAPTCHA
-
-**In Pro Version you can:**
-
-* **Password protect** specific pages and posts
-
-* **Lock specific sections** of content with partial content protection
-
-* **Create and manage** multiple passwords for different users
-
-* **Generate bypass links** for password-free access
-
-* **Protect WooCommerce** products and categories
-
-* **Protect custom post** types and taxonomies
-
-* **Allow trusted user** roles to bypass password screens
-
-* **Sell protected content** using Gravity Forms
-
-* **Sell password protected WordPress content** as a WooCommerce product
-
-* **Automatically email** access links after form submissions
-
-* **Redirect users to custom** pages after successful access
-
-* **Block bots with** hCaptcha, and Cloudflare Turnstile
-
 * **Monitor login attempts** and access activity
 
+**In Pro Version you can:**
+* **Password protect** specific pages and posts
+* **Lock specific sections** of content with partial content protection
+* **Create and manage** multiple passwords for different users
+* **Generate bypass links** for password-free access
+* **Protect WooCommerce** products and categories
+* **Protect custom post** types and taxonomies
+* **Allow trusted user** roles to bypass password screens
+* **Sell protected content** using Gravity Forms
+* **Sell password protected WordPress content** as a WooCommerce product
+* **Automatically email** access links after form submissions
+* **Redirect users to custom** pages after successful access
+* **Block bots with** hCaptcha, and Cloudflare Turnstile
 * **Set password expiration** dates and usage limits
-
 * **Customize your password** protected screen to match your brand
-
 * **Add an extra layer of** security to your WordPress login page
-
 
 ### What Makes the Password Protected Plugin Stand Out! 😎
 
@@ -104,7 +82,11 @@ This feature adds an extra layer of security by preventing unauthorized access f
 
 **✅Password Attempt Activity Report (Weekly)**
 
-Gain valuable insights into user interactions with your protected content (e.g., password protect pages, posts, etc.) through our exclusive Password Attempt Activity Report. This report will provide a comprehensive overview of login attempts, including successful and failed tries, browsers utilized, and recent activity logs. Whether using the Free or Pro version, this report enables you to track login attempts and user activity efficiently.
+Receive a weekly summary of password attempts, including successful and failed attempts, to help monitor access activity on your protected website.
+
+**✅Detailed Activity Logs**
+
+Stay informed with detailed activity logs for password attempts. Review recorded activity directly from your WordPress dashboard, including the visitor's IP address, browser information, entered passwords, password attempts, date, time, and whether the password attempt was successful or failed.
 
 == Pro Version Unlocks (everything in Free, plus): ==
 
@@ -165,10 +147,6 @@ Replace generic error messages with custom text when a password expires or reach
 **✅Bypass Links for Quick Access**
 
 For passwordless access, easily create unique bypass links for each password protected post, page, WooCommerce product, or category, along with a master bypass URL for the entire site.
-
-**✅Detailed Activity Logs**
-
-Stay informed and vigilant with detailed activity logs for every password attempt. This feature provides comprehensive insights into site activity, including IP addresses, dates, times, and login statuses, so you can easily monitor and review user interactions.
 
 **✅Export Activity Logs to CSV**
 
@@ -233,7 +211,7 @@ Upgrade your site's security with [Password Protected Pro](https://passwordprote
 
 Easily password protect WordPress website. From specific page/post protection to WP-Admin protection and user role whitelisting, Password Protected Pro empowers you to easily secure your site against unauthorized access.
 
-With intuitive password management features like multiple password management and detailed activity logs, maintaining security protocols becomes a seamless task, allowing you to focus on your core business objectives without compromising on protection.
+With intuitive password management features like multiple password management, maintaining security protocols becomes a seamless task, allowing you to focus on your core business objectives without compromising on protection.
 
 ⚡ **Reason #2: Better User Experience and Accessibility**
 
@@ -243,7 +221,7 @@ Meanwhile, features like Bypass URLs and certain page/post exclusions allow you 
 
 ⚡ **Reason #3: Gain Valuable Insights and Oversight**
 
-Stay informed and vigilant with Password Protected Pro's weekly comprehensive activity reporting and logging capabilities. With the password attempt activity report, including detailed activity logs, you gain valuable insights into user interactions, login attempts, and site activity.
+Build on the activity logs included in the Free version. Password Protected Pro lets you export your activity logs to a CSV file, so you gain valuable insights into user interactions, login attempts, and site activity for reporting and audits.
 
 This actionable data enables you to monitor access patterns, detect potential security threats, and optimize your access control strategy accordingly.
 
@@ -253,7 +231,7 @@ By leveraging this insight, you can proactively enhance site security, mitigate 
 
 Automate password management with Password Protected Pro's user-friendly interface and intuitive tools.
 
-With features like password expiration and usage limits, limit login attempts, and passwordless admin access, you can automate routine tasks, reduce administrative overhead, and ensure a smooth user experience.
+With features like password expiration and usage limits and limit login attempts, plus passwordless admin access that is already included in the Free version, you can automate routine tasks, reduce administrative overhead, and ensure a smooth user experience.
 
 With simplified access control and administration, Password Protected Pro frees up your valuable time and resources so you can focus on your core business objectives while maintaining the highest standards of security and compliance.
 
@@ -326,34 +304,34 @@ If you are upgrading manually via FTP rather that through the WordPress automati
 == Frequently Asked Questions ==
 
 = Can the plugin password protect WooCommerce products? =
-Yes, you can password protect WooCommerce products or entire product categories.
+Yes, with Password Protected Pro. You can password protect WooCommerce products or entire product categories.
 
 = Is my password protected content visible in Google search results? =
 No, password protected content is not visible to search engines like Google. The plugin prevents search engines from indexing protected content so that it remains private and accessible only to those with the password.
 
 = Does the plugin password protect specific pages or posts? =
-Yes, the Password Protected plugin allows you to secure individual pages or posts. You can set passwords for specific content.
+Yes, with Password Protected Pro. The plugin allows you to secure individual pages or posts. You can set passwords for specific content.
 
 = Can I whitelist certain user roles for passwordless access? =
-Yes, the User Role Whitelisting feature allows you to give open (passwordless) access to specific user roles without requiring a password.
+Yes, with Password Protected Pro. The User Role Whitelisting feature allows you to give open (passwordless) access to specific user roles without requiring a password.
 
 = What is Partial Content Protection in WordPress? =
-Partial Content Protection lets you lock only specific sections of a page or post while keeping the rest publicly visible. You can use shortcodes to hide premium text, images, or downloads behind a password.
+Partial Content Protection is a Password Protected Pro feature. It lets you lock only specific sections of a page or post while keeping the rest publicly visible. You can use shortcodes to hide premium text, images, or downloads behind a password.
 
 = How can I password protect a section of a WordPress page or post? =
-Simply wrap the content you want to lock with the shortcode that you generate using the Password Protected plugin. Only visitors with the correct password will be able to see it.
+With Password Protected Pro, simply wrap the content you want to lock with the shortcode that you generate using the plugin. Only visitors with the correct password will be able to see it.
 
 = Can I use Partial Content Protection with Elementor or Gutenberg? =
-Yes! It works seamlessly with Elementor, Gutenberg, and Beaver Builder. You can protect individual blocks, sections, or widgets without breaking your page design.
+Yes, with Password Protected Pro. It works seamlessly with Elementor, Gutenberg, and Beaver Builder. You can protect individual blocks, sections, or widgets without breaking your page design.
 
 = Does the plugin password protect wp-admin (WordPress admin login page)? =
-Yes, the WP-Admin Protection feature adds an extra layer of security to the WordPress admin dashboard. It prevents unauthorized access to your wp-admin.
+Yes, with Password Protected Pro. The WP-Admin Protection feature adds an extra layer of security to the WordPress admin dashboard. It prevents unauthorized access to your wp-admin.
 
 = What if I need to exclude certain pages or posts from password protection? =
-The plugin allows you to exclude specific pages, posts, or post types from password protection, ensuring that essential content like your homepage or contact page remains accessible to all visitors.
+With Password Protected Pro, you can exclude specific pages, posts, or post types from password protection, ensuring that essential content like your homepage or contact page remains accessible to all visitors.
 
 = Does the plugin protect against brute-force attacks? =
-The Limit Login Attempts feature allows you to set the number of failed login attempts, which reduces the risk of brute-force attacks and enhances your site's security.
+With Password Protected Pro, the Limit Login Attempts feature allows you to set the number of failed login attempts, which reduces the risk of brute-force attacks and enhances your site's security.
 
 = How can I enable feeds while the site is password protected? =
 In the settings, check the 'Allow Feeds' checkbox.
@@ -362,8 +340,7 @@ In the settings, check the 'Allow Feeds' checkbox.
 You must be an administrator (have the manage_options capability) and in the Password Protected settings, check the 'Allow Administrators' checkbox.
 
 = How can I log out? =
-Just add a "password-protected=logout" query to your URL.
-eg. http://www.example.com/?password-protected=logout
+Use the [password_protected_logout_link] shortcode, or the logout link generated by the plugin. A plain "password-protected=logout" URL no longer works because logout now requires a security token (nonce).
 
 = I have forgotten the password. How can I disable the plugin? =
 If you go to your WordPress admin login page `/wp-login.php` and it shows the admin login fields, you should still be able to login and disable the plugin.
@@ -378,70 +355,76 @@ If you want to translate this plugin you can easily contribute to the [Translati
 
 == External Services ==
 
-Password Protected can connect to third-party services to provide optional functionality. These services are described below.
+Password Protected connects to third-party services to provide optional CAPTCHA verification and plugin management functionality. These services are described below.
 
 = Google reCAPTCHA =
 
-Password Protected can integrate with Google reCAPTCHA to help detect automated activity on the password form.
+Google reCAPTCHA helps protect password-protected pages from automated submissions and abuse. When an administrator enables and configures reCAPTCHA, Google's scripts load in the visitor's browser when the password form is displayed, before the visitor interacts with the form.
 
-When a site administrator enables and configures Google reCAPTCHA, the plugin communicates with Google when the relevant password form verification runs. Google may process verification tokens, the visitor's IP address, browser information, and interaction data, depending on the reCAPTCHA version and implementation.
+The visitor's browser communicates with Google's reCAPTCHA service to load scripts and perform CAPTCHA verification. These requests may involve the visitor's IP address, browser information, cookies, and interaction data.
 
-**Service:** https://cloud.google.com/security/products/recaptcha
+When the password form is submitted, the website server sends a verification request to Google's API containing the configured reCAPTCHA secret key and the response token. With reCAPTCHA v3, the visitor's IP address is also sent. Verification requests are made for password submissions, whether the submitted password is correct or incorrect.
 
-**Privacy Policy:** https://policies.google.com/privacy
+Service: https://www.google.com/recaptcha/
 
-**Terms of Service:** https://policies.google.com/terms
+Privacy Policy: https://policies.google.com/privacy
+
+Terms of Service: https://policies.google.com/terms
 
 = Freemius =
 
-Password Protected uses Freemius to provide an optional email opt-in for site administrators.
+Password Protected includes the Freemius SDK for optional plugin management services, including administrator opt-in and related plugin management functionality.
 
-In the Free version, the plugin shares the site administrator's email address with Freemius only when the administrator explicitly consents by opting in. If the administrator does not opt in, the plugin does not share their email address with Freemius through this optional email opt-in.
+When an administrator opts in, the website server sends information to Freemius that may include the administrator's name and email address, site URL, site title, language, a unique site identifier, WordPress and PHP versions, plugin and SDK versions, and the selected tracking permissions. When the relevant permissions are enabled, subsequent synchronization may also include lists of installed plugins and themes.
 
-Freemius processes information in accordance with its privacy policy and the functionality used. Any additional information transmitted by the plugin, and the events that trigger communication with Freemius, depend on the actual integration and must be documented accurately.
+The SDK may communicate with Freemius as part of its plugin management functionality. When an administrator opts out, the plugin sends a request to update the recorded permissions.
 
-**Service:** https://freemius.com/
+Service: https://freemius.com/
 
-**Privacy Policy:** https://freemius.com/privacy/
+Privacy Policy: https://freemius.com/privacy/
 
-**Terms of Service:** https://freemius.com/terms/
+Terms of Service: https://freemius.com/terms/
 
 == Privacy Policy ==
 
 Password Protected processes information required to provide password protection and manage access to your WordPress site.
 
-Depending on the features enabled and the plugin's configuration, password-protection activity may involve the visitor's IP address, the date and time of an attempt, user-agent information, and whether a password attempt succeeded or failed. Include only the information the Free version actually collects or processes.
+The Free version's Activity Logs record information about password attempts, including the visitor's IP address, browser/user-agent information, date and time, and whether the attempt was successful or failed. This information helps site administrators review access activity on their protected website.
 
-If Google reCAPTCHA is enabled, the plugin communicates with Google to verify password form submissions. Google may process information associated with the visitor's interaction with the verification service. See the External Services section for details.
+If Google reCAPTCHA is enabled, the plugin loads Google's reCAPTCHA scripts when the password form is displayed. When a visitor submits the form, the website server communicates with Google's verification service. Google may process information associated with the visitor's browser and interaction with the verification service. With reCAPTCHA v3, the visitor's IP address is also sent. See the External Services section for details.
 
-Password Protected uses Freemius to offer an optional email opt-in to site administrators. In the Free version, the plugin shares the administrator's email address with Freemius only if the administrator consents to provide it by opting in. See the External Services section for details about Freemius and its privacy practices.
+Password Protected includes the Freemius SDK for optional plugin management functionality. When an administrator opts in, information may be shared with Freemius as described in the External Services section.
 
-For more information about how we handle personal information, please refer to our Privacy Policy.
+For more information about how we handle personal information, please refer to our [Privacy Policy](https://passwordprotectedwp.com/privacy-policy/).
 
 == Screenshots ==
 
 1. Enable complete sitewide protection, whitelist IP address, and allow passwordless access.
-2. Exclude pages, posts, and post types from protection.
-3. Enable and create a bypass URL to get password free access with that link.
-4. Create and manage multiple passwords for your protected site and content.
-5. Enable and password protect specific or all pages, posts, and post types.
-6. Enable and select user roles that should be whitelisted.
+2. Exclude pages, posts, and post types from protection.(Pro)
+3. Enable and create a bypass URL to get password free access with that link.(Pro)
+4. Create and manage multiple passwords for your protected site and content.(Pro)
+5. Enable and password protect specific or all pages, posts, and post types.(Pro)
+6. Enable and select user roles that should be whitelisted.(Pro)
 7. Google reCaptcha v2 and v3 settings.
 8. The protected screen perfectly mimics the WordPress login.
 9. The protected screen with reCaptcha v3.
 10. The protected screen with reCaptcha v2.
-11. Password Protect your WP login/WP admin.
-12. Limit password attempts to enhance your WordPress site protection.
+11. Password Protect your WP login/WP admin.(Pro)
+12. Limit password attempts to enhance your WordPress site protection.(Pro)
 13. Stay informed with detailed activity logs for every password attempt.
 14. Gain valuable insights through our exclusive Password Attempt Activity Report.
-15. Effortlessly manage password requests and control access to protected content directly from the admin dashboard.
+15. Effortlessly manage password requests and control access to protected content directly from the admin dashboard.(Pro)
 
 
 == Changelog ==
 
+= 2.8.6 =
+- New - Added Activity Logs in Free.
+- Improved code optimization.
+
 = 2.8.5 =
 - New - Added a show/hide password option in General settings.
-- Update - Tested up to WordPress 7.1.3
+- Update - Tested up to WordPress 7.1
 - Update - Updated Freemius SDK to the latest version.
 - Fixed - Resolved continuous page reloading when editing pages.
 - Fixed - Resolved an issue where REST API requests were blocked despite enabling Allow REST API.
@@ -583,7 +566,7 @@ For more information about how we handle personal information, please refer to o
 - Adds `password_protected_cookie_name` filter for the cookie name. Props [Jose Castaneda](https://github.com/jocastaneda).
 - Let developers override the capability needed to see the options page via a `password_protected_options_page_capability` filter. Props [Nicola Peluchetti](https://github.com/nicoladj77).
 - Don't use a "testcookie" POST query as it is blocked by Namecheap (and possibly other hosts).
-- Fix warnings in W3 validator - script and style “type” attribute not required. Props [@dianamurcia](https://github.com/dianamurcia).
+- Fix warnings in W3 validator - script and style “type” attribute not required. Props Diana Murcia.
 - Translations now via [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/password-protected/).
 - Updated URL references. Props [Garrett Hyder](https://github.com/garretthyder).
 

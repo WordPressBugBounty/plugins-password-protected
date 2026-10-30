@@ -170,6 +170,10 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		 * @return string|null
 		 */
 		public static function check_for_search() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return null;
+			}
+
 			if( isset( $_POST['s'] ) ) {
 				if ( ! isset( $_POST['search_activity_logs_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['search_activity_logs_nonce'] ) ), 'password_protected_search_activity_logs' ) ) {
 					wp_die('Sorry, your nonce did not verify.');
@@ -187,6 +191,10 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 		 * @return string|null
 		 */
 		public static function check_for_filter() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return null;
+			}
+
 			if( isset( $_GET['show_logs'], $_GET['_wpnonce'] ) ) {
 
 				$nonce = sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) );
@@ -255,10 +263,11 @@ if ( ! class_exists( 'Password_Protected_Activity_Logs' ) ) {
 					'SELECT
 						COALESCE( SUM( IF( status = %s, 1, 0 ) ), 0 ) AS success,
 						COALESCE( SUM( IF( status = %s, 1, 0 ) ), 0 ) AS failed
-					FROM `' . $table_name . '`
+					FROM %i
 					WHERE CAST( created_at AS UNSIGNED ) BETWEEN %d AND %d',
 					'Success',
 					'Failure',
+					$table_name,
 					$start,
 					$end
 				),

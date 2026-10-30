@@ -75,7 +75,7 @@ Made compatibility with [login designer](https://wp.org/plugins/login-designer);
 
 ### Fixed
 - Don't use a "testcookie" POST query as it is blocked by Namecheap (and possibly other hosts).
-- Fix warnings in W3 validator - script and style “type” attribute not required. Props [@dianamurcia](https://github.com/dianamurcia).
+- Fix warnings in W3 validator - script and style “type” attribute not required. Props dianamurcia.
 
 ### Changed
 - Translations now via [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/password-protected/).
